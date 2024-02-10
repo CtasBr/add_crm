@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Subtask, Task, User
+
+admin.site.register(Task)
+admin.site.register(Subtask)
+admin.site.register(User)
+
