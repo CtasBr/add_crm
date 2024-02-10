@@ -51,6 +51,23 @@ class Subtask(models.Model):
     description = models.TextField(verbose_name="Описание")
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DecimalField(verbose_name="Дата сдачи", blank=True)
-    main_task = models.ForeignKey(to="Task", on_delete=models.PROTECT)
+    main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
     done = models.BooleanField(verbose_name="Выполнено")
+    executors_id = models.ManyToManyField("User")
     
+
+class User(models.Model):
+    """Пользователи
+
+    Поля:
+        Имя
+        Имя пользователя в ТГ
+    """
+    
+    class Meta:
+        db_table = "users"
+        verbose_name = "пользователь"
+        verbose_name_plural = "пользователи"
+    
+    name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, blank=True)
