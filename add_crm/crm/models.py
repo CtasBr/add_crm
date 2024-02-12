@@ -1,6 +1,30 @@
 from django.db import models
 
 
+class Project(models.Model):
+    """Проекты
+
+    Поля:
+        Название
+        Описание
+        Дата добавления
+        Срок сдачи
+        Готовность
+    """
+    class Meta:
+        db_table = "projects"
+        verbose_name = "Проект"
+        verbose_name_plural = "Проекты"
+    
+    title = models.CharField(verbose_name="Название", max_length=500)
+    description = models.TextField(verbose_name="Описание")
+    date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
+    deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
+    is_done = models.BooleanField(verbose_name="Выполнено")
+    
+    def __str__(self):
+        return self.title
+
 class Task(models.Model):
     """Задачи
 
@@ -22,10 +46,11 @@ class Task(models.Model):
     
     title = models.TextField(verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
-    img = models.ImageField(verbose_name="Изображение", blank=True, upload_to='photos/%Y/%m/%d/')
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
-    done = models.BooleanField(verbose_name="Выполнено")
+    main_project_id = models.ForeignKey(to="Project", on_delete=models.PROTECT)
+    is_done = models.BooleanField(verbose_name="Выполнено")
+    executors_id = models.ManyToManyField("User")
     
     def __str__(self):
         return self.title
@@ -53,10 +78,11 @@ class Subtask(models.Model):
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
     done = models.BooleanField(verbose_name="Выполнено")
-    executors_id = models.ManyToManyField("User")
+    
     
     def __str__(self):
         return self.title
+
 
 class User(models.Model):
     """Пользователи
