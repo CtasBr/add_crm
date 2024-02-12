@@ -73,7 +73,6 @@ class Subtask(models.Model):
         verbose_name_plural = "Подзадачи"
         
     title = models.CharField(verbose_name="Название", max_length=500)
-    description = models.TextField(verbose_name="Описание")
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
