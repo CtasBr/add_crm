@@ -1,6 +1,36 @@
 from django.shortcuts import render
 
+from .models import *
 
-def main(request):
-    return render(request, 'main.html')
+
+def projects(request):
+    done_index = int(request.GET.get("done", -1))
+    if done_index > -1:
+        p_d = Project.objects.filter(id=done_index)
+        p_d.update(is_done=True)
+
+    p = Project.objects.all()
+    data = {"projects": p}
+    return render(request, 'projects.html', data)
+
+
+def tasks(request, num):
+    done_index = int(request.GET.get("done", -1))
+    if done_index > -1:
+        p_d = Task.objects.filter(id=done_index)
+        p_d.update(is_done=True)
+
+    tasks = Task.objects.filter(main_project_id=num)
+    data = {"tasks": tasks}
+    return render(request, 'tasks.html', data)
+
+
+def experiments(request):
+    return render(request, 'experiments.html')
+
+
+def schedule(request):
+    return render(request, 'schedule.html')
+
+
 # Create your views here.

@@ -3,5 +3,8 @@ from django.urls import include, path
 from .views import *
 
 urlpatterns = [
-    path('', main, name='main'),
+    path('', projects, name='projects'),
+    path('experiments/', experiments, name='experiments'),
+    path('schedule/', schedule, name='schedule'),
+    path('tasks/<int:num>', tasks, name="tasks")
 ]

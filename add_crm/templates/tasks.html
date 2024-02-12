@@ -1,0 +1,33 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Bootstrap Template</title>
+</head>
+<body>
+  {% include "inc/_nav.html" %}
+  <div class="container">
+    <div class="row">
+
+  {% for t in tasks %}
+  {% if not t.is_done %}
+  <div class="col-md-3 mt-5 mb-5">
+      <div class="card mx-auto" style="width: 90%">
+        <div class="card-body">
+          <h5 class="card-title">{{t.title}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{t.deadline}}</h6>
+          <p class="card-text">{{t.description}}</p>
+          <a href="{% url "projects" %}?done={{t.id}}" class="card-link">Готово</a>
+          {% comment %} <a href="{% url "tasks" p.id%}" class="card-link">Задачи проекта</a> {% endcomment %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
