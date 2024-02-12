@@ -44,7 +44,7 @@ class Task(models.Model):
         verbose_name = "Задача"
         verbose_name_plural = "Задачи"
     
-    title = models.TextField(verbose_name="Название")
+    title = models.CharField(verbose_name="Название", max_length=500)
     description = models.TextField(verbose_name="Описание")
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
@@ -72,7 +72,7 @@ class Subtask(models.Model):
         verbose_name = "Подзадача"
         verbose_name_plural = "Подзадачи"
         
-    title = models.TextField(verbose_name="Название")
+    title = models.CharField(verbose_name="Название", max_length=500)
     description = models.TextField(verbose_name="Описание")
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
