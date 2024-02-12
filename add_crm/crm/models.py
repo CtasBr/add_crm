@@ -102,3 +102,36 @@ class User(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+
+class Experiment(models.Model):
+    
+    class Meta:
+        db_table = "experiments"
+        verbose_name = "эксперимент"
+        verbose_name_plural = "эксперименты"
+    
+    title = models.CharField(verbose_name="Название", max_length=500)
+    instruction = models.TextField(verbose_name="Инструкция")
+    
+    def __str__(self):
+        return self.title 
+    
+
+class Variation(models.Model):
+    
+    class Meta:
+        db_table = "Variation"
+        verbose_name = "вариация эксперимента"
+        verbose_name_plural = "вариации экспериментов"
+        
+    code = models.CharField(verbose_name="Шифр", max_length=20)
+    date_start = models.DateField(verbose_name="Дата начала")
+    date_end = models.DateField(verbose_name="Дата конца")
+    comment = models.TextField(verbose_name="Комментарий")
+    content = models.TextField(verbose_name="Изменения в составе")
+    
+    def __str__(self):
+        return super().code
+    
