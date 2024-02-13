@@ -76,7 +76,7 @@ class Subtask(models.Model):
     date_add = models.DateField(verbose_name="Дата создания", auto_now_add=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
-    done = models.BooleanField(verbose_name="Выполнено")
+    is_done = models.BooleanField(verbose_name="Выполнено")
     
     
     def __str__(self):

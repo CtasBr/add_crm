@@ -17,13 +17,23 @@ def projects(request):
 def tasks(request, num):
     done_index = int(request.GET.get("done", -1))
     if done_index > -1:
-        p_d = Task.objects.filter(id=done_index)
-        p_d.update(is_done=True)
+        t_d = Task.objects.filter(id=done_index)
+        t_d.update(is_done=True)
 
     tasks = Task.objects.filter(main_project_id=num)
     data = {"tasks": tasks}
     return render(request, 'tasks.html', data)
 
+def subtasks(request, num):
+    done_index = int(request.GET.get("done", -1))
+    if done_index > -1:
+        st_d = Subtask.objects.filter(id=done_index)
+        st_d.update(is_done=True)
+        
+    subtasks = Subtask.objects.filter(main_task_id=num)
+    data = {"subtasks": subtasks}
+    
+    return render(request, 'subtasks.html', data)
 
 def experiments(request):
     return render(request, 'experiments.html')

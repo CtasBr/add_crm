@@ -10,16 +10,14 @@
   <div class="container">
     <div class="row">
 
-  {% for t in tasks %}
-  {% if not t.is_done %}
+  {% for s in subtasks %}
+  {% if not s.is_done %}
   <div class="col-md-3 mt-5 mb-5">
       <div class="card mx-auto" style="width: 90%">
         <div class="card-body">
-          <h5 class="card-title">{{t.title}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{t.deadline}}</h6>
-          <p class="card-text">{{t.description}}</p>
-          <a href="{% url "tasks" t.main_project_id.id%}?done={{t.id}}" class="card-link">Готово</a>
-          <a href="{% url "subtasks" t.id%}" class="card-link">Чекпоинты</a>
+          <h5 class="card-title">{{s.title}}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{s.deadline}}</h6>
+          <a href="{% url "subtasks" s.main_task_id.id%}?done={{s.id}}" class="card-link">Готово</a>
         </div>
       </div>
     </div>
