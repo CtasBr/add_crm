@@ -2,51 +2,68 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Календарь с точками</h1>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-            <th>Пн</th>
-            <th>Вт</th>
-            <th>Ср</th>
-            <th>Чт</th>
-            <th>Пт</th>
-            <th>Сб</th>
-            <th>Вс</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for w in calendar %}
-        <tr>
-            {% for d in w %}
-            <td>
-            <div class="container">
-                <div class="row">
-                  <div class="col text-center">
-                    <h3>{{d}}</h3>
-                  </div>
+    <div class="row mb-3">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            {% if  date.1 > 1%}
+            <a class="btn mr-3 btn-secondary" href="{% url "schedule" %}?year={{date.0}}&month={{date.1|add:-1}}">Предыдущий месяц</a>
+            {% else %}
+            <a class="btn mr-3 btn-secondary" href="{% url "schedule" %}?year={{date.0|add:-1}}&month={{12}}">Предыдущий месяц</a>
+            {% endif %}
+            
+            <h3>{{date.1}}.{{date.0}}</h3>
+            {% if  date.1 < 12%}
+            <a class="btn ml-3 btn-secondary" href="{% url "schedule" %}?year={{date.0}}&month={{date.1|add:1}}">Следующий месяц</a>
+            {% else %}
+            <a class="btn ml-3 btn-secondary" href="{% url "schedule" %}?year={{date.0|add:1}}&month={{1}}">Следующий месяц</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Пн</th>
+                <th>Вт</th>
+                <th>Ср</th>
+                <th>Чт</th>
+                <th>Пт</th>
+                <th>Сб</th>
+                <th>Вс</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for w in calendar %}
+            <tr>
+                {% for d in w %}
+                <td>
+                <div class="container">
+                    <div class="row">
+                    <div class="col text-center">
+                        <h3>{{d.0}}</h3>
+                    </div>
+                    </div>
+                    {% if d %}
+                    <div class="row mt-2">
+                    <div class="col-md-4 text-center">
+                        <div class="circle red"></div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="circle red"></div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="circle red"></div>
+                    </div>
+                    </div>
+                    {% endif %}
                 </div>
-                {% if d %}
-                <div class="row mt-2">
-                  <div class="col-md-4 text-center">
-                    <div class="circle red"></div>
-                  </div>
-                  <div class="col-md-4 text-center">
-                    <div class="circle red"></div>
-                  </div>
-                  <div class="col-md-4 text-center">
-                    <div class="circle red"></div>
-                  </div>
-                </div>
-                {% endif %}
-              </div>
-            </td>
+                </td>
 
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </tbody>
+        </table>
+    </div>
   </div>
 
 {% endblock content %}

@@ -15,14 +15,14 @@ def generate_calendar(month, year):
     first_day_weekday = calendar.weekday(year, month, 1)
     
     # Создаем список-календарь с пустыми ячейками
-    calendar_list = [["" for _ in range(7)] for _ in range(5)]
+    calendar_list = [["" for _ in range(7)] for _ in range(6)]
     
     # Заполняем список-календарь днями месяца
     current_day = 1
     for week in range(6):
         for weekday in range(7):
             if current_day <= num_days and (week > 0 or weekday >= first_day_weekday):
-                calendar_list[week][weekday] = str(current_day)
+                calendar_list[week][weekday] = [str(current_day)]
                 current_day += 1
     
     return calendar_list
@@ -95,10 +95,17 @@ def experiments(request):
 
 
 def schedule(request):
+    
     now = datetime.datetime.now()
-
-    calendar = generate_calendar(int(now.month), int(now.year))
-    data = {"calendar": calendar}
+    r_year = request.GET.get("year", now.year)
+    r_month = request.GET.get("month", now.month)
+    
+    subtasks = Subtask.objects.all()
+    for i in subtasks:
+        print(datetime.datetime.combine(i.deadline, datetime.datetime.min.time()).year)
+    calendar = generate_calendar(int(r_month), int(r_year))
+    print(calendar)
+    data = {"calendar": calendar, "date": [int(r_year), int(r_month)]}
     
     return render(request, 'schedule.html', data)
 
