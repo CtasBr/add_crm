@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Календарь с точками</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+            <th>Пн</th>
+            <th>Вт</th>
+            <th>Ср</th>
+            <th>Чт</th>
+            <th>Пт</th>
+            <th>Сб</th>
+            <th>Вс</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in calendar %}
+        <tr>
+            {% for d in w %}
+            <td>
+            <div class="container">
+                <div class="row">
+                  <div class="col text-center">
+                    <h3>{{d}}</h3>
+                  </div>
+                </div>
+                {% if d %}
+                <div class="row mt-2">
+                  <div class="col-md-4 text-center">
+                    <div class="circle red"></div>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <div class="circle red"></div>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <div class="circle red"></div>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </td>
+
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock content %}
+
