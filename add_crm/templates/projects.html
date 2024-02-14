@@ -1,33 +1,63 @@
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <title>Bootstrap Template</title>
-</head>
-<body>
-  {% include "inc/_nav.html" %}
-  <div class="container">
-    <div class="row">
+{% extends "base.html" %}
+{% load static %}
 
-  {% for p in projects %}
-  {% if not p.is_done %}
-  <div class="col-md-3 mt-5 mb-5">
-      <div class="card mx-auto" style="width: 90%">
-        <div class="card-body">
-          <h5 class="card-title">{{p.title}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{p.deadline}}</h6>
-          <p class="card-text">{{p.description}}</p>
-          <a href="{% url "projects" %}?done={{p.id}}" class="card-link">Готово</a>
-          <a href="{% url "tasks" p.id%}" class="card-link">Задачи проекта</a>
-        </div>
+
+{% block content %}
+<div class="container">
+  <div class="row">
+
+{% for p in projects %}
+{% if not p.is_done %}
+<div class="col-md-3 mt-5 mb-5">
+    <div class="card mx-auto" style="width: 90%">
+      <div class="card-body">
+        <h5 class="card-title">{{p.title}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{p.deadline}}</h6>
+        <p class="card-text">{{p.description}}</p>
+        <a href="{% url "projects" %}?done={{p.id}}" class="card-link">Готово</a>
+        <a href="{% url "tasks" p.id%}" class="card-link">Задачи проекта</a>
       </div>
     </div>
-    {% endif %}
-  {% endfor %}
+  </div>
+  {% endif %}
+{% endfor %}
+<div class="col-md-3 mt-5 mb-5">
+  <div class="card text-center" style="width: 90%">
+    <div class="card-body">
+        <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%" id="myBtn">
+    </div>
+  </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+<div id="myModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form method="POST" class="">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="title">Название</label>
+              <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="date">Дедлайн</label>
+              <input type="date" class="form-control" id="date" name="deadline">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Описание</label>
+            <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

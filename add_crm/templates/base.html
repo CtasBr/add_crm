@@ -1,0 +1,59 @@
+{% load static %}
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    
+    .modal {
+      display: none; /* Скрыто по умолчанию */
+      position: fixed; /* Оставаться на месте */
+      z-index: 1; /* Сидеть на вершине */
+      padding-top: 100px; /* Расположение коробки */
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%; /* Полная ширина */
+      height: 100%; /* Полная высота */
+      overflow: auto; /* Включите прокрутку, если это необходимо */
+      background-color: rgb(0,0,0); /* Цвет запасной вариант  */
+      background-color: rgba(0,0,0,0.4); /*Черный с непрозрачностью */
+    }
+  
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal_content{
+      display: flex; /* Используем flexbox для центрирования элементов */
+      justify-content: center; /* Горизонтальное центрирование */
+      align-items: center; /* Вертикальное центрирование */
+      flex-direction: column; /* Выравнивание по центру по вертикали */
+
+    }
+    </style>
+  <title>Add CRM</title>
+</head>
+<body>
+  {% include "inc/_nav.html" %}
+  {% block content %}{% endblock %}
+  
+
+
+  <script src="{% static "js/modal.js" %}"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
