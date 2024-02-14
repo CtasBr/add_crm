@@ -15,7 +15,7 @@
         <h6 class="card-subtitle mb-2 text-muted">{{p.deadline}}</h6>
         <p class="card-text">{{p.description}}</p>
         <a href="{% url "projects" %}?done={{p.id}}" class="card-link">Готово</a>
-        <a href="{% url "tasks" p.id%}" class="card-link">Задачи проекта</a>
+        <a href="{% url "tasks" p.id%}" class="card-link">Задачи</a>
       </div>
     </div>
   </div>

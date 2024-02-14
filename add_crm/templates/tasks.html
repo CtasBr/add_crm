@@ -13,8 +13,24 @@
           <h5 class="card-title">{{t.title}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{t.deadline}}</h6>
           <p class="card-text">{{t.description}}</p>
-          <a href="{% url "tasks" t.main_project_id.id%}?done={{t.id}}" class="card-link">Готово</a>
-          <a href="{% url "subtasks" t.id%}" class="card-link">Чекпоинты</a>
+          <a href="{% url "tasks" t.main_project_id.id %}?done={{t.id}}" class="card-link">Готово</a>
+          <a class="card-link" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Чекпоинты
+          </a>
+          <div class="collapse" id="collapseExample{{t.id}}">
+            <div class="card card-body">
+              {% for s in subtasks %}
+              {% if s.main_task_id.id == t.id %}
+              {% if not s.is_done %}
+              <a class="card-text">{{s.title}}</a>
+              <a href="{% url "tasks" t.main_project_id.id %}?done_subtask={{s.id}}" class="card-link">Готово</a>
+              <br>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% comment %} <a href="{% url "subtasks" t.id%}" class="card-link">Чекпоинты</a> {% endcomment %}
         </div>
       </div>
     </div>

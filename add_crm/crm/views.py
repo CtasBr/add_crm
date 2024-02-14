@@ -43,13 +43,20 @@ def tasks(request, num):
         return redirect('tasks', num)
     
     done_index = int(request.GET.get("done", -1))
-    if done_index > -1:
+    if done_index != -1:
         t_d = Task.objects.filter(id=done_index)
         t_d.update(is_done=True)
-
+    
+    s_done_index = int(request.GET.get("done_subtask", -1))
+    print(s_done_index)
+    if s_done_index != -1:
+        s_d = Subtask.objects.filter(id=s_done_index)
+        s_d.update(is_done=True)
+    
+    subtasks = Subtask.objects.all()
     tasks = Task.objects.filter(main_project_id=num)
     users = User.objects.all()
-    data = {"tasks": tasks, "users": users}
+    data = {"tasks": tasks, "users": users, "subtasks": subtasks}
     return render(request, 'tasks.html', data)
 
 def subtasks(request, num):
