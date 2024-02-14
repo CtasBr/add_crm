@@ -99,14 +99,57 @@ def schedule(request):
     now = datetime.datetime.now()
     r_year = request.GET.get("year", now.year)
     r_month = request.GET.get("month", now.month)
-    
-    subtasks = Subtask.objects.all()
-    for i in subtasks:
-        print(datetime.datetime.combine(i.deadline, datetime.datetime.min.time()).year)
     calendar = generate_calendar(int(r_month), int(r_year))
+    subtasks = Subtask.objects.all()
+    tasks = Task.objects.all()
+    projects = Project.objects.all()
+    buf = []
+    for i in subtasks:
+        dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
+        if int(dates.month) == r_month and int(dates.year) == r_year:
+            buf.append(dates.day)
+    for i in range(len(calendar)):
+        for j in range(len(calendar[i])):
+            try:
+                if int(calendar[i][j][0]) in buf:
+                    calendar[i][j].append(True)
+                else:
+                    calendar[i][j].append(False)
+            except IndexError:
+                continue
+    print(buf)
+    buf = []
+    for i in tasks:
+        dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
+        if int(dates.month) == r_month and int(dates.year) == r_year:
+            buf.append(dates.day)
+    for i in range(len(calendar)):
+        for j in range(len(calendar[i])):
+            try:
+                if int(calendar[i][j][0]) in buf:
+                    calendar[i][j].append(True)
+                else:
+                    calendar[i][j].append(False)
+            except IndexError:
+                continue
+    print(buf)        
+    buf = []
+    for i in projects:
+        dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
+        if int(dates.month) == r_month and int(dates.year) == r_year:
+            buf.append(dates.day)
+    for i in range(len(calendar)):
+        for j in range(len(calendar[i])):
+            try:
+                if int(calendar[i][j][0]) in buf:
+                    calendar[i][j].append(True)
+                else:
+                    calendar[i][j].append(False)
+            except IndexError:
+                continue
     print(calendar)
     data = {"calendar": calendar, "date": [int(r_year), int(r_month)]}
-    
+    print(buf)
     return render(request, 'schedule.html', data)
 
 

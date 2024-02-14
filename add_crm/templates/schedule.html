@@ -45,13 +45,25 @@
                     {% if d %}
                     <div class="row mt-2">
                     <div class="col-md-4 text-center">
+                        {% if d.1  %}
                         <div class="circle red"></div>
+                        {% else %}
+                        <div class="circle white"></div>
+                        {% endif %}
                     </div>
                     <div class="col-md-4 text-center">
-                        <div class="circle red"></div>
+                        {% if d.2  %}
+                        <div class="circle green"></div>
+                        {% else %}
+                        <div class="circle white"></div>
+                        {% endif %}
                     </div>
                     <div class="col-md-4 text-center">
-                        <div class="circle red"></div>
+                        {% if d.3  %}
+                        <div class="circle blue"></div>
+                        {% else %}
+                        <div class="circle white"></div>
+                        {% endif %}
                     </div>
                     </div>
                     {% endif %}
