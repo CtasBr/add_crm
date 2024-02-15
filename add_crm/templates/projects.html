@@ -6,30 +6,31 @@
 <div class="container">
   <div class="row">
 
-{% for p in projects %}
-{% if not p.is_done %}
-<div class="col-md-6 mt-5 mb-5">
-    <div class="card mx-auto" style="width: 90%">
-      <div class="card-body">
-        <h5 class="card-title">{{p.title}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{p.deadline}}</h6>
-        <p class="card-text">{{p.description}}</p>
-        <a href="{% url "projects" %}?done={{p.id}}" class="card-link">Готово</a>
-        <a href="{% url "tasks" p.id%}" class="card-link">Задачи</a>
+    {% for p in projects %}
+      {% if not p.is_done %}
+        <div class="col-md-6 mt-5 mb-5">
+            <div class="card mx-auto" style="width: 90%">
+              <div class="card-body">
+                <h5 class="card-title">{{p.title}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{p.deadline}}</h6>
+                <p class="card-text">{{p.description}}</p>
+                <a href="{% url "projects" %}?done={{p.id}}" class="card-link">Готово</a>
+                <a href="{% url "tasks" p.id%}" class="card-link">Задачи</a>
+                <a href="{% url "experiments" p.id%}" class="card-link">Эксперементы</a>
+              </div>
+            </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+    <div class="col-md-6 mt-5 mb-5">
+      <div class="card mx-auto text-center" style="width: 90%">
+        <div class="card-body">
+            <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%" id="myBtn">
+        </div>
       </div>
     </div>
   </div>
-  {% endif %}
-{% endfor %}
-<div class="col-md-3 mt-5 mb-5">
-  <div class="card text-center" style="width: 90%">
-    <div class="card-body">
-        <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%" id="myBtn">
-    </div>
-  </div>
 </div>
-
-
 <div id="myModal" class="modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -59,5 +60,6 @@
     </div>
   </div>
 </div>
+  
 {% endblock content %}
 

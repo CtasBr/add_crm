@@ -79,7 +79,10 @@ def tasks(request, num):
     subtasks = Subtask.objects.all()
     tasks = Task.objects.filter(main_project_id=num)
     users = User.objects.all()
-    data = {"tasks": tasks, "users": users, "subtasks": subtasks}
+    data = {"tasks": tasks, 
+            "users": users, 
+            "subtasks": subtasks
+            }
     return render(request, 'tasks.html', data)
 
 def subtasks(request, num):
@@ -90,15 +93,40 @@ def subtasks(request, num):
         subtask.save()
         return redirect('tasks', subtask.main_task_id.main_project_id.id)
 
-def experiments(request):
-    return render(request, 'experiments.html')
+def experiments(request, id):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        experiment = Experiment(title = title, instruction=description, main_project_id=Project(id=id))
+        experiment.save()
+        
+    
+    experiments = Experiment.objects.filter(main_project_id=id)
+    variations = Variation.objects.all()
+    data = {"experiments": experiments, 
+            "variations": variations
+            }
+    
+    return render(request, 'experiments.html', data)
 
+
+def variations(request, id):
+    if request.method == 'POST':
+        code = request.POST.get('title')
+        date_start = request.POST.get('date_start')
+        date_end = request.POST.get('deadline')
+        comment = request.POST.get('comment')
+        content = request.POST.get('changes')
+        variation = Variation(code=code, date_start=date_start, date_end=date_end, comment=comment, content=content, main_experiment_id=Experiment.objects.get(id=id))
+        variation.save()
+        return redirect('experiments', variation.main_experiment_id.main_project_id.id)
 
 def schedule(request):
-    
     now = datetime.datetime.now()
     r_year = request.GET.get("year", now.year)
     r_month = request.GET.get("month", now.month)
+    print(r_month)
+    print(r_year)
     calendar = generate_calendar(int(r_month), int(r_year))
     subtasks = Subtask.objects.all()
     tasks = Task.objects.all()
@@ -106,7 +134,7 @@ def schedule(request):
     buf = []
     for i in subtasks:
         dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
-        if int(dates.month) == r_month and int(dates.year) == r_year:
+        if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
             buf.append(dates.day)
     for i in range(len(calendar)):
         for j in range(len(calendar[i])):
@@ -117,11 +145,10 @@ def schedule(request):
                     calendar[i][j].append(False)
             except IndexError:
                 continue
-    print(buf)
     buf = []
     for i in tasks:
         dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
-        if int(dates.month) == r_month and int(dates.year) == r_year:
+        if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
             buf.append(dates.day)
     for i in range(len(calendar)):
         for j in range(len(calendar[i])):
@@ -131,12 +158,11 @@ def schedule(request):
                 else:
                     calendar[i][j].append(False)
             except IndexError:
-                continue
-    print(buf)        
+                continue        
     buf = []
     for i in projects:
         dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
-        if int(dates.month) == r_month and int(dates.year) == r_year:
+        if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
             buf.append(dates.day)
     for i in range(len(calendar)):
         for j in range(len(calendar[i])):
@@ -147,9 +173,9 @@ def schedule(request):
                     calendar[i][j].append(False)
             except IndexError:
                 continue
-    print(calendar)
-    data = {"calendar": calendar, "date": [int(r_year), int(r_month)]}
-    print(buf)
+    data = {"calendar": calendar, 
+            "date": [int(r_year), int(r_month)]
+            }
     return render(request, 'schedule.html', data)
 
 

@@ -112,7 +112,7 @@ class Experiment(models.Model):
     
     title = models.CharField(verbose_name="Название", max_length=500)
     instruction = models.TextField(verbose_name="Инструкция")
-    
+    main_project_id = models.ForeignKey(to="Project", on_delete=models.PROTECT)
     def __str__(self):
         return self.title 
     
@@ -129,7 +129,7 @@ class Variation(models.Model):
     date_end = models.DateField(verbose_name="Дата конца")
     comment = models.TextField(verbose_name="Комментарий")
     content = models.TextField(verbose_name="Изменения в составе")
-    
+    main_experiment_id = models.ForeignKey(to="Experiment", on_delete=models.PROTECT)
     def __str__(self):
-        return super().code
+        return self.code
     

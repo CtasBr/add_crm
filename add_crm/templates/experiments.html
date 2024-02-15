@@ -1,1 +1,100 @@
 {% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+
+  {% for e in experiments %}
+  <div class="col-md-6 mt-5 mb-5">
+      <div class="card mx-auto" style="width: 90%">
+        <div class="card-body">
+          <h5 class="card-title">{{e.title}}</h5>
+          <p class="card-text">{{e.instruction}}</p>
+          <a class="card-link" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Чекпоинты
+          </a>
+          <div class="collapse" id="collapseExample{{t.id}}">
+            <div class="card card-body">
+              {% for v in variations %}
+              {% if v.main_experiment_id.id == e.id %}
+              <a class="card-text">{{v.code}}</a>
+              <br>
+              {% endif %}
+              {% endfor %}
+              <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Добавить
+              </a>
+              <div class="collapse" id="collapseAdd{{t.id}}">
+                <div class="card card-body">
+                  <form method="POST" class="" action="/variations/{{e.id}}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                      <div class="form-group col-md-12">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Название">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="date_start">Дата начала</label>
+                        <input type="date" class="form-control" id="date_start" name="date_start" placeholder="Дата начала">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="deadline">Дедлайн</label>
+                        <input type="date" class="form-control" id="deadline" name="deadline" placeholder="Дедлайн">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <textarea class="form-control" id="comment" rows="3" name="comment" placeholder="Комментарий"></textarea>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <textarea class="form-control" id="changes" rows="3" name="changes" placeholder="Изменения"></textarea>
+                      </div>
+                      <div class="form-group col-md-6">
+                      <button type="submit" class="btn btn-primary">Сохранить</button>
+                      </div>
+                    </div>
+                  </form> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+
+  <div class="col-md-3 mt-5 mb-5">
+    <div class="card text-center" style="width: 90%">
+      <div class="card-body">
+          <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%" id="myBtn">
+      </div>
+    </div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form method="POST" class="">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="title">Название</label>
+                <input type="text" class="form-control" id="title" name="title">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Инструкция</label>
+              <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+  
