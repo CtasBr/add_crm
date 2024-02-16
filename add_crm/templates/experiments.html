@@ -1,6 +1,35 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% block add_to_styles %}
+.info-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: gray;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+ }
+ 
+ .info-content {
+    display: none;
+    position: absolute;
+    top: 25px;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid gray;
+    width: 200px;
+ }
+ 
+ .info-icon:hover + .info-content {
+    display: block;
+ }
+ 
+{% endblock add_to_styles %}
 
 {% block content %}
   <div class="container">
@@ -12,21 +41,21 @@
         <div class="card-body">
           <h5 class="card-title">{{e.title}}</h5>
           <p class="card-text">{{e.instruction}}</p>
-          <a class="card-link" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-            Чекпоинты
+          <a class="card-link" data-toggle="collapse" href="#collapseExample{{e.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Вариации
           </a>
-          <div class="collapse" id="collapseExample{{t.id}}">
+          <div class="collapse" id="collapseExample{{e.id}}">
             <div class="card card-body">
               {% for v in variations %}
               {% if v.main_experiment_id.id == e.id %}
               <a class="card-text">{{v.code}}</a>
-              <br>
+              <br>          
               {% endif %}
               {% endfor %}
-              <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+              <a class="card-link" data-toggle="collapse" href="#collapseAdd{{e.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Добавить
               </a>
-              <div class="collapse" id="collapseAdd{{t.id}}">
+              <div class="collapse" id="collapseAdd{{e.id}}">
                 <div class="card card-body">
                   <form method="POST" class="" action="/variations/{{e.id}}">
                     {% csrf_token %}
@@ -63,8 +92,8 @@
   {% endfor %}
 
 
-  <div class="col-md-3 mt-5 mb-5">
-    <div class="card text-center" style="width: 90%">
+  <div class="col-md-6 mt-5 mb-5">
+    <div class="card mx-auto text-center" style="width: 90%">
       <div class="card-body">
           <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%" id="myBtn">
       </div>
@@ -96,5 +125,7 @@
       </div>
     </div>
   </div>
+
+
   {% endblock content %}
   

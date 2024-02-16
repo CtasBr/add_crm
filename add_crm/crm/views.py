@@ -34,7 +34,6 @@ def projects(request):
         title = request.POST.get('title')
         deadline = request.POST.get('deadline')
         description = request.POST.get('description')
-        print(title, deadline, description)
         project = Project(title=title, deadline=deadline, description=description, is_done=False)
         project.save()  # Сохраняем объект в базе данных
 
@@ -122,11 +121,89 @@ def variations(request, id):
         return redirect('experiments', variation.main_experiment_id.main_project_id.id)
 
 def schedule(request):
+    lvl = int(request.GET.get("lvl", 1))
+    gant_data = []
+    if lvl == 1:
+        lvl_name = "Проекты"
+        projects = Project.objects.filter(is_done=False).order_by("date_add")
+        for p in projects:
+            done_tasks = Task.objects.filter(main_project_id__id=p.id).filter(is_done=True)
+            all_tasks = Task.objects.filter(main_project_id__id=p.id)
+            if len(all_tasks) != 0:
+                percent = len(done_tasks)/len(all_tasks) * 100
+            else:
+                percent = 100
+                
+            start_date = datetime.datetime.combine(p.date_add, datetime.datetime.min.time())
+            end_date = datetime.datetime.combine(p.deadline, datetime.datetime.min.time())
+            buf_lst = [str(p.id), 
+                       str(p.title), 
+                       str(p.id), 
+                          {"d": int(start_date.day), 
+                          "m": int(start_date.month),
+                          "y": int(start_date.year)
+                          },
+                          {"d": int(end_date.day), 
+                          "m": int(end_date.month),
+                          "y": int(end_date.year)
+                          },
+                       percent,
+                        ]
+            gant_data.append(buf_lst)
+        
+    elif lvl == 2:
+        lvl_name = "Задачи"
+        tasks = Task.objects.filter(is_done=False).order_by("date_add")
+        for t in tasks:
+            done_tasks = Subtask.objects.filter(main_task_id__id=t.id).filter(is_done=True)
+            all_tasks = Subtask.objects.filter(main_task_id__id=t.id)
+            if len(all_tasks) != 0:
+                percent = len(done_tasks)/len(all_tasks) * 100
+            else:
+                percent = 100
+            start_date = datetime.datetime.combine(t.date_add, datetime.datetime.min.time())
+            end_date = datetime.datetime.combine(t.deadline, datetime.datetime.min.time())
+            buf_lst = [str(t.id), 
+                       str(t.title), 
+                       str(t.main_project_id.title), 
+                          {"d": int(start_date.day), 
+                          "m": int(start_date.month),
+                          "y": int(start_date.year)
+                          },
+                          {"d": int(end_date.day), 
+                          "m": int(end_date.month),
+                          "y": int(end_date.year)
+                          },
+                       percent,
+                        ]
+            gant_data.append(buf_lst)
+    
+    elif lvl == 3:
+        lvl_name = "Подзадачи"
+        tasks = Subtask.objects.filter(is_done=False).order_by("date_add")
+        for t in tasks:    
+            percent = 0
+            start_date = datetime.datetime.combine(t.date_add, datetime.datetime.min.time())
+            end_date = datetime.datetime.combine(t.deadline, datetime.datetime.min.time())
+            buf_lst = [str(t.id), 
+                       str(t.title), 
+                       str(t.main_task_id.main_project_id.title), 
+                          {"d": int(start_date.day), 
+                          "m": int(start_date.month),
+                          "y": int(start_date.year)
+                          },
+                          {"d": int(end_date.day), 
+                          "m": int(end_date.month),
+                          "y": int(end_date.year)
+                          },
+                       percent,
+                        ]
+            gant_data.append(buf_lst)
+    gant_height = len(gant_data) * 50  
+    
     now = datetime.datetime.now()
     r_year = request.GET.get("year", now.year)
     r_month = request.GET.get("month", now.month)
-    print(r_month)
-    print(r_year)
     calendar = generate_calendar(int(r_month), int(r_year))
     subtasks = Subtask.objects.all()
     tasks = Task.objects.all()
@@ -174,7 +251,10 @@ def schedule(request):
             except IndexError:
                 continue
     data = {"calendar": calendar, 
-            "date": [int(r_year), int(r_month)]
+            "date": [int(r_year), int(r_month)],
+            "gant": gant_data,
+            "gant_height": gant_height,
+            "lvl": lvl_name
             }
     return render(request, 'schedule.html', data)
 

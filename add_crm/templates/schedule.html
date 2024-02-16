@@ -1,5 +1,49 @@
 {% extends "base.html" %}
 
+{% block add_to_head %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt'], 'language': 'ru'});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('string', 'Resource');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+      data.addRows([
+        {% for i in gant %}
+            ['{{i.0}}', '{{i.1}}', '{{i.2}}', new Date({{i.3.y}}, {{i.3.m}}, {{i.3.d}}), new Date({{i.4.y}}, {{i.4.m}}, {{i.4.d}}), null, {{i.5}}, null],
+        {% endfor %}
+      ]);
+
+      var options = {
+        legend:'left',
+        height: {{gant_height|add:gant_height}},
+        gantt: {
+          criticalPathEnabled: false,
+          trackHeight: 50,
+          labelStyle: {
+            fontSize: 20
+          },
+        },
+        language: 'ru',
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+{% endblock add_to_head %}
+
 {% block content %}
 <div class="container mt-5">
     <div class="row mb-3">
@@ -77,6 +121,22 @@
         </table>
     </div>
   </div>
+  
+  
+<div class="container mt-5">
+    <div class="dropdown mb-2">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+            {{lvl}}
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url "schedule" %}?lvl=1">Проекты</a>
+            <a class="dropdown-item" href="{% url "schedule" %}?lvl=2">Задачи</a>
+            <a class="dropdown-item" href="{% url "schedule" %}?lvl=3">Подзадачи</a>
+        </div>
+    </div>
+                  
+    <div id="chart_div"></div>
+</div>
 
 {% endblock content %}
 

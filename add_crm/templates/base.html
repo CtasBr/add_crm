@@ -63,8 +63,11 @@
       flex-direction: column; /* Выравнивание по центру по вертикали */
 
     }
+    {% block add_to_styles %}{% endblock add_to_styles %}
+
     </style>
   <title>Add CRM</title>
+  {% block add_to_head %}{% endblock add_to_head %}
 </head>
 <body>
   {% include "inc/_nav.html" %}
