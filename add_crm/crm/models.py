@@ -18,7 +18,7 @@ class Project(models.Model):
     
     title = models.CharField(verbose_name="Название", max_length=500)
     description = models.TextField(verbose_name="Описание")
-    date_add = models.DateField(verbose_name="Дата начала", auto_now=True)
+    date_add = models.DateField(verbose_name="Дата начала")
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     is_done = models.BooleanField(verbose_name="Выполнено")
     
@@ -45,7 +45,7 @@ class Task(models.Model):
     
     title = models.CharField(verbose_name="Название", max_length=500)
     description = models.TextField(verbose_name="Описание")
-    date_add = models.DateField(verbose_name="Дата начала", auto_now=True)
+    date_add = models.DateField(verbose_name="Дата начала")
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_project_id = models.ForeignKey(to="Project", on_delete=models.PROTECT)
     is_done = models.BooleanField(verbose_name="Выполнено")
