@@ -20,6 +20,11 @@
               <a class="card-link" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Чекпоинты
               </a>
+
+              <a class="card-link" data-toggle="collapse" href="#collapseComment{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Комментарии
+              </a>
+
               <div class="collapse" id="collapseExample{{t.id}}">
                 <div class="card card-body">
                   {% for s in subtasks %}
@@ -47,6 +52,37 @@
                           </div>
                           <div class="form-group col-md-6">
                             <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн">
+                          </div>
+                          <div class="form-group col-md-6">
+                          <button type="submit" class="btn btn-primary">Сохранить</button>
+                          </div>
+                        </div>
+                      </form> 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse" id="collapseComment{{t.id}}">
+                <div class="card card-body">
+                  {% for s in comments %}
+                  {% if s.main_task_id.id == t.id %}
+                  <a class="card-text">{{s.text}}</a>
+                  {% if s.file %}
+                  <a href="#" class="card-link">Файл</a>
+                  {% endif %}
+                  <br>
+                  {% endif %}
+                  {% endfor %}
+                  <div id="collapseAdd{{t.id}}">
+                    <div class="card card-body">
+                      <form method="POST" class="" action="/comment/{{t.id}}">
+                        {% csrf_token %}
+                        <div class="form-row">
+                          <div class="form-group col-md-12">
+                            <input type="text" class="form-control" id="text" name="text" placeholder="Текст сообщения">
+                          </div>
+                          <div class="form-group col-md-12">
+                            <input class="form-control" type="file" id="file" placeholder="file" name="file">
                           </div>
                           <div class="form-group col-md-6">
                           <button type="submit" class="btn btn-primary">Сохранить</button>

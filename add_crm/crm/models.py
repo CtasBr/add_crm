@@ -133,3 +133,16 @@ class Variation(models.Model):
     def __str__(self):
         return self.code
     
+
+class Comment(models.Model):
+    class Meta:
+        db_table = "comments"
+        verbose_name = "комментарий"
+        verbose_name_plural = "комментарии"
+    
+    text = models.TextField(verbose_name="Текст")
+    file = models.FileField(verbose_name="Файл", upload_to='comment_files/', blank=True, null=True)
+    main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
+    
+    def __str__(self):
+        return str(self.id)

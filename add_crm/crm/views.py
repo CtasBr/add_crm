@@ -78,11 +78,13 @@ def tasks(request, num):
         s_d.update(is_done=True)
     
     subtasks = Subtask.objects.all()
+    comment = Comment.objects.all()
     tasks = Task.objects.filter(main_project_id=num)
     users = User.objects.all()
     data = {"tasks": tasks, 
             "users": users, 
-            "subtasks": subtasks
+            "subtasks": subtasks,
+            "comments": comment,
             }
     return render(request, 'tasks.html', data)
 
@@ -262,5 +264,10 @@ def schedule(request):
     return render(request, 'schedule.html', data)
 
 
-
-# Create your views here.
+def comment(request, num):
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        file = request.POST.get('file')
+        comment = Comment(text=text, file=file, main_task_id=Task.objects.get(id=num))
+        comment.save()
+        return redirect('tasks', comment.main_task_id.main_project_id.id)

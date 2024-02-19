@@ -8,5 +8,6 @@ urlpatterns = [
     path('schedule/', schedule, name='schedule'),
     path('tasks/<int:num>', tasks, name="tasks"),
     path('subtasks/<int:num>', subtasks, name="subtasks"),
-    path('variations/<int:id>', variations, name="variations")
+    path('variations/<int:id>', variations, name="variations"),
+    path('comment/<int:num>', comment, name="comment")
 ]
