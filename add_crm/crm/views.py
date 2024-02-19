@@ -255,12 +255,23 @@ def schedule(request):
                     calendar[i][j].append(False)
             except IndexError:
                 continue
+    
+    users_info = []
+    users = User.objects.all()
+    
+    for u in users:
+        tasks = Task.objects.filter(executors_id=u.id).filter(is_done=False)
+        users_info.append([u, len(tasks), tasks])
+    
+    
     data = {"calendar": calendar, 
             "date": [int(r_year), int(r_month)],
             "gant": gant_data,
             "gant_height": gant_height,
-            "lvl": lvl_name
+            "lvl": lvl_name,
+            "users": users_info,
             }
+    
     return render(request, 'schedule.html', data)
 
 
