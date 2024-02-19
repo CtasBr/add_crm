@@ -1,0 +1,35 @@
+@import "./reset.css";
+
+body {
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1412px;
+    padding: 0 50px;
+}
+
+/* Header */
+
+.header {
+    background-color: #fff;
+    box-shadow: 0 0 1px #00000025;
+    padding-top: 50px;
+    margin: 0 auto;
+}
+
+.header-nav {
+    display: flex;
+}
+
+.nav-list {
+    
+}
+
+.nav-item {
+
+}
+
+.nav-link {
+
+}
