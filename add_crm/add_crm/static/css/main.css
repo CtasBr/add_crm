@@ -60,29 +60,6 @@ a{
     margin-left: 50px !important;
 }
 
-.team_title_block{
-    padding: 0 20px;
-    position: relative;
-    display: flex;
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto;
-    height: fit-content;
-    justify-content: flex-end;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-
-.team_title_text{
-    position: absolute;
-    right: 20px;
-    top: 10px;
-    color: #0AA5E8;
-    font-size: 55px;
-    line-height: normal;
-    text-align: start;
-}
 .slide-container{
     margin-left: 0px !important;
     max-width: 1512px;
@@ -112,7 +89,7 @@ a{
     content: "";
     position: absolute;
     width: 100%;
-    height: 50px;
+    height: 55px;
     background: #5C4438;
     border-radius: 10px 10px 0 0;
 }
@@ -120,9 +97,9 @@ a{
 .card_title{
     position: relative;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    align-items: left;
+
     border-radius: 30px;
     z-index: 100;
     color: #FFF;
@@ -138,17 +115,17 @@ a{
 
 .time_title{
     font-size: 14px;
-    margin-top: 4px;
-    text-align: right;
+    margin-left: 20px;
     margin-right: 20px;
 }
 
 .card_content{
-    margin-top: 7px;
+    margin-top: 12px;
     margin-right: 25px;
     margin-left: 20px;
     margin-bottom: 20px;
     font-size: 12px;
+    z-index: 100;
 }
 
 
@@ -188,8 +165,9 @@ a{
     margin-top: 15px;
 }
 
+
 .card.task::before{
-    background: #fff;
+    background: #ffffff00;
 }
 
 .card_title.task{
@@ -215,4 +193,43 @@ a.card_button{
 
 a.card_button.done{
     color: #925537 !important;
+}
+
+.card.subtasks::before{
+    content: none;
+    background: #fff;
+}
+
+.card.subtasks{
+    padding: 10px 20px 10px 20px;
+    align-items: stretch;
+}
+
+.subtask_name{
+    z-index: 100;
+}
+
+.circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%; /* Делаем границу блока округлой */
+    background-color: #fff; /* Цвет фона блока */
+    margin-top: 3px;
+    border: 2px solid #925537;
+}
+
+.circle:hover{
+    background-color: #925537;
+}
+
+.subtask{
+    display: flex;
+    gap: 5px;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.card.task.add{
+    padding: 10px 0 10px 0; 
+    background-color: #ffffff00;
 }

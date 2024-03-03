@@ -42,14 +42,25 @@ def projects(request):
 
 
     
-    done_index = int(request.GET.get("done", -1))
-    if done_index > -1:
-        p_d = Project.objects.filter(id=done_index)
-        p_d.update(is_done=True)
+    done_task_index = int(request.GET.get("done_task", -1))
+    if done_task_index > -1:
+        t_d = Task.objects.filter(id=done_task_index)
+        t_d.update(is_done=True)
+    
+    done_subtask_index = int(request.GET.get("done_subtask", -1))
+    print(done_subtask_index)
+    if done_subtask_index > -1:
+        st_d = Subtask.objects.filter(id=done_subtask_index)
+        st_d.update(is_done=True)
 
     p = Project.objects.all()
-    data = {"projects": p}
-    return render(request, 'projects.html', data)
+    t = Task.objects.all()
+    s = Subtask.objects.all()
+    data = {"projects": p, 
+            "tasks": t, 
+            'subtasks': s,
+            }
+    return render(request, 'index.html', data)
 
 
 def tasks(request, num):
@@ -81,6 +92,7 @@ def tasks(request, num):
     comment = Comment.objects.all()
     tasks = Task.objects.filter(main_project_id=num)
     users = User.objects.all()
+    
     data = {"tasks": tasks, 
             "users": users, 
             "subtasks": subtasks,
@@ -95,7 +107,7 @@ def subtasks(request, num):
         date_start = request.POST.get('date_start')
         subtask = Subtask(title=title, deadline=deadline, is_done=False, main_task_id=Task.objects.get(id=num), date_add=date_start)
         subtask.save()
-        return redirect('tasks', subtask.main_task_id.main_project_id.id)
+        return redirect('projects')
 
 def experiments(request, id):
     if request.method == 'POST':
@@ -282,3 +294,4 @@ def comment(request, num):
         comment = Comment(text=text, file=file, main_task_id=Task.objects.get(id=num))
         comment.save()
         return redirect('tasks', comment.main_task_id.main_project_id.id)
+    
