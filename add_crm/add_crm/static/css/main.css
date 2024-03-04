@@ -85,32 +85,36 @@ a{
     margin-right: 50px;
 }
 
-.card::before{
+/* .card::before{
     content: "";
     position: absolute;
     width: 100%;
     height: 55px;
     background: #5C4438;
     border-radius: 10px 10px 0 0;
-}
+} */
 
 .card_title{
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: left;
-
-    border-radius: 30px;
+    border-radius: 1px;
     z-index: 100;
     color: #FFF;
     width: 100%;
-    height: 50px;
+    border-radius: 10px 10px 0 0;
+    
 }
 
+.card_title.project{
+    background: #5C4438;
+}
 .text_title{
     text-align: left;
     font-size: 20px;
     margin-left: 20px;
+    margin-right: 20px;
 }
 
 .time_title{
@@ -166,9 +170,9 @@ a{
 }
 
 
-.card.task::before{
+/* .card.task::before{
     background: #ffffff00;
-}
+} */
 
 .card_title.task{
     color: #000;
@@ -195,10 +199,10 @@ a.card_button.done{
     color: #925537 !important;
 }
 
-.card.subtasks::before{
+/* .card.subtasks::before{
     content: none;
     background: #fff;
-}
+} */
 
 .card.subtasks{
     padding: 10px 20px 10px 20px;
@@ -227,9 +231,32 @@ a.card_button.done{
     gap: 5px;
     font-size: 14px;
     margin-bottom: 2px;
+    border-bottom: 1px solid #5C443850;
 }
 
 .card.task.add{
     padding: 10px 0 10px 0; 
     background-color: #ffffff00;
 }
+
+
+.popover_btn {
+    background: #ddd;
+    font-weight: 800;
+    border: 2px solid black;
+  }
+  
+  /* #my-popover {
+    background: #333;
+    color: white;
+    font-weight: 400;
+    padding: 1rem;
+    max-width: 200px;
+    line-height: 1.4;
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  } */
+  

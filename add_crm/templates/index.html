@@ -28,7 +28,7 @@
       {% for p in projects %} {% if not p.is_done %}
       <div class="slider--content">
         <div class="card">
-          <div class="card_title">
+          <div class="card_title project">
             <div class="text_title">{{p.title}}</div>
             <div class="time_title">{{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}</div>
           </div>
@@ -43,18 +43,27 @@
           <div class="card_content task">
             {{t.description}}
           </div>
+
           <div class="card_buttons">
             <a href="{% url "projects" %}?done_task={{t.id}}" class="card_button done">Готово</a>
             <a href="" class="card_button">Комментарии</a>
             <a class="card_button" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Подзадачи</a>
+            <button popovertarget="my-popover{{t.id}}" class="popover_btn"> Исполнитель </button>
+            
           </div>
+          <div id="my-popover{{t.id}}" popover>
+            {% for e in t.executors_id.all %}
+            <div>{{ e.name }}</div>
+            {% endfor %}
+          </div>
+          
         </div>
         <div class="collapse" id="collapseExample{{t.id}}">
           <div class="card subtasks">
             {% for s in subtasks %}
             {% if s.main_task_id.id == t.id %}
             {% if not s.is_done %}
-            <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.title}}</div>
+            <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
             {% endif %}
             {% endif %}
             {% endfor %}
@@ -85,11 +94,16 @@
           </div>
         </div>
         {% endif %} {% endif %} {% endfor %}
+        {% comment %} <div class="card task add">
+          <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%; z-index: 100; background-color: #925537; border: 0px;" id="myBtn">
+        </div> {% endcomment %}
+      </div>
+      {% endif %} {% endfor %}
+      <div class="slider--content">
         <div class="card task add">
           <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%; z-index: 100; background-color: #925537; border: 0px;" id="myBtn">
         </div>
       </div>
-      {% endif %} {% endfor %}
       
     </section>
 
@@ -117,14 +131,6 @@
               <div class="form-group">
                 <label for="description">Описание</label>
                 <textarea class="form-control" id="description" rows="3" name="description"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="users">Исполнитель</label>
-                <select class="custom-select" multiple name="users" id="users">
-                  {% for u in users%}
-                    <option value="{{u.id}}">{{u.name}}</option>
-                  {% endfor %}
-                </select>
               </div>
             </div>
             <div class="modal-footer">
