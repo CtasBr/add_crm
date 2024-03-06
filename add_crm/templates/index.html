@@ -48,10 +48,10 @@
             <a href="{% url "projects" %}?done_task={{t.id}}" class="card_button done">Готово</a>
             <a href="" class="card_button">Комментарии</a>
             <a class="card_button" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Подзадачи</a>
-            <button popovertarget="my-popover{{t.id}}" class="popover_btn"> Исполнитель </button>
+            
             
           </div>
-          <div id="my-popover{{t.id}}" popover>
+          <div id="my-popover{{t.id}}" popover class="my-popover">
             {% for e in t.executors_id.all %}
             <div>{{ e.name }}</div>
             {% endfor %}

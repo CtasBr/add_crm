@@ -246,17 +246,45 @@ a.card_button.done{
     border: 2px solid black;
   }
   
-  /* #my-popover {
+  .my-popover {
     background: #333;
     color: white;
     font-weight: 400;
     padding: 1rem;
     max-width: 200px;
     line-height: 1.4;
-    position: absolute;
     top: 1rem;
     left: 0;
     right: 0;
     margin: 0 auto;
-  } */
+  }
   
+.tooltip.tooltiptext{
+width: 160px;
+bottom:80%;
+left:40%;
+margin-left: 80px;
+}
+
+.tooltipleft{
+    position: relative;
+    display: inline-block;
+    border-bottom: 2px dotted blue;
+    }
+    .tooltipleft .toolttextleft {
+    visibility: hidden;
+    width: 200px;
+    height:50px;
+    background-color:lightsalmon;
+    color: black;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px ;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    right: 130%;
+    }
+    .tooltipleft:hover .toolttextleft {
+    visibility: visible;
+    }
