@@ -49,7 +49,7 @@ class Task(models.Model):
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_project_id = models.ForeignKey(to="Project", on_delete=models.PROTECT)
     is_done = models.BooleanField(verbose_name="Выполнено")
-    executors_id = models.ManyToManyField("User")
+    executors_id = models.ManyToManyField("User", blank=True)
     
     def __str__(self):
         return self.title

@@ -56,9 +56,11 @@ def projects(request):
     p = Project.objects.all()
     t = Task.objects.all()
     s = Subtask.objects.all()
+    u = User.objects.all()
     data = {"projects": p, 
             "tasks": t, 
-            'subtasks': s,
+            "subtasks": s,
+            "users": u,
             }
     return render(request, 'index.html', data)
 
@@ -74,31 +76,8 @@ def tasks(request, num):
         users = User.objects.filter(id__in=users)
         task.save()
         task.executors_id.set(users)
-          # Сохраняем объект в базе данных
 
-        return redirect('tasks', num)
-    
-    done_index = int(request.GET.get("done", -1))
-    if done_index != -1:
-        t_d = Task.objects.filter(id=done_index)
-        t_d.update(is_done=True)
-    
-    s_done_index = int(request.GET.get("done_subtask", -1))
-    if s_done_index != -1:
-        s_d = Subtask.objects.filter(id=s_done_index)
-        s_d.update(is_done=True)
-    
-    subtasks = Subtask.objects.all()
-    comment = Comment.objects.all()
-    tasks = Task.objects.filter(main_project_id=num)
-    users = User.objects.all()
-    
-    data = {"tasks": tasks, 
-            "users": users, 
-            "subtasks": subtasks,
-            "comments": comment,
-            }
-    return render(request, 'tasks.html', data)
+        return redirect('projects')
 
 def subtasks(request, num):
     if request.method == 'POST':
