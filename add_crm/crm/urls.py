@@ -10,4 +10,5 @@ urlpatterns = [
     path('subtasks/<int:num>', subtasks, name="subtasks"),
     path('variations/<int:id>', variations, name="variations"),
     path('comment/<int:num>', comment, name="comment"),
+    path('calendar/', calendar, name='calendar'),
 ]

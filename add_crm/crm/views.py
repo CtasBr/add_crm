@@ -1,5 +1,6 @@
-import calendar
+import calendar as cal
 import datetime
+import locale
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -57,10 +58,12 @@ def projects(request):
     t = Task.objects.all()
     s = Subtask.objects.all()
     u = Empl.objects.all()
+    c = Comment.objects.all()
     data = {"projects": p, 
             "tasks": t, 
             "subtasks": s,
             "users": u,
+            "comments": c,
             }
     return render(request, 'index.html', data)
 
@@ -269,8 +272,36 @@ def schedule(request):
 def comment(request, num):
     if request.method == 'POST':
         text = request.POST.get('text')
-        file = request.POST.get('file')
-        comment = Comment(text=text, file=file, main_task_id=Task.objects.get(id=num))
+        # file = request.POST.get('file')
+        comment = Comment(text=text, main_task_id=Task.objects.get(id=num), user=request.user)
         comment.save()
-        return redirect('tasks', comment.main_task_id.main_project_id.id)
+        return redirect('projects')
+    
+def calendar(request):
+    locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+    today = datetime.date.today()
+    day_word = today.strftime('%A')
+    day_number = today.strftime('%d')  # число
+    month_word = today.strftime('%B')  # месяц
+    year = today.strftime('%Y')  # год
+    date = {"day": day_word.capitalize(), 
+            "day_num": day_number, 
+            "month": month_word.capitalize(),
+            "year": year
+            }
+
+    c = cal.monthcalendar(2027, 5)
+    print(c)
+    translate = ["first", "second", "third", "fourth", "fifth", "sixth"]
+    c_done = []
+    for i in range(len(c)):
+        c_done.append({"text": translate[i], "week": c[i]})
+
+    
+
+    data = {
+        "date": date,
+        "calendar": c_done,
+    }
+    return render(request, 'calendar.html', data)
     
