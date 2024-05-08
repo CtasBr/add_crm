@@ -85,6 +85,10 @@ a{
     margin-right: 50px;
 }
 
+.card.login{
+    margin-left: 25px;
+}
+
 /* .card::before{
     content: "";
     position: absolute;
@@ -288,3 +292,116 @@ margin-left: 80px;
     .tooltipleft:hover .toolttextleft {
     visibility: visible;
     }
+
+    .login-page {
+        width: 360px;
+        padding: 100 0 0;
+        margin: auto;
+      }
+      .form {
+        position: relative;
+        z-index: 1;
+        background: #FFFFFF;
+        max-width: 360px;
+        margin: 0 auto 100px;
+        padding: 45px;
+        text-align: center;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+      }
+      .form input {
+        font-family: "Roboto", sans-serif;
+        outline: 0;
+        background: #f2f2f2;
+        width: 100%;
+        border: 0;
+        margin: 0 0 15px;
+        padding: 15px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      .form button {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #4CAF50;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        -webkit-transition: all 0.3 ease;
+        transition: all 0.3 ease;
+        cursor: pointer;
+      }
+      .form button:hover,.form button:active,.form button:focus {
+        background: #43A047;
+      }
+      .form .message {
+        margin: 15px 0 0;
+        color: #b3b3b3;
+        font-size: 12px;
+      }
+      .form .message a {
+        color: #4CAF50;
+        text-decoration: none;
+      }
+      .form .register-form {
+        display: none;
+      }
+      .containereg {
+        position: relative;
+        z-index: 1;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      .containereg:before, .container:after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+      .containereg .info {
+        margin: 50px auto;
+        text-align: center;
+      }
+      .containereg .info h1 {
+        margin: 0 0 15px;
+        padding: 0;
+        font-size: 36px;
+        font-weight: 300;
+        color: #1a1a1a;
+      }
+      .containereg .info span {
+        color: #4d4d4d;
+        font-size: 12px;
+      }
+      .containereg .info span a {
+        color: #000000;
+        text-decoration: none;
+      }
+      .containereg .info span .fa {
+        color: #EF3B3A;
+      }
+
+      #mc_embed_signup { border: none; text-align: center; width: 100%; } /* Signup form container */
+
+      .mc-field-group { display: inline-block; } /* positions input field horizontally */
+      
+      #mce-EMAIL { font-size: 1em; border: 1px solid #925537 ; color: #925537; background-color: #fff; padding: .7em 9em .7em 1em; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; display: inline-block; margin: 0; } /* Input Styles */
+      
+      .clear { display: inline-block; } /* positions button horizontally in line with input */
+      
+      .button { font-family: 'Helvetica Neue', Helvetica,  Arial, sans-serif; font-size: 1em; letter-spacing: .03em; color: #fff; background-color: #2386C8 ; padding: .7em 2em; border: 2px solid #2386C8 ; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; display: inline-block; margin: 0; } /* Button Styles */
+      
+      :-webkit-input-placeholder { color: #925537 ; } /* WebKit browsers */ 
+      :-moz-placeholder { color: #925537 ; } /* Mozilla Firefox 4 to 18 */
+      ::-moz-placeholder { color: #925537 ; } /* Mozilla Firefox 19+ */
+      :-ms-input-placeholder { color: #925537 ; } /* Internet Explorer 10+ */
+      
+      @media (max-width: 768px) { /* positions input field and button underneath each other with 100% width for tablet and mobile */
+        
+      .mc-field-group { display: block; max-width: 100%; }
+      #mce-EMAIL { padding: .7em 0 .7em 1em; width: 96%; margin: 0; }
+      .clear { display: block; width: 100% }
+      .button { width: 100%; margin: .5em 0 0 0; }
+        
+      }

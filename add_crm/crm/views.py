@@ -56,7 +56,7 @@ def projects(request):
     p = Project.objects.all()
     t = Task.objects.all()
     s = Subtask.objects.all()
-    u = User.objects.all()
+    u = Empl.objects.all()
     data = {"projects": p, 
             "tasks": t, 
             "subtasks": s,

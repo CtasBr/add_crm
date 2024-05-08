@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -49,7 +50,7 @@ class Task(models.Model):
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_project_id = models.ForeignKey(to="Project", on_delete=models.PROTECT)
     is_done = models.BooleanField(verbose_name="Выполнено")
-    executors_id = models.ManyToManyField("User", blank=True)
+    executors_id = models.ManyToManyField("Empl", blank=True)
     
     def __str__(self):
         return self.title
@@ -82,7 +83,7 @@ class Subtask(models.Model):
         return self.title
 
 
-class User(models.Model):
+class Empl(models.Model):
     """Пользователи
 
     Поля:
@@ -91,7 +92,7 @@ class User(models.Model):
     """
     
     class Meta:
-        db_table = "users"
+        db_table = "empl"
         verbose_name = "пользователь"
         verbose_name_plural = "пользователи"
     
@@ -139,7 +140,7 @@ class Comment(models.Model):
         db_table = "comments"
         verbose_name = "комментарий"
         verbose_name_plural = "комментарии"
-    
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     text = models.TextField(verbose_name="Текст")
     file = models.FileField(verbose_name="Файл", upload_to='comment_files/', blank=True, null=True)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)

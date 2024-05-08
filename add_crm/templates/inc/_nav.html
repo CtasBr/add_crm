@@ -7,21 +7,21 @@
   </div>
   {% if user.is_authenticated %}
   <div class="btn-group" role="group" aria-label="Basic example">
-    <a class="btn btn-custom">{{ user.first_name }} {{ user.last_name }}</a>
+  <a class="btn btn-custom">{{ user.first_name }} {{ user.last_name }}</a>
   </div>
   {% endif %}
-
   <div class="btn-group" role="group" aria-label="Basic example">
-    {% if user.is_authenticated %}
-    <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-custom active">Выйти</button>
-    </form>
-    {% else %}
-    <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-custom active">Войти</button>
-    </form>
-    {% endif %}
-  </div>
+  {% if user.is_authenticated %}
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-custom active">Выйти</button>
+  </form>
+  {% else %}
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-custom active">Войти</button>
+  </form>
+  {% endif %}
 </div>
+
+
