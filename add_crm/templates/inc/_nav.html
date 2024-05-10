@@ -1,9 +1,9 @@
 <div class="container mt-0 mr-0 ml-0" style="padding: 0">
   <div class="btn-group" role="group" aria-label="Basic example">
-    <a href="{% url "projects" %}" type="button" class="btn btn-custom active">Проекты</a>
-    <a href="{% url "calendar" %}" type="button" class="btn btn-custom">Календарь</a>
-    <a type="button" class="btn btn-custom">Гант</a>
-    <a type="button" class="btn btn-custom">Сотрудники</a>
+    <a href="{% url "projects" %}" type="button" class="btn btn-custom {{nav.projects}}">Проекты</a>
+    <a href="{% url "calendar" %}" type="button" class="btn btn-custom {{nav.calendar}}">Календарь</a>
+    <a type="button" class="btn btn-custom {{nav.hant}}">Гант</a>
+    <a type="button" class="btn btn-custom {{nav.employees}}">Сотрудники</a>
   </div>
   {% if user.is_authenticated %}
   <div class="btn-group" role="group" aria-label="Basic example">

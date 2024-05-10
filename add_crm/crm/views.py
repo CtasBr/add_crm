@@ -8,28 +8,6 @@ from django.shortcuts import redirect, render
 from .models import *
 
 
-def generate_calendar(month, year):
-    # Получаем количество дней в указанном месяце и году
-    num_days = calendar.monthrange(year, month)[1]
-    
-    # Получаем день недели первого дня указанного месяца
-    first_day_weekday = calendar.weekday(year, month, 1)
-    
-    # Создаем список-календарь с пустыми ячейками
-    calendar_list = [["" for _ in range(7)] for _ in range(6)]
-    
-    # Заполняем список-календарь днями месяца
-    current_day = 1
-    for week in range(6):
-        for weekday in range(7):
-            if current_day <= num_days and (week > 0 or weekday >= first_day_weekday):
-                calendar_list[week][weekday] = [str(current_day)]
-                current_day += 1
-    
-    return calendar_list
-
-
-
 def projects(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -53,7 +31,13 @@ def projects(request):
     if done_subtask_index > -1:
         st_d = Subtask.objects.filter(id=done_subtask_index)
         st_d.update(is_done=True)
+    nav_state = {"projects": "active", 
+                 "hant": "",
+                 "calendar": "",
+                 "employees": ""    
+                 }
 
+    
     p = Project.objects.all()
     t = Task.objects.all()
     s = Subtask.objects.all()
@@ -64,6 +48,7 @@ def projects(request):
             "subtasks": s,
             "users": u,
             "comments": c,
+            "nav": nav_state,
             }
     return render(request, 'index.html', data)
 
@@ -203,7 +188,7 @@ def schedule(request):
     now = datetime.datetime.now()
     r_year = request.GET.get("year", now.year)
     r_month = request.GET.get("month", now.month)
-    calendar = generate_calendar(int(r_month), int(r_year))
+    # calendar = generate_calendar(int(r_month), int(r_year))
     subtasks = Subtask.objects.all()
     tasks = Task.objects.all()
     projects = Project.objects.all()
@@ -289,19 +274,30 @@ def calendar(request):
             "month": month_word.capitalize(),
             "year": year
             }
-
-    c = cal.monthcalendar(2027, 5)
+    r_year = int(request.GET.get("year", today.year))
+    r_month = int(request.GET.get("month", today.month))
+    c = cal.monthcalendar(r_year, r_month)
     print(c)
     translate = ["first", "second", "third", "fourth", "fifth", "sixth"]
     c_done = []
     for i in range(len(c)):
         c_done.append({"text": translate[i], "week": c[i]})
 
+    nav_state = {"projects": "", 
+                 "hant": "",
+                 "calendar": "active",
+                 "employees": ""    
+                 }
+    date_active = {
+        "year": r_year,
+        "month": r_month,
+    }
     
-
     data = {
         "date": date,
         "calendar": c_done,
+        "nav": nav_state,
+        "date_active": date_active,
     }
     return render(request, 'calendar.html', data)
     

@@ -2,7 +2,7 @@
 <div class="container_cal">
   <div class="front">
     <div class="current-date">
-      <h1>{{date.day}}</h1>
+      <h1>{{date_active.month}}.{{date_active.year}}</h1>
       <h1>{{date.day_num}} {{date.month}} {{date.year}}</h1>
     </div>
 
@@ -32,17 +32,15 @@
   </div>
 </div>
 <div class="btn-group" role="group" aria-label="Basic example">
-    {% if  date.1 > 1%}
-    <a class="btn mr-3 btn-secondary" href="{% url "schedule" %}?year={{date.0}}&month={{date.1|add:-1}}">Предыдущий месяц</a>
+    {% if  date_active.month > 1%}
+    <a class="btn mr-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:-1}}">Предыдущий месяц</a>
     {% else %}
-    <a class="btn mr-3 btn-secondary" href="{% url "schedule" %}?year={{date.0|add:-1}}&month={{12}}">Предыдущий месяц</a>
+    <a class="btn mr-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year|add:-1}}&month={{12}}">Предыдущий месяц</a>
     {% endif %}
-    
-    <h3>{{date.1}}.{{date.0}}</h3>
-    {% if  date.1 < 12%}
-    <a class="btn ml-3 btn-secondary" href="{% url "schedule" %}?year={{date.0}}&month={{date.1|add:1}}">Следующий месяц</a>
+    {% if  date_active.month < 12%}
+    <a class="btn ml-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:1}}">Следующий месяц</a>
     {% else %}
-    <a class="btn ml-3 btn-secondary" href="{% url "schedule" %}?year={{date.0|add:1}}&month={{1}}">Следующий месяц</a>
+    <a class="btn ml-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year|add:1}}&month={{1}}">Следующий месяц</a>
     {% endif %}
 </div>
 {% endblock content %}
