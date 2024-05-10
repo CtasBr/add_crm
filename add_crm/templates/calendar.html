@@ -1,4 +1,18 @@
 {% extends "base.html" %} {% block content %}
+<br>
+
+<div class="btn-group" role="group" aria-label="Basic example">
+  {% if  date_active.month > 1%}
+  <a class="btn mr-1 btn-custom active" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:-1}}">Предыдущий месяц</a>
+  {% else %}
+  <a class="btn mr-1 btn-custom active" href="{% url "calendar" %}?year={{date_active.year|add:-1}}&month={{12}}">Предыдущий месяц</a>
+  {% endif %}
+  {% if  date_active.month < 12%}
+  <a class="btn btn-custom active" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:1}}">Следующий месяц</a>
+  {% else %}
+  <a class="btn btn-custom active" href="{% url "calendar" %}?year={{date_active.year|add:1}}&month={{1}}">Следующий месяц</a>
+  {% endif %}
+</div>
 <div class="container_cal">
   <div class="front">
     <div class="current-date">
@@ -8,20 +22,23 @@
 
     <div class="current-month">
       <ul class="week-days">
-        <li>MON</li>
-        <li>TUE</li>
-        <li>WED</li>
-        <li>THU</li>
-        <li>FRI</li>
-        <li>SAT</li>
-        <li>SUN</li>
+        <li>ПН</li>
+        <li>ВТ</li>
+        <li>СР</li>
+        <li>ЧТ</li>
+        <li>ПТ</li>
+        <li>СБ</li>
+        <li>ВС</li>
       </ul>
 
       <div class="weeks">
         {% for cal_obj in calendar %}
         <div class="{{cal_obj.text}}">
           {% for day in cal_obj.week %} {% if day.date %}
-          <span class="{{day.ev}}" data-tooltip="Подсказка">{{day.date}}</span>
+          {% if day.ev %}<span class="event" data-tooltip="{{day.ev}}">{{day.date}}</span>
+          {% else %}
+          <span class="" data-tooltip="">{{day.date}}</span>
+          {% endif %}
           {% else %}
           <span></span>
           {% endif %} {% endfor %}
@@ -31,16 +48,5 @@
     </div>
   </div>
 </div>
-<div class="btn-group" role="group" aria-label="Basic example">
-    {% if  date_active.month > 1%}
-    <a class="btn mr-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:-1}}">Предыдущий месяц</a>
-    {% else %}
-    <a class="btn mr-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year|add:-1}}&month={{12}}">Предыдущий месяц</a>
-    {% endif %}
-    {% if  date_active.month < 12%}
-    <a class="btn ml-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year}}&month={{date_active.month|add:1}}">Следующий месяц</a>
-    {% else %}
-    <a class="btn ml-3 btn-secondary" href="{% url "calendar" %}?year={{date_active.year|add:1}}&month={{1}}">Следующий месяц</a>
-    {% endif %}
-</div>
+
 {% endblock content %}

@@ -283,22 +283,29 @@ def calendar(request):
     c_done = []
     
     subtask_dates = []
+    subtask_names = []
     for i in subtasks:
         dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
         if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
             subtask_dates.append(dates.day)
+            subtask_names.append(i.title)
     task_dates = []
+    task_names = []
     for i in tasks:
             dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
             if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
                 task_dates.append(dates.day)
-    print(task_dates, subtask_dates)
+                task_names.append(i.title)
         
-    
+    used = {"task": 0, "subtask":0}
     for week in c:
         for i in range(len(week)):
-            if week[i] in task_dates or week[i] in subtask_dates:
-                week[i] = {"ev": "event", "date": week[i]}
+            if week[i] in task_dates:
+                week[i] = {"ev": f"{task_names[used['task']]}", "date": week[i]}
+                used["task"] += 1
+            elif week[i] in subtask_dates:
+                week[i] = {"ev": f"{subtask_names[used['subtask']]}", "date": week[i]}
+                used["subtask"] += 1
             else:
                 week[i] = {"ev": "", "date": week[i]}
     
@@ -321,4 +328,15 @@ def calendar(request):
         "date_active": date_active,
     }
     return render(request, 'calendar.html', data)
-    
+
+
+def gantt(request):
+    nav_state = {"projects": "", 
+                 "hant": "active",
+                 "calendar": "",
+                 "employees": ""    
+                 }
+    data = {
+        "nav": nav_state,
+    }
+    return render(request, 'gantt.html', data)

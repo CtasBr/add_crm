@@ -20,6 +20,7 @@ a{
 }
 .background-image {
     position: fixed;
+    opacity: 0.9;
     top: 0;
     left: 0;
     width: 100%;
@@ -61,6 +62,10 @@ a{
 .btn-group{
     margin-left: 25px;
     margin-top: 25px;
+}
+.m0{
+  margin-left: 0px !important; 
+  margin-top: 0px !important;
 }
 .slide-content{
     padding: 0 !important;
@@ -443,20 +448,20 @@ margin-left: 80px;
       }
       
       .current-date {
-        border-bottom: 1px solid rgba(73, 114, 133, .6);
+        border-bottom: 1px solid #fff;
         display: flex;
         justify-content: space-between;
         padding: 30px 40px;
       }
       
       .current-date h1 {
-        color: #dfebed;
+        color: #fff;
         font-size: 1.4em;
         font-weight: 300;
       }
       
       .week-days {
-        color: #dfebed;
+        color: #fff;
         display: flex;
         justify-content: space-between;
         font-weight: 600;
@@ -616,6 +621,100 @@ margin-left: 80px;
         background: #5889a0;
         outline: none;
       }
+
+      :root {
+        --white: #fff;
+        --divider: lightgrey;
+        --body: #f5f7f8;
+      }
+      .chart-wrapper {
+        max-width: 1600px;
+        padding: 0 10px;
+        margin: 10px auto;
+      }
       
       
+      /* CHART-VALUES
+      –––––––––––––––––––––––––––––––––––––––––––––––––– */
+      .chart-wrapper .chart-values {
+        position: relative;
+        display: flex;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #FFF;
+      }
       
+      .chart-wrapper .chart-values li {
+        flex: 1;
+        min-width: 80px;
+        text-align: center;
+      }
+      
+      .chart-wrapper .chart-values li:not(:last-child) {
+        position: relative;
+      }
+      
+      .chart-wrapper .chart-values li:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        height: 500px;
+      }
+      
+      
+      /* CHART-BARS
+      –––––––––––––––––––––––––––––––––––––––––––––––––– */
+      .chart-wrapper .chart-bars li {
+        position: relative;
+        color: var(--white);
+        margin-bottom: 15px;
+        font-size: 16px;
+        border-radius: 20px;
+        padding: 10px 20px;
+        width: 0;
+        opacity: 0;
+        transition: all 0.65s linear 0.2s;
+      }
+      
+      @media screen and (max-width: 600px) {
+        .chart-wrapper .chart-bars li {
+          padding: 10px;
+        }
+      }
+
+      .gantinf::before{
+        content: attr(data-tooltip);
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+      .gantinf:hover::before {
+        opacity: 1;
+      }
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+  
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+  
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+  

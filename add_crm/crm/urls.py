@@ -11,4 +11,5 @@ urlpatterns = [
     path('variations/<int:id>', variations, name="variations"),
     path('comment/<int:num>', comment, name="comment"),
     path('calendar/', calendar, name='calendar'),
+    path('gantt/', gantt, name='gantt'),
 ]
