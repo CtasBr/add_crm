@@ -1,11 +1,22 @@
 import calendar as cal
 import datetime
 import locale
+import random
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from .models import *
+
+
+def generate_random_hex():
+    random_number = random.randrange(0, 16777215) 
+    hex_number = hex(random_number)[2:]
+    res_hex = ['0', '0', '0', '0', '0', '0']
+    for i in range(-1, -1*len(hex_number)-1, -1):
+        res_hex[i] = hex_number[i]
+    res_hex = '#' + ''.join(res_hex)
+    return res_hex
 
 
 def projects(request):
@@ -329,14 +340,27 @@ def calendar(request):
     }
     return render(request, 'calendar.html', data)
 
+range_lvl = "week"
+lvl = "projects"
 
 def gantt(request):
+    global range_lvl
+    global lvl
+    range_lvl = request.GET.get("range", range_lvl)
+    lvl = request.GET.get("lvl", lvl)
+    button_state = {"range": {"week": "", "month": "", "year": ""}, "lvl": {"projects": "", "tasks": "", "subtasks": ""}}
+    button_state["range"][range_lvl] = "active"
+    button_state["lvl"][lvl] = "active"
+    print(range_lvl, lvl)
     nav_state = {"projects": "", 
                  "hant": "active",
                  "calendar": "",
                  "employees": ""    
                  }
+    hex_lst = [generate_random_hex() for i in range(8)]
     data = {
         "nav": nav_state,
+        "h_l": hex_lst,
+        "b_s": button_state
     }
     return render(request, 'gantt.html', data)

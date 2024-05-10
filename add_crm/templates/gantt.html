@@ -1,49 +1,47 @@
 {% extends "base.html" %} {% block content %}
 <br>
 <div class="btn-group" role="group" aria-label="Basic example">
-  <a href="#" type="button" class="btn btn-custom active">Проекты</a>
-  <a href="#" type="button" class="btn btn-custom">Задачи</a>
-  <a href="#" type="button" class="btn btn-custom">Подзадачи</a>
+  <a href="{% url "gantt" %}?lvl=projects" type="button" class="btn btn-custom {{b_s.lvl.projects}}">Проекты</a>
+  <a href="{% url "gantt" %}?lvl=tasks" type="button" class="btn btn-custom {{b_s.lvl.tasks}}">Задачи</a>
+  <a href="{% url "gantt" %}?lvl=subtasks" type="button" class="btn btn-custom {{b_s.lvl.subtasks}}">Подзадачи</a>
 </div>
+<div class="btn-group" role="group" aria-label="Basic example">
+  <a href="{% url "gantt" %}?range=week" type="button" class="btn btn-custom {{b_s.range.week}}">Неделя</a>
+  <a href="{% url "gantt" %}?range=month" type="button" class="btn btn-custom {{b_s.range.month}}">Месяц</a>
+  <a href="{% url "gantt" %}?range=year" type="button" class="btn btn-custom {{b_s.range.year}}">Год</a>
+</div>
+<section class="slider">
 <div class="chart-wrapper">
     <ul class="chart-values">
-      <li>sun</li>
-      <li>mon</li>
-      <li>tue</li>
-      <li>wed</li>
-      <li>thu</li>
-      <li>fri</li>
-      <li>sat</li>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+      <li>6</li>
+      <li>7</li>
     </ul>
     <ul class="chart-bars">
       <li
         class="gantinf"
         data-tooltip="Подсказка какая-то"
-        data-duration="tue½-wed"
+        data-duration="1½-3"
         data-color="#b03532"
       >
         Task
       </li>
-      <li data-duration="wed-sat" data-color="#33a8a5">Task</li>
-      <li data-duration="sun-tue" data-color="#30997a">Task</li>
-      <li data-duration="tue½-thu" data-color="#6a478f">Task</li>
-      <li data-duration="mon-tue½" data-color="#da6f2b">Task</li>
-      <li data-duration="wed-wed" data-color="#3d8bb1">Task</li>
-      <li data-duration="thu-fri½" data-color="#e03f3f">Task</li>
-      <li data-duration="mon½-wed½" data-color="#59a627">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
-      <li data-duration="fri-sat" data-color="#4464a1">Task</li>
+      <li data-duration="3-6" data-color="{{h_l.0}}">Task</li>
+      <li data-duration="1-4" data-color="{{h_l.1}}">Task</li>
+      <li data-duration="1½-3" data-color="{{h_l.2}}">Task</li>
+      <li data-duration="2-3½" data-color="{{h_l.3}}">Task</li>
+      <li data-duration="1-3" data-color="{{h_l.4}}">Task</li>
+      <li data-duration="6-7½" data-color="{{h_l.5}}">Task</li>
+      <li data-duration="1½-7½" data-color="{{h_l.6}}">Task</li>
+      <li data-duration="1-4" data-color="{{h_l.7}}">Task</li>
     </ul>
   </div>
+</div>
+</section>
   {% endblock content %} {% block scripts %}
   <script>
     function createChart(e) {
@@ -100,4 +98,4 @@
     window.addEventListener("resize", createChart);
   </script>
   {% endblock scripts %}
-</div>
+

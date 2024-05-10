@@ -628,7 +628,7 @@ margin-left: 80px;
         --body: #f5f7f8;
       }
       .chart-wrapper {
-        max-width: 1600px;
+        width: 100%;
         padding: 0 10px;
         margin: 10px auto;
       }
