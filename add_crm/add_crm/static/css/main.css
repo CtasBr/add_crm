@@ -516,6 +516,24 @@ margin-left: 80px;
         top: -4px;
       }
       
+      .event::before{
+        content: attr(data-tooltip);
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+      .event:hover::before {
+        opacity: 1;
+      }
+      
       /* Back - Event form */
       
       .back {

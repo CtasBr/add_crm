@@ -20,8 +20,8 @@
       <div class="weeks">
         {% for cal_obj in calendar %}
         <div class="{{cal_obj.text}}">
-          {% for date in cal_obj.week %} {% if date %}
-          <span>{{date}}</span>
+          {% for day in cal_obj.week %} {% if day.date %}
+          <span class="{{day.ev}}" data-tooltip="Подсказка">{{day.date}}</span>
           {% else %}
           <span></span>
           {% endif %} {% endfor %}

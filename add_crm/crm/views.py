@@ -263,6 +263,8 @@ def comment(request, num):
         return redirect('projects')
     
 def calendar(request):
+    subtasks = Subtask.objects.all()
+    tasks = Task.objects.all()
     locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
     today = datetime.date.today()
     day_word = today.strftime('%A')
@@ -277,12 +279,31 @@ def calendar(request):
     r_year = int(request.GET.get("year", today.year))
     r_month = int(request.GET.get("month", today.month))
     c = cal.monthcalendar(r_year, r_month)
-    print(c)
     translate = ["first", "second", "third", "fourth", "fifth", "sixth"]
     c_done = []
+    
+    subtask_dates = []
+    for i in subtasks:
+        dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
+        if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
+            subtask_dates.append(dates.day)
+    task_dates = []
+    for i in tasks:
+            dates = datetime.datetime.combine(i.deadline, datetime.datetime.min.time())
+            if int(dates.month) == int(r_month) and int(dates.year) == int(r_year):
+                task_dates.append(dates.day)
+    print(task_dates, subtask_dates)
+        
+    
+    for week in c:
+        for i in range(len(week)):
+            if week[i] in task_dates or week[i] in subtask_dates:
+                week[i] = {"ev": "event", "date": week[i]}
+            else:
+                week[i] = {"ev": "", "date": week[i]}
+    
     for i in range(len(c)):
         c_done.append({"text": translate[i], "week": c[i]})
-
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "active",
