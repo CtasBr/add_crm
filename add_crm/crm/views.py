@@ -348,10 +348,29 @@ def gantt(request):
     global lvl
     range_lvl = request.GET.get("range", range_lvl)
     lvl = request.GET.get("lvl", lvl)
-    button_state = {"range": {"week": "", "month": "", "year": ""}, "lvl": {"projects": "", "tasks": "", "subtasks": ""}}
+    if range_lvl == "week":
+        column_names= [i for i in range(1, 8)]
+    else:
+        column_names= [i for i in range(1, 31)]
+    button_state = {"range": {"week": "", "month": ""}, "lvl": {"projects": "", "tasks": ""}}
     button_state["range"][range_lvl] = "active"
     button_state["lvl"][lvl] = "active"
-    print(range_lvl, lvl)
+    current_date = datetime.datetime.now()
+    current_month = int(current_date.month)
+    current_year = int(current_date.year)
+    month_start = f"1.{current_month}.{current_year}"
+    if current_month != 12: 
+        month_end = f"1.{current_month+1}.{current_year}"
+    else:
+        month_end = f"1.1.{current_year+1}"
+    month_start = datetime.datetime.strptime(month_start, '%d.%m.%Y')
+    month_end = datetime.datetime.strptime(month_end, '%d.%m.%Y')
+    if lvl == "projects":
+        projects_inf = Project.objects.filter(deadline__gt=month_start, date_add__lt=month_end, is_done=False)
+        tasks_inf = []
+        for i in projects_inf:
+            tasks_inf.append({"project": i, "tasks": Task.objects.filter(main_project_id=i)})
+        print(tasks_inf)
     nav_state = {"projects": "", 
                  "hant": "active",
                  "calendar": "",
@@ -361,6 +380,7 @@ def gantt(request):
     data = {
         "nav": nav_state,
         "h_l": hex_lst,
-        "b_s": button_state
+        "b_s": button_state,
+        "c_n": column_names,
     }
     return render(request, 'gantt.html', data)

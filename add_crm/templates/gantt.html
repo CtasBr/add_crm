@@ -3,23 +3,17 @@
 <div class="btn-group" role="group" aria-label="Basic example">
   <a href="{% url "gantt" %}?lvl=projects" type="button" class="btn btn-custom {{b_s.lvl.projects}}">Проекты</a>
   <a href="{% url "gantt" %}?lvl=tasks" type="button" class="btn btn-custom {{b_s.lvl.tasks}}">Задачи</a>
-  <a href="{% url "gantt" %}?lvl=subtasks" type="button" class="btn btn-custom {{b_s.lvl.subtasks}}">Подзадачи</a>
 </div>
 <div class="btn-group" role="group" aria-label="Basic example">
   <a href="{% url "gantt" %}?range=week" type="button" class="btn btn-custom {{b_s.range.week}}">Неделя</a>
   <a href="{% url "gantt" %}?range=month" type="button" class="btn btn-custom {{b_s.range.month}}">Месяц</a>
-  <a href="{% url "gantt" %}?range=year" type="button" class="btn btn-custom {{b_s.range.year}}">Год</a>
 </div>
 <section class="slider">
 <div class="chart-wrapper">
     <ul class="chart-values">
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
+      {% for name in c_n %}
+      <li>{{name}}</li>
+      {% endfor %}
     </ul>
     <ul class="chart-bars">
       <li
