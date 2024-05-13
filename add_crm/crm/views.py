@@ -348,13 +348,9 @@ def gantt(request):
     global lvl
     range_lvl = request.GET.get("range", range_lvl)
     lvl = request.GET.get("lvl", lvl)
-    if range_lvl == "week":
-        column_names= [i for i in range(1, 8)]
-    else:
-        column_names= [i for i in range(1, 31)]
-    button_state = {"range": {"week": "", "month": ""}, "lvl": {"projects": "", "tasks": ""}}
-    button_state["range"][range_lvl] = "active"
-    button_state["lvl"][lvl] = "active"
+    column_names= [i for i in range(1, 32)]
+    button_state = {"projects": "", "tasks": ""}
+    button_state[lvl] = "active"
     current_date = datetime.datetime.now()
     current_month = int(current_date.month)
     current_year = int(current_date.year)
@@ -365,22 +361,52 @@ def gantt(request):
         month_end = f"1.1.{current_year+1}"
     month_start = datetime.datetime.strptime(month_start, '%d.%m.%Y')
     month_end = datetime.datetime.strptime(month_end, '%d.%m.%Y')
+    line_inf = []
     if lvl == "projects":
-        projects_inf = Project.objects.filter(deadline__gt=month_start, date_add__lt=month_end, is_done=False)
-        tasks_inf = []
+        projects_inf = Project.objects.filter(deadline__gte=month_start, date_add__lte=month_end, is_done=False)
         for i in projects_inf:
-            tasks_inf.append({"project": i, "tasks": Task.objects.filter(main_project_id=i)})
-        print(tasks_inf)
+            second_layer = []
+            get_tasks = Task.objects.filter(deadline__gte=month_start, date_add__lte=month_end, main_project_id=i, is_done=False)
+            for y in get_tasks:
+                second_layer.append({"title": y.title,
+                                     "hint": f"с {y.date_add.strftime('%d.%m.%Y')} по {y.deadline.strftime('%d.%m.%Y')}",
+                                     "start_tag": "1" if y.date_add.month < current_month else y.date_add.day, 
+                                     "end_tag": "31" if y.deadline.month > current_month else y.deadline.day})
+            first_layer = {
+                "title": i.title,
+                "hint": f"с {i.date_add.strftime('%d.%m.%Y')} по {i.deadline.strftime('%d.%m.%Y')}",
+                "start_tag": "1" if i.date_add.month < current_month else i.date_add.day, 
+                "end_tag": "31" if i.deadline.month > current_month else i.deadline.day
+            }
+            line_inf.append({"color": generate_random_hex(),
+                             "first_layer": first_layer,
+                             "second_layer": second_layer})
+    elif lvl == "tasks":
+        task_inf = Task.objects.filter(deadline__gte=month_start, date_add__lte=month_end, is_done=False)
+        for i in task_inf:
+            second_layer = []
+            get_subtasks = Subtask.objects.filter(deadline__gte=month_start, date_add__lte=month_end, main_task_id=i, is_done=False)
+            for y in get_subtasks:
+                second_layer.append({"title": y.title,
+                                     "hint": f"с {y.date_add} по {y.deadline}",
+                                     "start_tag": "1" if y.date_add.month < current_month else y.date_add.day, 
+                                     "end_tag": "31" if y.deadline.month > current_month else y.deadline.day})
+            line_inf.append({"color": generate_random_hex(), 
+                             "first_layer": i, 
+                             "second_layer": second_layer})
+        
+        
+    print(line_inf)
     nav_state = {"projects": "", 
                  "hant": "active",
                  "calendar": "",
                  "employees": ""    
                  }
-    hex_lst = [generate_random_hex() for i in range(8)]
+    print(line_inf)
     data = {
         "nav": nav_state,
-        "h_l": hex_lst,
         "b_s": button_state,
         "c_n": column_names,
+        "infos": line_inf,
     }
     return render(request, 'gantt.html', data)

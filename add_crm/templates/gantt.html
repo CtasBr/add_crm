@@ -1,12 +1,8 @@
 {% extends "base.html" %} {% block content %}
 <br>
 <div class="btn-group" role="group" aria-label="Basic example">
-  <a href="{% url "gantt" %}?lvl=projects" type="button" class="btn btn-custom {{b_s.lvl.projects}}">Проекты</a>
-  <a href="{% url "gantt" %}?lvl=tasks" type="button" class="btn btn-custom {{b_s.lvl.tasks}}">Задачи</a>
-</div>
-<div class="btn-group" role="group" aria-label="Basic example">
-  <a href="{% url "gantt" %}?range=week" type="button" class="btn btn-custom {{b_s.range.week}}">Неделя</a>
-  <a href="{% url "gantt" %}?range=month" type="button" class="btn btn-custom {{b_s.range.month}}">Месяц</a>
+  <a href="{% url "gantt" %}?lvl=projects" type="button" class="btn btn-custom {{b_s.projects}}">Проекты</a>
+  <a href="{% url "gantt" %}?lvl=tasks" type="button" class="btn btn-custom {{b_s.tasks}}">Задачи</a>
 </div>
 <section class="slider">
 <div class="chart-wrapper">
@@ -16,22 +12,26 @@
       {% endfor %}
     </ul>
     <ul class="chart-bars">
+      {% for line in infos %}
       <li
         class="gantinf"
-        data-tooltip="Подсказка какая-то"
-        data-duration="1½-3"
-        data-color="#b03532"
+        data-tooltip="{{line.first_layer.hint}}"
+        data-duration="{{line.first_layer.start_tag}}-{{line.first_layer.end_tag}}"
+        data-color="{{line.color}}"
       >
-        Task
+        {{line.first_layer.title}}
       </li>
-      <li data-duration="3-6" data-color="{{h_l.0}}">Task</li>
-      <li data-duration="1-4" data-color="{{h_l.1}}">Task</li>
-      <li data-duration="1½-3" data-color="{{h_l.2}}">Task</li>
-      <li data-duration="2-3½" data-color="{{h_l.3}}">Task</li>
-      <li data-duration="1-3" data-color="{{h_l.4}}">Task</li>
-      <li data-duration="6-7½" data-color="{{h_l.5}}">Task</li>
-      <li data-duration="1½-7½" data-color="{{h_l.6}}">Task</li>
-      <li data-duration="1-4" data-color="{{h_l.7}}">Task</li>
+      {% for i in line.second_layer %}
+      <li
+        class="gantinf"
+        data-tooltip="{{i.hint}}"
+        data-duration="{{i.start_tag}}-{{i.end_tag}}"
+        data-color="{{line.color}}"
+      >
+        {{i.title}}
+      </li>
+      {% endfor %}
+      {% endfor %}
     </ul>
   </div>
 </div>
