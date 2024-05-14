@@ -12,4 +12,5 @@ urlpatterns = [
     path('comment/<int:num>', comment, name="comment"),
     path('calendar/', calendar, name='calendar'),
     path('gantt/', gantt, name='gantt'),
+    path('staff/', staff, name='staff'),
 ]

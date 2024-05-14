@@ -1,6 +1,7 @@
 import calendar as cal
 import datetime
 import locale
+import math
 import random
 
 from django.http import HttpResponseRedirect
@@ -421,3 +422,32 @@ def gantt(request):
         "date_active": date_active,
     }
     return render(request, 'gantt.html', data)
+
+
+def staff(request):
+    users = Empl.objects.all()
+    counter = 0
+    users_infos = {
+        "part1": [],
+        "part2": [],
+        "part3": [],
+    }
+    
+    for i in users:
+        if len(users_infos["part1"]) < math.ceil(len(users)/3):
+            users_infos["part1"].append({"usr": i})
+        elif len(users_infos["part2"]) < math.ceil((len(users) - len(users_infos["part2"]))/2):
+            users_infos["part2"].append(i)
+        else:
+            users_infos["part3"].append(i)
+    print(users_infos)
+        
+    nav_state = {"projects": "", 
+                 "hant": "",
+                 "calendar": "",
+                 "employees": "active"    
+                 }
+    data = {
+        "nav": nav_state,
+    }
+    return render(request, "staff.html", data)

@@ -3,7 +3,7 @@
     <a href="{% url "projects" %}" type="button" class="btn btn-custom {{nav.projects}}">Проекты</a>
     <a href="{% url "calendar" %}" type="button" class="btn btn-custom {{nav.calendar}}">Календарь</a>
     <a href="{% url "gantt" %}" type="button" class="btn btn-custom {{nav.hant}}">Гант</a>
-    <a type="button" class="btn btn-custom {{nav.employees}}">Сотрудники</a>
+    <a href="{% url "staff" %}" type="button" class="btn btn-custom {{nav.employees}}">Сотрудники</a>
   </div>
   {% if user.is_authenticated %}
   <div class="btn-group" role="group" aria-label="Basic example">
