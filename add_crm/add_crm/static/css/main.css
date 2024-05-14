@@ -444,7 +444,7 @@ margin-left: 80px;
         perspective: 1000;
         transition: .9s;
         transform-style: preserve-3d;
-        width: 100%;
+        width: 98%;
       }
       
       .current-date {
@@ -487,7 +487,7 @@ margin-left: 80px;
         font-weight: 300;
         justify-content: space-between;
         margin-bottom: 20px;
-        width: 100%;
+        width: 98%;
       }
       
       .last-month {

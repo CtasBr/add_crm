@@ -1,37 +1,279 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <section class="slider">
   <div class="slider--content">
-    <div class="card">
+    {% for usr in user_info.part1 %}
+    <div class="card mb-3">
       <div class="card_title project">
-        <div class="text_title">{{p.title}}</div>
-        <div class="time_title">
-          {{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}
+        <div class="text_title">{{usr.usr}}</div>
+        <div class="time_title"></div>
+      </div>
+      <div class="card_content" style="font-size: 20px">
+        Задачи:
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOverdue_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ff6464;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.overdue_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOverdue_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.overdue_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}
+              <br />{% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseWeek_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ffe162;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.week_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseWeek_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.week_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOver_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-left: 5px;
+            font-size: 20px;
+            margin-top: 5px;
+            color: #91c483;
+          "
+        >
+          {{usr.tasks.over_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOver_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.over_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }} <br />
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card_content">{{p.description}}</div>
     </div>
+    {% endfor %}
   </div>
+
   <div class="slider--content">
-    <div class="card">
+    {% for usr in user_info.part2 %}
+    <div class="card mb-3">
       <div class="card_title project">
-        <div class="text_title">{{p.title}}</div>
-        <div class="time_title">
-          {{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}
+        <div class="text_title">{{usr.usr}}</div>
+        <div class="time_title"></div>
+      </div>
+      <div class="card_content" style="font-size: 20px">
+        Задачи:
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOverdue_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ff6464;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.overdue_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOverdue_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.overdue_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseWeek_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ffe162;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.week_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseWeek_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.week_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOver_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-left: 5px;
+            font-size: 20px;
+            margin-top: 5px;
+            color: #91c483;
+          "
+        >
+          {{usr.tasks.over_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOver_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.over_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }} <br />
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card_content">{{p.description}}</div>
     </div>
+    {% endfor %}
   </div>
+
   <div class="slider--content">
-    <div class="card">
+    {% for usr in user_info.part3 %}
+    <div class="card mb-3">
       <div class="card_title project">
-        <div class="text_title">{{p.title}}</div>
-        <div class="time_title">
-          {{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}
+        <div class="text_title">{{usr.usr}}</div>
+        <div class="time_title"></div>
+      </div>
+      <div class="card_content" style="font-size: 20px">
+        Задачи:
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOverdue_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ff6464;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.overdue_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOverdue_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.overdue_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />{% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseWeek_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-top: 5px;
+            color: #ffe162;
+            margin-left: 5px;
+            font-size: 20px;
+          "
+        >
+          {{usr.tasks.week_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseWeek_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.week_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="card-link"
+          data-toggle="collapse"
+          href="#collapseOver_tasks{{usr.usr.id}}"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+          style="
+            text-align: left;
+            margin-left: 5px;
+            font-size: 20px;
+            margin-top: 5px;
+            color: #91c483;
+          "
+        >
+          {{usr.tasks.over_tasks.count}}
+        </a>
+        <div class="collapse" id="collapseOver_tasks{{usr.usr.id}}">
+          <div class="card subtasks">
+            <div class="comment">
+              {% for i in usr.tasks.over_tasks.tasks %} {{ i.title }} |
+              {{i.deadline }}<br />
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card_content">{{p.description}}</div>
     </div>
+    {% endfor %}
   </div>
 </section>
+
 {% endblock content %}

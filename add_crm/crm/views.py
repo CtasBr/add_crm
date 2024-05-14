@@ -39,7 +39,6 @@ def projects(request):
         t_d.update(is_done=True)
     
     done_subtask_index = int(request.GET.get("done_subtask", -1))
-    print(done_subtask_index)
     if done_subtask_index > -1:
         st_d = Subtask.objects.filter(id=done_subtask_index)
         st_d.update(is_done=True)
@@ -275,8 +274,8 @@ def comment(request, num):
         return redirect('projects')
     
 def calendar(request):
-    subtasks = Subtask.objects.all()
-    tasks = Task.objects.all()
+    subtasks = Subtask.objects.filter(is_done=False)
+    tasks = Task.objects.filter(is_done=False)
     locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
     today = datetime.date.today()
     day_word = today.strftime('%A')
@@ -407,13 +406,11 @@ def gantt(request):
                              "second_layer": second_layer})
         
         
-    print(line_inf)
     nav_state = {"projects": "", 
                  "hant": "active",
                  "calendar": "",
                  "employees": ""    
                  }
-    print(line_inf)
     data = {
         "nav": nav_state,
         "b_s": button_state,
@@ -426,21 +423,31 @@ def gantt(request):
 
 def staff(request):
     users = Empl.objects.all()
-    counter = 0
     users_infos = {
         "part1": [],
         "part2": [],
         "part3": [],
     }
-    
+    today = datetime.date.today()
+    week_day = today +  datetime.timedelta(days=7)
     for i in users:
+        overdue_tasks = Task.objects.filter(is_done=False, executors_id=i, deadline__lt=today)
+        week_tasks = Task.objects.filter(is_done=False, executors_id=i, deadline__lt=week_day, deadline__gte=today)
+        over_tasks = Task.objects.filter(is_done=False, executors_id=i, deadline__gte=week_day)
         if len(users_infos["part1"]) < math.ceil(len(users)/3):
-            users_infos["part1"].append({"usr": i})
+            part = "part1"
         elif len(users_infos["part2"]) < math.ceil((len(users) - len(users_infos["part2"]))/2):
-            users_infos["part2"].append(i)
+            part = "part2"
         else:
-            users_infos["part3"].append(i)
-    print(users_infos)
+            part = "part3"
+        users_infos[part].append({
+            "usr": i, 
+            "tasks": {
+                "overdue_tasks": {"tasks": overdue_tasks, "count": len(overdue_tasks)},
+                "week_tasks": {"tasks": week_tasks, "count": len(week_tasks)},
+                "over_tasks": {"tasks": over_tasks, "count": len(over_tasks)},
+            }
+            })
         
     nav_state = {"projects": "", 
                  "hant": "",
@@ -449,5 +456,6 @@ def staff(request):
                  }
     data = {
         "nav": nav_state,
+        "user_info": users_infos,
     }
     return render(request, "staff.html", data)
