@@ -4,6 +4,19 @@
   <a href="{% url "gantt" %}?lvl=projects" type="button" class="btn btn-custom {{b_s.projects}}">Проекты</a>
   <a href="{% url "gantt" %}?lvl=tasks" type="button" class="btn btn-custom {{b_s.tasks}}">Задачи</a>
 </div>
+<div class="btn-group" role="group" aria-label="Basic example">
+  {% if  date_active.month > 1%}
+  <a class="btn btn-custom active" href="{% url "gantt" %}?year={{date_active.year}}&month={{date_active.month|add:-1}}">Предыдущий месяц</a>
+  {% else %}
+  <a class="btn btn-custom active" href="{% url "gantt" %}?year={{date_active.year|add:-1}}&month={{12}}">Предыдущий месяц</a>
+  {% endif %}
+  <a class="btn btn-custom">{{date_active.month_name}} {{date_active.year}}</a>
+  {% if  date_active.month < 12%}
+  <a class="btn btn-custom active" href="{% url "gantt" %}?year={{date_active.year}}&month={{date_active.month|add:1}}">Следующий месяц</a>
+  {% else %}
+  <a class="btn btn-custom active" href="{% url "gantt" %}?year={{date_active.year|add:1}}&month={{1}}">Следующий месяц</a>
+  {% endif %}
+</div>
 <section class="slider">
 <div class="chart-wrapper">
     <ul class="chart-values">

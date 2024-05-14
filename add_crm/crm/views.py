@@ -352,9 +352,13 @@ def gantt(request):
     button_state = {"projects": "", "tasks": ""}
     button_state[lvl] = "active"
     current_date = datetime.datetime.now()
-    current_month = int(current_date.month)
-    current_year = int(current_date.year)
+    current_year = int(request.GET.get("year", current_date.year))
+    current_month = int(request.GET.get("month", current_date.month))
     month_start = f"1.{current_month}.{current_year}"
+    month_name = [
+        "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+    ]
+    date_active = {"year": current_year, "month": current_month, "month_name": month_name[current_month-1]}
     if current_month != 12: 
         month_end = f"1.{current_month+1}.{current_year}"
     else:
@@ -370,13 +374,13 @@ def gantt(request):
             for y in get_tasks:
                 second_layer.append({"title": y.title,
                                      "hint": f"с {y.date_add.strftime('%d.%m.%Y')} по {y.deadline.strftime('%d.%m.%Y')}",
-                                     "start_tag": "1" if y.date_add.month < current_month else y.date_add.day, 
-                                     "end_tag": "31" if y.deadline.month > current_month else y.deadline.day})
+                                     "start_tag": "1" if y.date_add.month < current_month or y.deadline.year < current_year else y.date_add.day, 
+                                     "end_tag": "31" if y.deadline.month > current_month or y.deadline.year > current_year else y.deadline.day})
             first_layer = {
                 "title": i.title,
                 "hint": f"с {i.date_add.strftime('%d.%m.%Y')} по {i.deadline.strftime('%d.%m.%Y')}",
-                "start_tag": "1" if i.date_add.month < current_month else i.date_add.day, 
-                "end_tag": "31" if i.deadline.month > current_month else i.deadline.day
+                "start_tag": "1" if i.date_add.month < current_month or i.deadline.year < current_year else i.date_add.day, 
+                "end_tag": "31" if i.deadline.month > current_month or i.deadline.year > current_year else i.deadline.day
             }
             line_inf.append({"color": generate_random_hex(),
                              "first_layer": first_layer,
@@ -388,11 +392,17 @@ def gantt(request):
             get_subtasks = Subtask.objects.filter(deadline__gte=month_start, date_add__lte=month_end, main_task_id=i, is_done=False)
             for y in get_subtasks:
                 second_layer.append({"title": y.title,
-                                     "hint": f"с {y.date_add} по {y.deadline}",
-                                     "start_tag": "1" if y.date_add.month < current_month else y.date_add.day, 
-                                     "end_tag": "31" if y.deadline.month > current_month else y.deadline.day})
+                                     "hint": f"с {y.date_add.strftime('%d.%m.%Y')} по {y.deadline.strftime('%d.%m.%Y')}",
+                                     "start_tag": "1" if y.date_add.month < current_month or y.deadline.year < current_year else y.date_add.day, 
+                                     "end_tag": "31" if y.deadline.month > current_month or y.deadline.year > current_year else y.deadline.day})
+            first_layer = {
+                "title": i.title,
+                "hint": f"с {i.date_add.strftime('%d.%m.%Y')} по {i.deadline.strftime('%d.%m.%Y')}",
+                "start_tag": "1" if i.date_add.month < current_month or i.deadline.year < current_year else i.date_add.day, 
+                "end_tag": "31" if i.deadline.month > current_month or i.deadline.year > current_year else i.deadline.day
+            }
             line_inf.append({"color": generate_random_hex(), 
-                             "first_layer": i, 
+                             "first_layer": first_layer, 
                              "second_layer": second_layer})
         
         
@@ -408,5 +418,6 @@ def gantt(request):
         "b_s": button_state,
         "c_n": column_names,
         "infos": line_inf,
+        "date_active": date_active,
     }
     return render(request, 'gantt.html', data)
