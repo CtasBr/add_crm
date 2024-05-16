@@ -7,7 +7,7 @@
   <div class="slider--content">
     <div class="card">
       <div class="card_title project">
-        <div class="text_title">{{p.title}}</div>
+        <div class="text_title">{{p.title}} <img class="mt-1" src="{% static "img/edit_white.png" %}" width="20" height="20" alt="Редактировать"></div>
         <div class="time_title">{{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}</div>
       </div>
       <div class="card_content">{{p.description}}</div>
@@ -15,7 +15,7 @@
     {%for t in tasks%} {%if t.main_project_id.id == p.id%} {%if not t.is_done%}
     <div class="card task">
       <div class="card_title task">
-        <div class="text_title">{{t.title}}</div>
+        <div class="text_title">{{t.title}} <img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></div>
         <div class="time_title">{{t.date_add | date:"d.m.Y"}} - {{t.deadline | date:"d.m.Y"}}</div>
       </div>
       <div class="card_content task">
