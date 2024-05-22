@@ -6,8 +6,20 @@
   {% for p in projects %} {% if not p.is_done %}
   <div class="slider--content">
     <div class="card">
+      {% comment %} <div class="card-description card-description{{p.title}}">
+        <p>This is the description</p>
+        <button onclick="toggleEditForm('{{p.title}}', '{{p.title}}')">Edit Description</button>
+      </div> {% endcomment %}
+      <div class="card-edit-form card-edit-form{{p.title}}">
+        <form>
+          <label for="newDescription">Edit Description:</label><br>
+          <input type="text" id="newDescription" name="newDescription"><br>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    
       <div class="card_title project">
-        <div class="text_title">{{p.title}} <a class="card_button" data-toggle="collapse" href="#collapseComments32" role="button" aria-expanded="false" aria-controls="collapseExample"><img class="mt-1" src="{% static "img/edit_white.png" %}" width="20" height="20" alt="Редактировать"></a></div>
+        <div class="text_title">{{p.title}} <a href="#" class="card_button"><img class="mt-1" src="{% static "img/edit_white.png" %}" width="20" height="20" alt="Редактировать"></a></div>
         <div class="time_title">{{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}</div>
       </div>
       <div class="card_content">{{p.description}}</div>
@@ -15,7 +27,7 @@
     {%for t in tasks%} {%if t.main_project_id.id == p.id%} {%if not t.is_done%}
     <div class="card task">
       <div class="card_title task">
-        <div class="text_title">{{t.title}} <a class="card_button" data-toggle="collapse" href="#collapseComments32" role="button" aria-expanded="false" aria-controls="collapseExample"><img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></a></div>
+        <div class="text_title">{{t.title}} <a href="#" class="card_button"><img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></a></div>
         <div class="time_title">{{t.date_add | date:"d.m.Y"}} - {{t.deadline | date:"d.m.Y"}}</div>
       </div>
       <div class="card_content task">
@@ -26,8 +38,6 @@
         <a href="{% url "projects" %}?done_task={{t.id}}" class="card_button done">Готово</a>
         <a class="card_button" data-toggle="collapse" href="#collapseComments{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Комментарии</a>
         <a class="card_button" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Подзадачи</a>
-        
-        
       </div>
       <div id="my-popover{{t.id}}" popover class="my-popover">
         {% for e in t.executors_id.all %}
@@ -164,13 +174,13 @@
   {% endif %} {% endfor %}
   <div class="slider--content">
     <div class="card task add">
-      <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Плюс" style="width: 50%; z-index: 100; background-color: #925537; border: 0px;" id="myBtn">
+      <input type="image" src="{% static "img/free-icon-plus-2549959.png" %}" class="btn btn-primary" alt="Добавить проект" style="width: 50%; z-index: 100; background-color: #925537; border: 0px;" id="myBtn">
     </div>
   </div>
   
 </section>
 
-<div id="myModal" class="modal">
+<div id="myModal" class="modal" style="z-index: 1000;">
   <div class="modal-dialog">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -205,3 +215,21 @@
 </div>
 
 {% endblock content %}
+
+{% block scripts %}
+<script>
+  function toggleEditForm(description_name, editForm_name) {
+    var description = document.querySelector('.card-description' + description_name);
+    var editForm = document.querySelector('.card-edit-form' + editForm_name);
+    if (description.style.display === "none") {
+      description.style.display = "flex";
+      editForm.style.display = "none";
+    } else {
+      description.style.display = "none";
+      editForm.style.display = "flex";
+    }
+  }
+</script>
+
+{% endblock scripts %}
+

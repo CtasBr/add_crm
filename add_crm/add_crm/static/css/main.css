@@ -717,4 +717,12 @@ margin-left: 80px;
       .dropdown:hover .dropdown-content {
         display: block;
       }
+      .card-description, .card-edit-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .card-edit-form {
+        display: none;
+      }
   
