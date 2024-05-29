@@ -461,3 +461,50 @@ def staff(request):
         "user_info": users_infos,
     }
     return render(request, "staff.html", data)
+
+
+def edit_task(request, num):
+    if request.method == 'POST':
+        task_obj = Task.objects.get(id=int(num))
+        
+        title = request.POST.get('title')
+        
+        description = request.POST.get('description', '')
+        
+        date_start = request.POST.get('date_start')
+        
+        task_obj.date_add = date_start if date_start!='' else task_obj.date_add
+        
+        deadline = request.POST.get('deadline') 
+        
+        task_obj.deadline = deadline if deadline!='' else task_obj.deadline
+        
+        task_obj.title = title
+        
+        task_obj.description = description
+        
+        task_obj.save(update_fields=["title", "deadline", "description", "date_add"])
+        return redirect('projects')
+    
+def edit_project(request, num):
+    if request.method == 'POST':
+        pr_obj = Project.objects.get(id=int(num))
+        
+        title = request.POST.get('title')
+        
+        description = request.POST.get('description', '')
+        
+        date_start = request.POST.get('date_start')
+        
+        pr_obj.date_add = date_start if date_start!='' else pr_obj.date_add
+        
+        deadline = request.POST.get('deadline') 
+        
+        pr_obj.deadline = deadline if deadline!='' else pr_obj.deadline
+        
+        pr_obj.title = title
+        
+        pr_obj.description = description
+        
+        pr_obj.save(update_fields=["title", "deadline", "description", "date_add"])
+        return redirect('projects')

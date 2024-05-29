@@ -19,17 +19,75 @@
       </div>
     
       <div class="card_title project">
-        <div class="text_title">{{p.title}} <a href="#" class="card_button"><img class="mt-1" src="{% static "img/edit_white.png" %}" width="20" height="20" alt="Редактировать"></a></div>
+        <div class="text_title">{{p.title}} <a class="card_button" data-toggle="collapse" href="#collapseEditPr{{p.id}}" role="button" aria-expanded="false" aria-controls="collapseExample"><img class="mt-1" src="{% static "img/edit_white.png" %}" width="20" height="20" alt="Редактировать"></a></div>
         <div class="time_title">{{p.date_add | date:"d.m.Y"}} - {{p.deadline | date:"d.m.Y"}}</div>
+      </div>
+      <div class="collapse" id="collapseEditPr{{p.id}}">
+        <div class="card card-body task">
+          <form method="POST" class="" action="/edit_project/{{p.id}}">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{p.title}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{p.date_add}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{p.deadline}}">
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="textarea" class="form-control" id="description" name="description" placeholder="Дедлайн" value="{{p.description}}">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+            </div>
+          </form>
+        </div>
       </div>
       <div class="card_content">{{p.description}}</div>
     </div>
     {%for t in tasks%} {%if t.main_project_id.id == p.id%} {%if not t.is_done%}
     <div class="card task">
       <div class="card_title task">
-        <div class="text_title">{{t.title}} <a href="#" class="card_button"><img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></a></div>
+        <div class="text_title">{{t.title}} <a class="card_button" data-toggle="collapse" href="#collapseEdit{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample"><img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></a></div>
         <div class="time_title">{{t.date_add | date:"d.m.Y"}} - {{t.deadline | date:"d.m.Y"}}</div>
         <div class="time_title">{% for u in t.executors_id.all %}{{u.name}} | {% endfor %}</div>
+      </div>
+      <div class="collapse" id="collapseEdit{{t.id}}">
+        <div class="card card-body task">
+          <form method="POST" class="" action="/edit_task/{{t.id}}">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{t.title}}">
+              </div>
+              <div class="form-group col-md-12">
+                <input type="textarea" class="form-control" id="title" name="description" placeholder="Описание" value="{{t.description}}">
+              </div>
+              <div class="form-group col-md-6">
+                <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{t.date_add}}">
+              </div>
+              <div class="form-group col-md-6">
+                <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{t.deadline}}">
+              </div>
+              {% comment %} <div class="form-group col-md-12">
+              <select class="custom-select" multiple name="users" id="users">
+                {% for u in users%}
+                  <option value="{{u.id}}">{{u.name}}</option>
+                {% endfor %}
+              </select>
+              </div> {% endcomment %}
+              
+              <div class="form-group col-md-6">
+              <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+              </div>
+            </div>
+          </form> 
+        </div>
       </div>
       <div class="card_content task">
         {{t.description}}
