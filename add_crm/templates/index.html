@@ -29,6 +29,7 @@
       <div class="card_title task">
         <div class="text_title">{{t.title}} <a href="#" class="card_button"><img class="mt-1" src="{% static "img/edit.png" %}" width="20" height="20" alt="Редактировать"></a></div>
         <div class="time_title">{{t.date_add | date:"d.m.Y"}} - {{t.deadline | date:"d.m.Y"}}</div>
+        <div class="time_title">{% for u in t.executors_id.all %}{{u.name}} | {% endfor %}</div>
       </div>
       <div class="card_content task">
         {{t.description}}

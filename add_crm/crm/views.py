@@ -25,7 +25,7 @@ def projects(request):
         title = request.POST.get('title')
         deadline = request.POST.get('deadline')
         date_start = request.POST.get('date_start')
-        description = request.POST.get('description')
+        description = request.POST.get('description', '')
         project = Project(title=title, deadline=deadline, description=description, is_done=False, date_add=date_start)
         project.save()  # Сохраняем объект в базе данных
 
@@ -68,12 +68,14 @@ def tasks(request, num):
     if request.method == 'POST':
         title = request.POST.get('title')
         deadline = request.POST.get('deadline')
-        description = request.POST.get('description')
+        description = request.POST.get('description', '')
         users = request.POST.getlist('users')
+        
         date_start = request.POST.get('date_start')
         task = Task(title=title, deadline=deadline, description=description, is_done=False, main_project_id=Project.objects.get(id=num), date_add=date_start)
-        users = User.objects.filter(id__in=users)
+        users = Empl.objects.filter(id__in=users)
         task.save()
+        print(users)
         task.executors_id.set(users)
 
         return redirect('projects')
@@ -81,7 +83,7 @@ def tasks(request, num):
 def subtasks(request, num):
     if request.method == 'POST':
         title = request.POST.get('title')
-        deadline = request.POST.get('deadline')
+        deadline = request.POST.get('deadline', '')
         date_start = request.POST.get('date_start')
         subtask = Subtask(title=title, deadline=deadline, is_done=False, main_task_id=Task.objects.get(id=num), date_add=date_start)
         subtask.save()
