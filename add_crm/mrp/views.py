@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
+from .models import *
+
 
 def warehouse(request):
+    obj = Position.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -9,9 +12,9 @@ def warehouse(request):
                  "warehouse": "active",
                  "purchase":  ""   
                  }
-    
     data = {
-        "nav": nav_state
+        "nav": nav_state,
+        "positions": obj,
     }
     return render(request, "warehouse.html", data)
 
