@@ -1,8 +1,9 @@
 from django.contrib import admin
-from models import *
+
+from .models import *
 
 admin.site.register(Purchase_topic)
 admin.site.register(Status)
-admin.site.register(Units)
-admin.site.register(Positions)
+admin.site.register(Unit)
+admin.site.register(Position)
 admin.site.register(Application)
