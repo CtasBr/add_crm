@@ -4,6 +4,8 @@
     <a href="{% url "calendar" %}" type="button" class="btn btn-custom {{nav.calendar}}">Календарь</a>
     <a href="{% url "gantt" %}" type="button" class="btn btn-custom {{nav.hant}}">Гант</a>
     <a href="{% url "staff" %}" type="button" class="btn btn-custom {{nav.employees}}">Сотрудники</a>
+    <a href="{% url "warehouse" %}" type="button" class="btn btn-custom {{nav.warehouse}}">Склад</a>
+    <a href="{% url "purchase" %}" type="button" class="btn btn-custom {{nav.purchase}}">Закупки</a>
   </div>
   {% if user.is_authenticated %}
   <div class="btn-group" role="group" aria-label="Basic example">

@@ -46,7 +46,8 @@ class Position(models.Model):
     
     title = models.CharField(verbose_name="Название", max_length=300)
     quantity = models.FloatField(verbose_name="Количество")
-    units = models.ForeignKey(to="Unit", on_delete=models.PROTECT)
+    units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
+    link = models.CharField(verbose_name="Ссылка", max_length=500, blank=True)
     def __str__(self) -> str:
         return self.title
 
@@ -57,10 +58,11 @@ class Application(models.Model):
         verbose_name_plural = "Заявки"
     
     title = models.CharField(verbose_name="Название", max_length=300)
-    purchase_topic = models.ForeignKey(to="Purchase_topic", on_delete=models.PROTECT)
-    creator = models.ForeignKey(to=User, on_delete=models.PROTECT)
-    status = models.ForeignKey(to="Status", on_delete=models.PROTECT)
-    positions = models.ManyToManyField("Position", blank=True)
+    purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
+    positions = models.ManyToManyField("Position", blank=True, verbose_name="Позиции")
+    provider = models.CharField(verbose_name="Поставщик", max_length=500)
     def __str__(self) -> str:
         return self.title
     

@@ -45,7 +45,9 @@ def projects(request):
     nav_state = {"projects": "active", 
                  "hant": "",
                  "calendar": "",
-                 "employees": ""    
+                 "employees": "",  
+                 "warehouse": "",      
+                 "purchase":  ""
                  }
 
     
@@ -327,7 +329,9 @@ def calendar(request):
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "active",
-                 "employees": ""    
+                 "employees": "",   
+                 "warehouse": "",
+                 "purchase":  ""      
                  }
     date_active = {
         "year": r_year,
@@ -411,7 +415,9 @@ def gantt(request):
     nav_state = {"projects": "", 
                  "hant": "active",
                  "calendar": "",
-                 "employees": ""    
+                 "employees": "",   
+                 "warehouse": "",
+                 "purchase":  ""      
                  }
     data = {
         "nav": nav_state,
@@ -454,7 +460,9 @@ def staff(request):
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
-                 "employees": "active"    
+                 "employees": "active",   
+                 "warehouse": "",
+                 "purchase":  ""      
                  }
     data = {
         "nav": nav_state,
