@@ -66,3 +66,17 @@ class Application(models.Model):
     def __str__(self) -> str:
         return self.title
     
+    
+class TraceLogUnit(models.Model):
+    class Meta:
+        db_table = "TraceLogUnits"
+        verbose_name = "Лог"
+        verbose_name_plural = "Логи"
+    
+    user_name = models.ForeignKey(to=User, verbose_name="Пользователь", on_delete=models.PROTECT)
+    object = models.ForeignKey(to=Position, verbose_name="Позиция", on_delete=models.PROTECT)
+    count_units = models.FloatField()
+    action = models.CharField(verbose_name="Действие", max_length=300)
+    
+    def __str__(self) -> str:
+        return f'{self.user_name.first_name} {self.user_name.last_name} {self.action} {self.count_units} {self.object.units} {self.object}'

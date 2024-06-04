@@ -1,4 +1,46 @@
 {% extends "base.html" %} {% block content %}
+<br>
+<form method="POST" class="mt-4 ml-4" action="{% url "take" 0 %}">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <input type="text" class="form-control" id="obj" name="obj" placeholder="Что взять" value="{{take_obj}}" list="options" autocomplete="off">
+        <datalist id="options">
+            {% for p in positions %}
+            <option value="{{p.title}}">
+                {% endfor %}
+          </datalist>
+      </div>
+      <div class="form-group col-md-2">
+        <input type="number" class="form-control" step="0.01" id="count" name="count" placeholder="Количество" value="">
+      </div>
+      <div class="form-group col-md-3">
+      <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Взять</button>
+      </div>
+    </div>
+</form> 
+<form method="POST" class="mt-2 ml-4" action="{% url "take" 1 %}">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <input type="text" class="form-control" id="obj" name="obj" placeholder="Что вернуть" value="{{return_obj}}" list="options" autocomplete="off">
+        <datalist id="options">
+            {% for p in positions %}
+            <option value="{{p.title}}">
+                {% endfor %}
+          </datalist>
+      </div>
+      <div class="form-group col-md-2">
+        <input type="number" class="form-control" step="0.01" id="count" name="count" placeholder="Количество" value="">
+      </div>
+      <div class="form-group col-md-3">
+      <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Вернуть</button>
+      </div>
+    </div>
+</form> 
+
+
+
 <div class="card-container">
   {% for p in positions %}
   <div class="card mt-3">
@@ -9,15 +51,15 @@
     <div class="card_content" style="font-size: 1.2rem">
       {{p.quantity}} {{p.units}}
     </div>
-    <div class="card_buttons">
+    <div class="card_buttons" style="font-size: 1.2rem">
       <a
         class="card_button done"
-        data-toggle="collapse"
-        href="#collapseTake{{p.id}}"
-        role="button"
-        aria-expanded="false"
-        aria-controls="collapseExample"
+        href="{% url "warehouse" %}?take={{p.id}}"
         >Взять</a>
+      <a
+        class="card_button"
+        href="{% url "warehouse" %}?return={{p.id}}"
+        >Вернуть</a>
     </div>
     </div>
     {% endfor %}
