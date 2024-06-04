@@ -64,8 +64,11 @@ class Application(models.Model):
     creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
     positions = models.ManyToManyField("Position", blank=True, verbose_name="Позиции")
+    count_pos = models.FloatField(verbose_name="Количество")
+    units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
     provider = models.CharField(verbose_name="Поставщик", max_length=500)
-    deadline = models.DateField(verbose_name="Срок поставки", blank=True)
+    link = models.CharField(verbose_name="Ссылка", max_length=500)
+    deadline = models.DateField(verbose_name="Срок поставки", blank=True, null=True)
     def __str__(self) -> str:
         return self.title
     

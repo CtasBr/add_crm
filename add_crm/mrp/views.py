@@ -53,6 +53,7 @@ def warehouse(request):
 
 
 def purchase(request):
+    
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
