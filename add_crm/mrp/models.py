@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -63,6 +65,7 @@ class Application(models.Model):
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
     positions = models.ManyToManyField("Position", blank=True, verbose_name="Позиции")
     provider = models.CharField(verbose_name="Поставщик", max_length=500)
+    deadline = models.DateField(verbose_name="Срок поставки", blank=True)
     def __str__(self) -> str:
         return self.title
     

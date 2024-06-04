@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect, render
 
 from .models import *
@@ -63,4 +64,4 @@ def purchase(request):
     data = {
         "nav": nav_state
     }
-    return render(request, "warehouse.html", data)
+    return render(request, "purchase.html", data)
