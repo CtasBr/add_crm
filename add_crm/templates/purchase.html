@@ -1,1 +1,32 @@
 {% extends "base.html" %}
+{% block content %}
+<div class="card-container">
+    {% for a in applications %}
+    <div class="card mt-3">
+      <div class="card_title project">
+        <div class="text_title">{{a.title}}</div>
+        
+        <div class="time_title">{% if a.deadline %}Ожидаемый срок поставки: {{a.deadline}}<br>{% endif %}Поставщик: {{a.provider}}</div>
+       
+      </div>
+      <div class="card_content" style="font-size: 1.2rem">
+        <a>Позиции закупки: {% for p in a.positions.all %}
+        {{p}} 
+        {% endfor %}
+        </a><br>
+      </div>
+      {% comment %} <div class="card_buttons" style="font-size: 1.2rem">
+        <a
+          class="card_button done"
+          href="{% url "warehouse" %}?take={{p.id}}"
+          >Взять</a>
+        <a
+          class="card_button"
+          href="{% url "warehouse" %}?return={{p.id}}"
+          >Вернуть</a>
+      </div> {% endcomment %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

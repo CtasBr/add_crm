@@ -53,7 +53,7 @@ def warehouse(request):
 
 
 def purchase(request):
-    
+    applications = Application.objects.all().order_by("-id")
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -63,6 +63,7 @@ def purchase(request):
                  }
     
     data = {
-        "nav": nav_state
+        "nav": nav_state,
+        "applications": applications,
     }
     return render(request, "purchase.html", data)
