@@ -6,5 +6,5 @@ from .views import *
 urlpatterns = [
     path('', warehouse, name='warehouse'),
     path('purchase/', purchase, name='purchase'),
-    path('take/<int:flag>', take, name='take'),
+    path('take/', take, name='take'),
 ]

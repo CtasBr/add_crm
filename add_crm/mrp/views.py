@@ -4,37 +4,31 @@ from django.shortcuts import redirect, render
 from .models import *
 
 
-def take(request, flag):
-    if request.method == 'POST':
-        obj = request.POST.get('obj')
-        count_units = request.POST.get('count')
-        object = Position.objects.get(title=obj)
-        if flag:
-            object.quantity = object.quantity + float(count_units)
+def take(request):
+    take_obj = int(request.GET.get("take", "-1"))
+    return_obj = int(request.GET.get("return", "-1"))
+    count_obj = request.GET.get("count", "-1")
+    count_obj = float(count_obj) if count_obj else -1
+
+    print(take_obj, return_obj, count_obj)
+    id_obj = max(take_obj, return_obj)
+    print(id_obj)
+    if id_obj>=0 and count_obj>0:
+        object = Position.objects.get(id=id_obj)
+        if take_obj > -1:
+            object.quantity = object.quantity - count_obj
+            flag = 0
         else:
-            object.quantity = object.quantity - float(count_units)
-        actions = ["взял", "вернул"]
+            object.quantity = object.quantity + count_obj
+            flag = 1
         object.save(update_fields=['quantity'])
-        log = TraceLogUnit(user_name=request.user, object=object, count_units=count_units, action=actions[flag])
+        actions = ["взял", "вернул"]
+        log = TraceLogUnit(user_name=request.user, object=object, count_units=count_obj, action=actions[flag])
         log.save()
     return redirect('warehouse')
 
 
 def warehouse(request):
-    take_obj = int(request.GET.get("take", "-1"))
-    return_obj = int(request.GET.get("return", "-1"))
-    
-    if take_obj != -1:
-        take_obj = Position.objects.get(id=take_obj)
-    else:
-        take_obj = ""
-        
-    if return_obj != -1:
-        return_obj = Position.objects.get(id=return_obj)
-    else:
-        return_obj = ""
-
-    print(take_obj)
     obj = Position.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
@@ -46,8 +40,6 @@ def warehouse(request):
     data = {
         "nav": nav_state,
         "positions": obj,
-        "take_obj": take_obj,
-        "return_obj": return_obj
     }
     return render(request, "warehouse.html", data)
 
