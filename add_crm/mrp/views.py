@@ -63,6 +63,6 @@ def purchase(request):
     
     data = {
         "nav": nav_state,
-        "applications": applications,
+        "appl": applications,
     }
     return render(request, "purchase.html", data)

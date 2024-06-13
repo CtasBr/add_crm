@@ -19,6 +19,7 @@
 <div class="container ml-2">
   <div class="row">
     {% for p in positions %}
+    {% if p.is_done %}
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
       <div class="card mb-2">
           <div class="card_title project">
@@ -42,6 +43,7 @@
           </div>
       </div>
     </div>
+    {% endif %}
     {% endfor %}
   </div>
 </div>

@@ -49,8 +49,9 @@ class Position(models.Model):
     title = models.CharField(verbose_name="Название", max_length=300)
     quantity = models.FloatField(verbose_name="Количество")
     units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
-    link = models.CharField(verbose_name="Ссылка", max_length=500, blank=True)
-    min_quantity = models.FloatField(verbose_name="Минимальное количество")
+    link = models.ManyToManyField("Link", blank=True, verbose_name="Сслыки")
+    min_quantity = models.FloatField(verbose_name="Минимальное количество", blank=True, null=True)
+    is_done = models.BooleanField(verbose_name="Закуплена")
     def __str__(self) -> str:
         return self.title
 
@@ -60,18 +61,14 @@ class Application(models.Model):
         verbose_name = "Заявка"
         verbose_name_plural = "Заявки"
     
-    title = models.CharField(verbose_name="Название", max_length=300)
     purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
     creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
-    positions = models.ManyToManyField("Position", blank=True, verbose_name="Позиции")
-    count_pos = models.FloatField(verbose_name="Количество")
-    units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
-    provider = models.CharField(verbose_name="Поставщик", max_length=500)
-    link = models.CharField(verbose_name="Ссылка", max_length=500)
+    positions = models.ManyToManyField("PositionInApplication", blank=True, verbose_name="Позиции")
+    provider = models.ForeignKey(to="Provider", verbose_name="Поставщик", on_delete=models.PROTECT)
     deadline = models.DateField(verbose_name="Срок поставки", blank=True, null=True)
     def __str__(self) -> str:
-        return self.title
+        return self.provider.name
     
     
 class TraceLogUnit(models.Model):
@@ -87,3 +84,29 @@ class TraceLogUnit(models.Model):
     
     def __str__(self) -> str:
         return f'{self.user_name.first_name} {self.user_name.last_name} {self.action} {self.count_units} {self.object.units} {self.object}'
+    
+
+class Provider(models.Model):
+    class Meta:
+        db_table = "Providers"
+        verbose_name = "Поставщик"
+        verbose_name_plural = "Поставщики"
+    
+    name = models.CharField(verbose_name="Название", max_length=300)
+    link = models.CharField(verbose_name="Ссылка", max_length=1000)
+
+
+class Link(models.Model):
+    class Meta:
+        db_table = "Links"
+        verbose_name = "Ссылка"
+        verbose_name_plural = "Ссылки"
+    
+    link = models.CharField(verbose_name="Ссылка", max_length=1000)
+    appl = models.ForeignKey(to="Application", verbose_name="Для заявки", on_delete=models.PROTECT)
+
+
+class PositionInApplication(models.Model):
+    position = models.ForeignKey(to="Position", verbose_name="Позиция", on_delete=models.PROTECT)
+    quantity = models.FloatField(verbose_name="Количество")
+    link = models.CharField(verbose_name="Ссылка", max_length=1000)
