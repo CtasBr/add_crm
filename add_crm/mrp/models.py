@@ -50,6 +50,7 @@ class Position(models.Model):
     quantity = models.FloatField(verbose_name="Количество")
     units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
     link = models.CharField(verbose_name="Ссылка", max_length=500, blank=True)
+    min_quantity = models.FloatField(verbose_name="Минимальное количество")
     def __str__(self) -> str:
         return self.title
 

@@ -29,7 +29,12 @@ def take(request):
 
 
 def warehouse(request):
-    obj = Position.objects.all()
+    find = request.GET.get("obj", "")
+    if find:
+        obj = Position.objects.filter(title__icontains=find.lower())
+    else:
+        obj = Position.objects.all()
+    obj_for_find = Position.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -40,6 +45,8 @@ def warehouse(request):
     data = {
         "nav": nav_state,
         "positions": obj,
+        "find": find,
+        "find_objs": obj_for_find,
     }
     return render(request, "warehouse.html", data)
 

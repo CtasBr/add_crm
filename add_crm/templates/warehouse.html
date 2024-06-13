@@ -1,70 +1,44 @@
 {% extends "base.html" %} {% block content %}
 <br>
-{% comment %} <form method="POST" class="mt-4 ml-4" action="{% url "take" 0 %}">
-    {% csrf_token %}
+<form method="GET" class="mt-4 ml-4" action="{% url "warehouse" %}">
     <div class="form-row">
       <div class="form-group col-md-3">
-        <input type="text" class="form-control" id="obj" name="obj" placeholder="Что взять" value="{{take_obj}}" list="options" autocomplete="off">
+        <input type="text" class="form-control" id="obj" name="obj" placeholder="Найти" value="{{find}}" list="options" autocomplete="off">
         <datalist id="options">
-            {% for p in positions %}
+          {% for p in find_objs %}
             <option value="{{p.title}}">
-                {% endfor %}
+          {% endfor %}
           </datalist>
       </div>
-      <div class="form-group col-md-2">
-        <input type="number" class="form-control" step="0.01" id="count" name="count" placeholder="Количество" value="">
-      </div>
       <div class="form-group col-md-3">
-      <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Взять</button>
+      <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Поиск</button>
       </div>
     </div>
 </form> 
-<form method="POST" class="mt-2 ml-4" action="{% url "take" 1 %}">
-    {% csrf_token %}
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        <input type="text" class="form-control" id="obj" name="obj" placeholder="Что вернуть" value="{{return_obj}}" list="options" autocomplete="off">
-        <datalist id="options">
-            {% for p in positions %}
-            <option value="{{p.title}}">
-                {% endfor %}
-          </datalist>
-      </div>
-      <div class="form-group col-md-2">
-        <input type="number" class="form-control" step="0.01" id="count" name="count" placeholder="Количество" value="">
-      </div>
-      <div class="form-group col-md-3">
-      <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Вернуть</button>
-      </div>
-    </div>
-</form>  {% endcomment %}
 
-<div class="container ml-2 mt-4">
+<div class="container ml-2">
   <div class="row">
     {% for p in positions %}
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-      <div class="card mt-2 mb-2">
+      <div class="card mb-2">
           <div class="card_title project">
             <div class="text_title">{{p.title}}</div>
-            <div class="time_title"><a href="{{p.link}}">Что это?</a></div>
+            <div class="time_title"><a href="{{p.link}}" style="color: #ffffff">что это?</a></div>
           </div>
-          <div class="card_content" style="font-size: 1.2rem">
+          <div class="card_content {% if p.quantity < p.min_quantity %}zq{% endif %} " style="font-size: 1.2rem">
             {{p.quantity}} {{p.units}}
           </div>
-          <div class="card_buttons mr-3" style="font-size: 1.2rem">
+          <div class="card_buttons mr-4" style="font-size: 1.2rem">
             <a
               class="card_button done"
+              href="#"
               style="font-size: 1rem"
-              {% comment %} href="{% url "warehouse" %}?take={{p.id}}" {% endcomment %}
-              onclick="takeAction({{p.id}})"
-              >Взять</a>
+              onclick="takeAction({{p.id}})">взять</a>
               <input type="number" class="form-control" step="0.01" id="how_many_{{p.id}}" name="how_many" value="">
-            <a
-              class="card_button"
-              style="font-size: 1rem"
-              {% comment %} href="{% url "warehouse" %}?return={{p.id}}" {% endcomment %}
+            <a class="card_button" style="font-size: 1rem"
+            href="#"
               onclick="returnAction({{p.id}})"
-              >Вернуть</a>
+              >вернуть</a>
           </div>
       </div>
     </div>
