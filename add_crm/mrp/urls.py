@@ -7,4 +7,5 @@ urlpatterns = [
     path('', warehouse, name='warehouse'),
     path('purchase/', purchase, name='purchase'),
     path('take/', take, name='take'),
+    path('application/<int:num>', application, name='application'),
 ]

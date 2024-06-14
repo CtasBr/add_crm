@@ -54,7 +54,7 @@ def warehouse(request):
 def purchase(request):
     applications = Application.objects.all().order_by("-id")
     units = Unit.objects.all()
-    print(units)
+    statuses = Status.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -66,6 +66,20 @@ def purchase(request):
     data = {
         "nav": nav_state,
         "appl": applications,
-        "units": units
+        "units": units,
+        "status": statuses
     }
     return render(request, "purchase.html", data)
+
+
+def application(request, num):
+    if request.method == 'POST':
+        deadline = request.POST.get('deadline')
+        status = request.POST.get('status')
+        appl = Application.objects.get(id=num)
+        appl.status = Status.objects.get(id=int(status))
+        appl.deadline = deadline
+        appl.save(update_fields=["status", "deadline"])
+        print("a", deadline)
+    
+    return redirect('purchase')
