@@ -1,5 +1,10 @@
-{% extends "base.html" %} {% block content %} {% for a in appl %}
-<div class="card mt-4 mr-4 ml-4" style="max-width: 100%; width: auto">
+{% extends "base.html" %}{% load static %}{% block content %}
+<br>
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a class="btn btn-custom active">Создать заявку</a>
+</div>
+{% for a in appl %}
+<div class="card mt-3 mr-4 ml-4" style="max-width: 100%; width: auto">
   <div class="row no-gutters d-flex align-items-center" style="width: 100%">
     <div class="col-md-1" style="color: #925537">
       <div class="card-body">
@@ -12,13 +17,14 @@
     >
       <div class="card-body" style="">
         <p class="card-text">
-          {% for p in a.positions.all %}{{p.position.title}} | {% endfor %}
+          {% for p in a.positions.all %} <a href="{{p.link}}">{{p.position.title}}</a> | {% endfor %}
         </p>
       </div>
     </div>
     <div class="col-md-2">
       <div class="card-body">
-        <p class="card-text">{{a.status}}</p>
+        <p class="card-text"><img src="{% static "img/material-symbols-light_draft-orders.png" %}"
+          width="20" height="20" alt="Тема:">{{a.purchase_topic.title}}</p>
       </div>
     </div>
     <div
@@ -26,13 +32,15 @@
       style="border-right: 1px solid; border-left: 1px solid"
     >
       <div class="card-body">
-        <p class="card-text">{{a.purchase_topic.title}}</p>
+        <p class="card-text"><img src="{% static "img/dashicons_post-status.png" %}"
+          width="20" height="20" alt="Статус:">{{a.status}}</p>
       </div>
     </div>
     <div class="col-md-2">
       <div class="card-body">
         <p class="card-text">
-          {% if a.deadline %}{{a.deadline | date:"d.m.Y"}} {% else %}Не
+          <img src="{% static "img/Vector.png" %}"
+          width="20" height="20" alt="Примерная дата поставки:"> {% if a.deadline %}{{a.deadline | date:"d.m.Y"}} {% else %}Не
           определен{% endif %}
         </p>
       </div>
