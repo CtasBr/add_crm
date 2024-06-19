@@ -93,5 +93,15 @@ def application(request, num):
 
 
 def add_application(request):
-    print("OK done")
+    if request.method == 'POST':
+        contact = request.POST.get('contact')
+        payment_method = request.POST.get('payment_method')
+        diadok = request.POST.get('diadok')
+        name_position = request.POST.getlist('name_position')
+        num_pos = len(name_position)
+        count_pos = request.POST.getlist('count')
+        units = request.POST.getlist('units')
+        print(name_position)
+        # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {name_position}, count_pos {count_pos}, units {units}')
+        
     return redirect('purchase')

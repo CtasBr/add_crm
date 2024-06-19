@@ -14,7 +14,7 @@
           <div class="form-row" id="form_add_pur_row">
             <div class="form-group col-md-12">
               {% comment %} <label for="title">Поставщик</label> {% endcomment %}
-              <input type="text" class="form-control" id="title" name="title" placeholder="Ссылка на станицу с контактами поставщика">
+              <input type="text" class="form-control" id="contact" name="contact" placeholder="Ссылка на станицу с контактами поставщика">
             </div>
             <div class="form-group col-md-12">
               <label for="payment_method">Оплата</label>
@@ -24,12 +24,12 @@
               </select>
             </div>
             <div class="form-group col-md-12">
-              <input id="diadok" type="checkbox">
+              <input id="diadok" name="diadok" type="checkbox">
               <label for="diadok">Поставщик работает в ДИАДОК</label>
             </div>
             <div class="form-group col-md-12 mt-2">
               <label for="description">Позиция</label>
-              <input class="form-control" id="name" name="name" placeholder="Название" list="options" autocomplete="off">
+              <input class="form-control" id="name_position" name="name_position" placeholder="Название" list="options" autocomplete="off">
               <datalist id="options">
               {% for p in objects %}
                 <option value="{{p.title}}">
@@ -37,10 +37,10 @@
               </datalist>
             </div>
             <div class="form-group col-md-6">
-              <input type="number" step="0.01" class="form-control" id="name" name="name" placeholder="Количество">
+              <input type="number" step="0.01" class="form-control" id="count" name="count" placeholder="Количество">
             </div>
             <div class="form-group col-md-6">
-              <select id="payment_method" name="payment_method">
+              <select id="units" name="units">
                 {% for u in units %}
                 <option value="{{u.id}}">{{u.title}}</option>
                 {% endfor %}
@@ -141,26 +141,35 @@
 
 {% block scripts %}
 <script>
+var i = 0;
 function addInputs() {
   var formArray = document.getElementById("form_add_pur_row"); 
-  {% comment %} console.log(formArray); {% endcomment %}
-  formArray.innerHTML += `<div class="form-group col-md-12 mt-2">
-    <label for="description">Позиция</label>
-    <input class="form-control" id="name" name="name" placeholder="Название">
-  </div>
-  <div class="form-group col-md-6">
-    <input type="number" step="0.01" class="form-control" id="name" name="name" placeholder="Количество">
-  </div>
-  <div class="form-group col-md-6">
-    <select id="payment_method" name="payment_method">
-      {% for u in units %}
-      <option value="{{u.id}}">{{u.title}}</option>
-      {% endfor %}
-    </select>
-  </div>
+  {% comment %} console.log(formArray); 
+  formArray.innerHTML += `
   <div class="form-group col-md-12">
     <input class="form-control" id="link" name="link" placeholder="Ссылка">
-  </div>`
+  </div>`{% endcomment %}
+
+  const posInput = document.createElement(`div`);
+  posInput.className = 'form-group col-md-12 mt-2';
+  posInput.innerHTML = '<label for="description">Позиция</label> <input class="form-control" id="name_position" name="name_position" list="options" placeholder="Название" autocomplete="off">' ;
+
+  const countInput = document.createElement(`div`);
+  countInput.className = 'form-group col-md-6';
+  countInput.innerHTML = '<input type="number" step="0.01" class="form-control" id="count" name="count" placeholder="Количество">';
+
+  const unitsInput = document.createElement(`div`);
+  unitsInput.className = 'form-group col-md-6';
+  unitsInput.innerHTML = '<select id="units" name="units"> {% for u in units %} <option value="{{u.id}}">{{u.title}}</option> {% endfor %} </select>';
+
+  const linkInput = document.createElement(`div`);
+  linkInput.className = 'form-group col-md-12';
+  linkInput.innerHTML = '<input class="form-control" id="link" name="link" placeholder="Ссылка">';
+
+  formArray.appendChild(posInput);
+  formArray.appendChild(countInput);
+  formArray.appendChild(unitsInput);
+  formArray.appendChild(linkInput);
 }
 </script>
 {% endblock scripts %}
