@@ -97,11 +97,19 @@ def add_application(request):
         contact = request.POST.get('contact')
         payment_method = request.POST.get('payment_method')
         diadok = request.POST.get('diadok')
-        name_position = request.POST.getlist('name_position')
-        num_pos = len(name_position)
+        positions = request.POST.getlist('name_position')
+        num_pos = len(positions)
         count_pos = request.POST.getlist('count')
         units = request.POST.getlist('units')
-        print(name_position)
-        # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {name_position}, count_pos {count_pos}, units {units}')
+        
+        for i in range(num_pos):
+            try:
+                position = Position.objects.get(title=positions[i])
+            except:
+                position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
+                position.save()
+            positions[i] = position
+            print(position)
+        print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         
     return redirect('purchase')
