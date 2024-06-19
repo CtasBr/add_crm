@@ -55,6 +55,7 @@ def purchase(request):
     applications = Application.objects.all().order_by("-id")
     units = Unit.objects.all()
     statuses = Status.objects.all()
+    obj_for_add = Position.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -67,7 +68,8 @@ def purchase(request):
         "nav": nav_state,
         "appl": applications,
         "units": units,
-        "status": statuses
+        "status": statuses,
+        "objects": obj_for_add
     }
     return render(request, "purchase.html", data)
 
@@ -87,4 +89,9 @@ def application(request, num):
         appl.save(update_fields=["status", "deadline"])
         print("a", deadline)
     
+    return redirect('purchase')
+
+
+def add_application(request):
+    print("OK done")
     return redirect('purchase')

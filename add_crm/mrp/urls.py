@@ -8,4 +8,5 @@ urlpatterns = [
     path('purchase/', purchase, name='purchase'),
     path('take/', take, name='take'),
     path('application/<int:num>', application, name='application'),
+    path('add_application/', add_application, name='add_application'),
 ]
