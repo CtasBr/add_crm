@@ -79,6 +79,11 @@ def application(request, num):
         appl = Application.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
         appl.deadline = deadline
+        if appl.status.id == 5:
+            for pos in appl.positions.all():
+                obj = pos.position
+                obj.quantity += pos.quantity
+                obj.save(update_fields=["quantity"])
         appl.save(update_fields=["status", "deadline"])
         print("a", deadline)
     
