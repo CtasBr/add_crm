@@ -1,14 +1,61 @@
 {% extends "base.html" %}{% load static %}{% block content %}
 <br>
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
-  <a href="{% url "purchase" %}" class="btn btn-custom" id="myBtn">Позиции</a>
-  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom active" id="myBtn">ТЗ</a>
+  <a href="{% url "purchase" %}" class="btn btn-custom">Позиции</a>
+  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom active">ТЗ</a>
 </div>
 <br>
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
   <a class="btn btn-custom active" alt="Добавить проект" id="myBtn">Создать заявку</a>
 </div>
-
+<div id="myModal" class="modal" style="z-index: 1000;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form method="POST" class="" action="{% url "add_application_ts" %}">
+          {% csrf_token %}
+          <div class="modal-body">
+            <div class="form-row" id="form_add_pur_row">
+              <div class="form-group col-md-12">
+                {% comment %} <label for="title">Поставщик</label> {% endcomment %}
+                <input type="text" class="form-control" id="name_provider" name="name_provider" placeholder="Название поставщика">
+              </div>
+              <div class="form-group col-md-12">
+                {% comment %} <label for="title">Поставщик</label> {% endcomment %}
+                <input type="text" class="form-control" id="contact" name="contact" placeholder="Ссылка на станицу с контактами поставщика">
+              </div>
+              <div class="form-group col-md-12">
+                <label for="topic">Тема закупки</label>
+                <select id="topic" name="topic" >
+                  {% for t in topics %}
+                  <option value="{{t.id}}">{{t.title}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <label for="payment_method">Оплата</label>
+                <select id="payment_method" name="payment_method" >
+                  <option value="post-payment">Постоплата</option>
+                  <option value="3070">30/70</option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <input id="diadok" name="diadok" type="checkbox">
+                <label for="diadok">Поставщик работает в ДИАДОК</label>
+              </div>
+              <div class="form-group col-md-12 mt-2">
+                <label for="description">Позиция</label>
+                <input type="file" class="form-control" id="ts" name="ts" placeholder="ТЗ">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% for a in appl %}
 {% if a.status.id != 5 %}
 <div class="card mt-3 mr-4 ml-4" style="max-width: 100%; width: auto">
@@ -25,7 +72,7 @@
       <div class="card-body" style="">
         <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
           width="20" height="20" alt="Оплата:"> 
-         <a href="{{a.technical_specification}}">{{a.technical_specification}}</a> 
+         <a href="{{a.technical_specification.url}}" download>{{a.file_name}}</a> 
         </p>
         <div class="collapse" id="collapseInf{{a.id}}">
           <div class="card text-left" style="align-items: normal">

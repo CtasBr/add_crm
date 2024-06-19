@@ -55,13 +55,14 @@ def warehouse(request):
 
 def purchase(request):
     types = request.GET.get("type", "appl")
-    
+    topics = Purchase_topic.objects.all()
+    statuses = Status.objects.all()
     if types == "appl":
         applications = Application.objects.all().order_by("-id")
         units = Unit.objects.all()
-        statuses = Status.objects.all()
+        
         obj_for_add = Position.objects.all()
-        topics = Purchase_topic.objects.all()
+        
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -84,6 +85,8 @@ def purchase(request):
         data = {
             "nav": nav_state,
             "appl": applications,
+            "status": statuses,
+            "topics": topics,
         }
         return render(request, "purchase_t.html", data)
     
@@ -139,7 +142,28 @@ def add_application(request):
                                   provider=provider
                                 )
         application.save()
-        print(positions)
         application.positions.set(positions)
+        
+    return redirect('purchase')
+
+
+def add_application_ts(request):
+    if request.method == 'POST':
+        topic = request.POST.get('topic')
+        name_provider = request.POST.get('name_provider')
+        contact = request.POST.get('contact')
+        provider = Provider(name=name_provider, link=contact)
+        provider.save()
+        payment_method = "Постоплата" if request.POST.get('payment_method')=="post-payment" else "30/70"
+        diadok = request.POST.get('diadok')
+        filefield = request.POST.get('file')
+        application = ApplicationTechnicalSpecification(purchase_topic=Purchase_topic.objects.get(id=topic), 
+                                  creator=request.user, 
+                                  status=Status.objects.get(id=1), 
+                                  payment_form=payment_method, 
+                                  provider=provider,
+                                  technical_specification=filefield
+                                )
+        application.save()
         
     return redirect('purchase')
