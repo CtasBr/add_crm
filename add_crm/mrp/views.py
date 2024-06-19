@@ -95,21 +95,32 @@ def application(request, num):
 def add_application(request):
     if request.method == 'POST':
         contact = request.POST.get('contact')
+        provider = Provider(link=contact)
+        provider.save()
         payment_method = request.POST.get('payment_method')
         diadok = request.POST.get('diadok')
         positions = request.POST.getlist('name_position')
         num_pos = len(positions)
         count_pos = request.POST.getlist('count')
         units = request.POST.getlist('units')
-        
+        link = request.POST.getlist('link')
+        positions_in_appl = []
         for i in range(num_pos):
             try:
                 position = Position.objects.get(title=positions[i])
             except:
                 position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
                 position.save()
-            positions[i] = position
+            positions[i] = PositionInApplication(position=position, quantity=int(num_pos[i]), link=link[i])
             print(position)
         print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         
+        application = Application(purchase_topic=Purchase_topic.objects.get(title="Аддитив"), 
+                                  creator=request.user, 
+                                  status=Status.objects.get(id=0), 
+                                  payment_form=payment_method, 
+                                  positions=positions_in_appl,
+                                  provider=provider
+                                )
+        application.save()
     return redirect('purchase')

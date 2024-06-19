@@ -96,7 +96,7 @@ class Provider(models.Model):
         verbose_name = "Поставщик"
         verbose_name_plural = "Поставщики"
     
-    name = models.CharField(verbose_name="Название", max_length=300)
+    name = models.CharField(verbose_name="Название", max_length=300, blank=True)
     link = models.CharField(verbose_name="Ссылка", max_length=1000)
     
     def __str__(self) -> str:
@@ -116,4 +116,5 @@ class Link(models.Model):
 class PositionInApplication(models.Model):
     position = models.ForeignKey(to="Position", verbose_name="Позиция", on_delete=models.PROTECT)
     quantity = models.FloatField(verbose_name="Количество")
+    units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
     link = models.CharField(verbose_name="Ссылка", max_length=1000)
