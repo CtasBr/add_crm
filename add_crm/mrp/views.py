@@ -1,3 +1,5 @@
+from os.path import basename
+
 from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect, render
 
@@ -52,10 +54,14 @@ def warehouse(request):
 
 
 def purchase(request):
-    applications = Application.objects.all().order_by("-id")
-    units = Unit.objects.all()
-    statuses = Status.objects.all()
-    obj_for_add = Position.objects.all()
+    types = request.GET.get("type", "appl")
+    
+    if types == "appl":
+        applications = Application.objects.all().order_by("-id")
+        units = Unit.objects.all()
+        statuses = Status.objects.all()
+        obj_for_add = Position.objects.all()
+        topics = Purchase_topic.objects.all()
     nav_state = {"projects": "", 
                  "hant": "",
                  "calendar": "",
@@ -63,20 +69,29 @@ def purchase(request):
                  "warehouse": "", 
                  "purchase":  "active"
                  }
+    if types == "appl":
+        data = {
+            "nav": nav_state,
+            "appl": applications,
+            "units": units,
+            "status": statuses,
+            "objects": obj_for_add,
+            "topics": topics,
+        }
+        return render(request, "purchase.html", data)
+    else:
+        applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
+        data = {
+            "nav": nav_state,
+            "appl": applications,
+        }
+        return render(request, "purchase_t.html", data)
     
-    data = {
-        "nav": nav_state,
-        "appl": applications,
-        "units": units,
-        "status": statuses,
-        "objects": obj_for_add
-    }
-    return render(request, "purchase.html", data)
 
 
 def application(request, num):
     if request.method == 'POST':
-        deadline = request.POST.get('deadline')
+        deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
         appl = Application.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
@@ -85,7 +100,8 @@ def application(request, num):
             for pos in appl.positions.all():
                 obj = pos.position
                 obj.quantity += pos.quantity
-                obj.save(update_fields=["quantity"])
+                obj.is_done = True
+                obj.save(update_fields=["quantity", "is_done"])
         appl.save(update_fields=["status", "deadline"])
         print("a", deadline)
     
@@ -94,33 +110,36 @@ def application(request, num):
 
 def add_application(request):
     if request.method == 'POST':
+        topic = request.POST.get('topic')
+        name_provider = request.POST.get('name_provider')
         contact = request.POST.get('contact')
-        provider = Provider(link=contact)
+        provider = Provider(name=name_provider, link=contact)
         provider.save()
-        payment_method = request.POST.get('payment_method')
+        payment_method = "Постоплата" if request.POST.get('payment_method')=="post-payment" else "30/70"
         diadok = request.POST.get('diadok')
         positions = request.POST.getlist('name_position')
         num_pos = len(positions)
         count_pos = request.POST.getlist('count')
         units = request.POST.getlist('units')
         link = request.POST.getlist('link')
-        positions_in_appl = []
         for i in range(num_pos):
             try:
                 position = Position.objects.get(title=positions[i])
             except:
                 position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
                 position.save()
-            positions[i] = PositionInApplication(position=position, quantity=int(num_pos[i]), link=link[i])
-            print(position)
-        print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
+            positions[i] = PositionInApplication(position=position, quantity=int(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
+            positions[i].save()
+        # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         
-        application = Application(purchase_topic=Purchase_topic.objects.get(title="Аддитив"), 
+        application = Application(purchase_topic=Purchase_topic.objects.get(id=topic), 
                                   creator=request.user, 
-                                  status=Status.objects.get(id=0), 
+                                  status=Status.objects.get(id=1), 
                                   payment_form=payment_method, 
-                                  positions=positions_in_appl,
                                   provider=provider
                                 )
         application.save()
+        print(positions)
+        application.positions.set(positions)
+        
     return redirect('purchase')

@@ -1,6 +1,11 @@
 {% extends "base.html" %}{% load static %}{% block content %}
 <br>
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a href="{% url "purchase" %}" class="btn btn-custom active" id="myBtn">Позиции</a>
+  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom" id="myBtn">ТЗ</a>
+</div>
+<br>
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
   <a class="btn btn-custom active" alt="Добавить проект" id="myBtn">Создать заявку</a>
 </div>
 {% comment %} Нужно доделать форму ввода заявки {% endcomment %}
@@ -14,7 +19,19 @@
           <div class="form-row" id="form_add_pur_row">
             <div class="form-group col-md-12">
               {% comment %} <label for="title">Поставщик</label> {% endcomment %}
+              <input type="text" class="form-control" id="name_provider" name="name_provider" placeholder="Название поставщика">
+            </div>
+            <div class="form-group col-md-12">
+              {% comment %} <label for="title">Поставщик</label> {% endcomment %}
               <input type="text" class="form-control" id="contact" name="contact" placeholder="Ссылка на станицу с контактами поставщика">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="topic">Тема закупки</label>
+              <select id="topic" name="topic" >
+                {% for t in topics %}
+                <option value="{{t.id}}">{{t.title}}</option>
+                {% endfor %}
+              </select>
             </div>
             <div class="form-group col-md-12">
               <label for="payment_method">Оплата</label>
@@ -61,11 +78,12 @@
   </div>
 </div>
 {% for a in appl %}
+{% if a.status.id != 5 %}
 <div class="card mt-3 mr-4 ml-4" style="max-width: 100%; width: auto">
   <div class="row no-gutters d-flex align-items-center" style="width: 100%">
     <div class="col-md-1" style="color: #925537">
       <div class="card-body">
-        <a class="card-text" data-toggle="collapse" {% if a.status.id != 5 %} href="#collapseInf{{a.id}}" {% endif %} role="button" aria-expanded="false" aria-controls="collapseExample" style="color: #925537">#{{a.id}}</a>
+        <a class="card-text" data-toggle="collapse"  href="#collapseInf{{a.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="color: #925537">#{{a.id}}</a>
       </div>
     </div>
     <div
@@ -75,7 +93,7 @@
       <div class="card-body" style="">
         <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
           width="20" height="20" alt="Оплата:"> 
-          {% for p in a.positions.all %} <a href="{{p.link}}">{{p.position.title}}</a> | {% endfor %}
+          {% for p in a.positions.all %} <a href="{{p.link}}">{{p.position.title}} ({{p.position.quantity}} {{p.position.units}})</a> | {% endfor %}
         </p>
         <div class="collapse" id="collapseInf{{a.id}}">
           <div class="card text-left" style="align-items: normal">
@@ -135,6 +153,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endfor %}
 
 {% endblock content %}

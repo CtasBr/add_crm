@@ -118,3 +118,25 @@ class PositionInApplication(models.Model):
     quantity = models.FloatField(verbose_name="Количество")
     units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
     link = models.CharField(verbose_name="Ссылка", max_length=1000)
+    
+class ApplicationTechnicalSpecification(models.Model):
+    payment_forms = (
+        ('Постоплата', 'Постоплата'),
+        ('30/70', '30/70'),
+    )
+    class Meta:
+        db_table = "ApplicationTechnicalSpecifications"
+        verbose_name = "Заявка с ТЗ"
+        verbose_name_plural = "Заявки с ТЗ"
+    purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
+    payment_form = models.CharField(verbose_name="Оплата", choices=payment_forms, max_length=100)
+    technical_specification = models.FileField(verbose_name="Файл", upload_to='technical_specification/', blank=True, null=True)
+    file_name = models.FileField(verbose_name="Имя файла", blank=True, null=True)
+    provider = models.ForeignKey(to="Provider", verbose_name="Поставщик", on_delete=models.PROTECT)
+    deadline = models.DateField(verbose_name="Срок поставки", blank=True, null=True)
+    
+    def __str__(self) -> str:
+        return self.provider.name
+    

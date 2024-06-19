@@ -1,0 +1,93 @@
+{% extends "base.html" %}{% load static %}{% block content %}
+<br>
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a href="{% url "purchase" %}" class="btn btn-custom" id="myBtn">Позиции</a>
+  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom active" id="myBtn">ТЗ</a>
+</div>
+<br>
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a class="btn btn-custom active" alt="Добавить проект" id="myBtn">Создать заявку</a>
+</div>
+
+{% for a in appl %}
+{% if a.status.id != 5 %}
+<div class="card mt-3 mr-4 ml-4" style="max-width: 100%; width: auto">
+  <div class="row no-gutters d-flex align-items-center" style="width: 100%">
+    <div class="col-md-1" style="color: #925537">
+      <div class="card-body">
+        <a class="card-text" data-toggle="collapse"  href="#collapseInf{{a.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="color: #925537">#{{a.id}}</a>
+      </div>
+    </div>
+    <div
+      class="col-md-5"
+      style="border-right: 1px solid; border-left: 1px solid"
+    >
+      <div class="card-body" style="">
+        <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
+          width="20" height="20" alt="Оплата:"> 
+         <a href="{{a.technical_specification}}">{{a.technical_specification}}</a> 
+        </p>
+        <div class="collapse" id="collapseInf{{a.id}}">
+          <div class="card text-left" style="align-items: normal">
+            <a href="{{a.provider.link}}"><img src="{% static "img/mdi_contact-outline.png" %}"
+              width="20" height="20" alt="Поставщик:"> {{a.provider}}</a>
+            <a style="margin-top: 2px"><img src="{% static "img/tdesign_money.png" %}"
+              width="20" height="20" alt="Оплата:"> {{a.payment_form}}</a>
+              <form method="POST" class="mt-1" action="/mrp/application/{{a.id}}">
+                {% csrf_token %}
+                <div class="modal-body p-0">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <input type="date" class="form-control" id="deadline" name="deadline" {% if a.deadline %}value="{{a.deadline | date:"Y-m-d"}}{% endif %}">
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <select id="status" name="status">
+                        {% for s in status %}
+                        <option value="{{s.id}}" {% if a.status == s %}selected{% endif %}>{{s.title}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer p-0" style="border-top: 0px; justify-content: flex-start;">
+                  <button type="submit" class="btn btn-primary pull-left" style="margin: 0px; background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </form>  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card-body">
+        <p class="card-text"><img src="{% static "img/material-symbols-light_draft-orders.png" %}"
+          width="20" height="20" alt="Тема:"> {{a.purchase_topic.title}}</p>
+      </div>
+    </div>
+    <div
+      class="col-md-2"
+      style="border-right: 1px solid; border-left: 1px solid"
+    >
+      <div class="card-body">
+        <p class="card-text"><img src="{% static "img/dashicons_post-status.png" %}"
+          width="20" height="20" alt="Статус:"> {{a.status}}</p>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card-body">
+        <p class="card-text">
+          <img src="{% static "img/Vector.png" %}"
+          width="20" height="20" alt="Примерная дата поставки:"> {% if a.deadline %}{{a.deadline | date:"d.m.Y"}} {% else %}Не
+          определен{% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock content %}
+
+
