@@ -80,6 +80,13 @@ def purchase(request):
             "topics": topics,
         }
         return render(request, "purchase.html", data)
+
+    elif types == "equipment":
+        data = {
+            "nav": nav_state,
+        }
+        return render(request, "purchase_e.html", data)
+    
     else:
         applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
         data = {

@@ -5,7 +5,6 @@ from django.db import models
 
 
 class Purchase_topic(models.Model):
-    
     class Meta:
         db_table = "Purchase topics"
         verbose_name = "Тема закупок"
@@ -72,7 +71,7 @@ class Application(models.Model):
     provider = models.ForeignKey(to="Provider", verbose_name="Поставщик", on_delete=models.PROTECT)
     deadline = models.DateField(verbose_name="Срок поставки", blank=True, null=True)
     def __str__(self) -> str:
-        return self.provider.name
+        return f'{self.provider.name} {self.purchase_topic}'
     
     
 class TraceLogUnit(models.Model):
@@ -111,13 +110,24 @@ class Link(models.Model):
     
     link = models.CharField(verbose_name="Ссылка", max_length=1000)
     appl = models.ForeignKey(to="Application", verbose_name="Для заявки", on_delete=models.PROTECT)
+    
+    def __str__(self) -> str:
+        return self.link
 
 
 class PositionInApplication(models.Model):
+    class Meta:
+        db_table = "PositionsInApplication"
+        verbose_name = "Позиция в заявке"
+        verbose_name_plural = "Позиции в заявке"
+    
     position = models.ForeignKey(to="Position", verbose_name="Позиция", on_delete=models.PROTECT)
     quantity = models.FloatField(verbose_name="Количество")
     units = models.ForeignKey(verbose_name="Единица измерения", to="Unit", on_delete=models.PROTECT)
     link = models.CharField(verbose_name="Ссылка", max_length=1000)
+    
+    def __str__(self) -> str:
+        return f'{self.position.title} {self.quantity} {self.units}'
     
 class ApplicationTechnicalSpecification(models.Model):
     payment_forms = (
@@ -128,6 +138,7 @@ class ApplicationTechnicalSpecification(models.Model):
         db_table = "ApplicationTechnicalSpecifications"
         verbose_name = "Заявка с ТЗ"
         verbose_name_plural = "Заявки с ТЗ"
+    
     purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
     creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
@@ -139,4 +150,27 @@ class ApplicationTechnicalSpecification(models.Model):
     
     def __str__(self) -> str:
         return self.provider.name
+    
+
+class Equipment(models.Model):
+    class Meta:
+        db_table = "Equipments"
+        verbose_name = "Оборудование"
+        verbose_name_plural = "Оборудование"
+    
+    name = models.CharField(verbose_name="Название", max_length=1000)
+    quantity = models.IntegerField(verbose_name="Количество")
+    
+    
+    def __str__(self) -> str:
+        return self.name
+    
+
+class EquipmentApplication(models.Model):
+    class Meta:
+        db_table = "EquipmentApplications"
+        verbose_name = "Заявка на оборудование"
+        verbose_name_plural = "Заявки на оборудование"
+    
+    
     
