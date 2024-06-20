@@ -102,9 +102,20 @@ def application(request, num):
         if appl.status.id == 5:
             for pos in appl.positions.all():
                 obj = pos.position
-                obj.quantity += pos.quantity
+                update_fields=["is_done"]
+                if obj.units == pos.units:
+                    obj.quantity += pos.quantity
+                    update_fields.append("quantity")
+                elif (obj.units.title == "кг" and pos.units.title == "г") or (obj.units.title == "л" and pos.units.title == "мл"):
+                    obj.quantity += (pos.quantity / 1000)
+                    update_fields.append("quantity")
+                elif (obj.units.title == "г" and pos.units.title == "кг") or (obj.units.title == "мл" and pos.units.title == "л"):
+                    obj.quantity += (pos.quantity * 1000)
+                    update_fields.append("quantity")
+                else:
+                    pass
                 obj.is_done = True
-                obj.save(update_fields=["quantity", "is_done"])
+                obj.save(update_fields=update_fields)
         appl.save(update_fields=["status", "deadline"])
         print("a", deadline)
     
