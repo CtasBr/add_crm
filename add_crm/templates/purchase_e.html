@@ -94,7 +94,7 @@
       <div class="card-body" style="">
         <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
           width="20" height="20" alt="Оплата:"> 
-          {% for p in a.positions.all %} <a href="{{p.link}}">{{p.position.title}} ({{p.quantity}} {{p.units}})</a> | {% endfor %}
+          {% for p in a.equipment.all %} <a href="{{p.link}}">{{p.name}} ({{p.quantity}} шт)</a> | {% endfor %}
         </p>
         <div class="collapse" id="collapseInf{{a.id}}">
           <div class="card text-left" style="align-items: normal">

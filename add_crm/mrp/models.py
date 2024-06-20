@@ -160,17 +160,29 @@ class Equipment(models.Model):
     
     name = models.CharField(verbose_name="Название", max_length=1000)
     quantity = models.IntegerField(verbose_name="Количество")
-    
+    link = models.CharField(verbose_name="Ссылка", max_length=1000)
     
     def __str__(self) -> str:
         return self.name
     
 
 class EquipmentApplication(models.Model):
+    payment_forms = (
+        ('Постоплата', 'Постоплата'),
+        ('30/70', '30/70'),
+    )
     class Meta:
         db_table = "EquipmentApplications"
         verbose_name = "Заявка на оборудование"
         verbose_name_plural = "Заявки на оборудование"
     
+    purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
+    payment_form = models.CharField(verbose_name="Оплата", choices=payment_forms, max_length=100)
+    provider = models.ForeignKey(to="Provider", verbose_name="Поставщик", on_delete=models.PROTECT)
+    deadline = models.DateField(verbose_name="Срок поставки", blank=True, null=True)
+    equipment = models.ManyToManyField("Equipment", blank=True, verbose_name="Оборудование")
     
-    
+    def __str__(self) -> str:
+        return f'{self.purchase_topic.title} {self.provider.name}'

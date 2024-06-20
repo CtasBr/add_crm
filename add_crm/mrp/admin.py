@@ -12,3 +12,7 @@ admin.site.register(Link)
 admin.site.register(Provider)
 admin.site.register(PositionInApplication)
 admin.site.register(ApplicationTechnicalSpecification)
+admin.site.register(Equipment)
+admin.site.register(EquipmentApplication)
+
+

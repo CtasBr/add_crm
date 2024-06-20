@@ -82,8 +82,10 @@ def purchase(request):
         return render(request, "purchase.html", data)
 
     elif types == "equipment":
+        applications = EquipmentApplication.objects.all()
         data = {
             "nav": nav_state,
+            "appl": applications,
         }
         return render(request, "purchase_e.html", data)
     
