@@ -123,11 +123,18 @@ def add_application(request):
         positions = request.POST.getlist('name_position')
         num_pos = len(positions)
         count_pos = request.POST.getlist('count')
-        units = request.POST.getlist('units')
+        units = list(map(int, request.POST.getlist('units')))
         link = request.POST.getlist('link')
+        min_count = list(map(int, request.POST.getlist('min_count')))
+        
         for i in range(num_pos):
             try:
                 position = Position.objects.get(title=positions[i])
+                print(min_count[i] != position.min_quantity, int(units[i]) == position.units.id)
+                if min_count[i] != position.min_quantity and units[i] == position.units.id:
+                    print("done_ifff")
+                    position.min_quantity = min_count[i]
+                    position.save(update_fields=["min_quantity"])
             except:
                 position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
                 position.save()
