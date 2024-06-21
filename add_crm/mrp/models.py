@@ -38,6 +38,7 @@ class Unit(models.Model):
     def __str__(self) -> str:
         return self.title
 
+
 class Position(models.Model):
     class Meta:
         db_table = "Positions"
@@ -52,6 +53,7 @@ class Position(models.Model):
     is_done = models.BooleanField(verbose_name="Закуплена")
     def __str__(self) -> str:
         return self.title
+
 
 class Application(models.Model):
     payment_forms = (
@@ -128,6 +130,7 @@ class PositionInApplication(models.Model):
     
     def __str__(self) -> str:
         return f'{self.position.title} {self.quantity} {self.units}'
+ 
     
 class ApplicationTechnicalSpecification(models.Model):
     payment_forms = (

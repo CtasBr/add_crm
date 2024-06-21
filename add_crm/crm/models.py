@@ -26,6 +26,7 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+
 class Task(models.Model):
     """Задачи
 
@@ -101,8 +102,7 @@ class Empl(models.Model):
     
     def __str__(self):
         return self.name
-    
-    
+     
 
 class Experiment(models.Model):
     

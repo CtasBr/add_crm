@@ -19,7 +19,6 @@ def generate_random_hex():
     res_hex = '#' + ''.join(res_hex)
     return res_hex
 
-
 def projects(request):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -65,7 +64,6 @@ def projects(request):
             }
     return render(request, 'index.html', data)
 
-
 def tasks(request, num):
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -106,7 +104,6 @@ def experiments(request, id):
             }
     
     return render(request, 'experiments.html', data)
-
 
 def variations(request, id):
     if request.method == 'POST':
@@ -268,7 +265,6 @@ def schedule(request):
     
     return render(request, 'schedule.html', data)
 
-
 def comment(request, num):
     if request.method == 'POST':
         text = request.POST.get('text')
@@ -428,7 +424,6 @@ def gantt(request):
     }
     return render(request, 'gantt.html', data)
 
-
 def staff(request):
     users = Empl.objects.all()
     users_infos = {
@@ -469,7 +464,6 @@ def staff(request):
         "user_info": users_infos,
     }
     return render(request, "staff.html", data)
-
 
 def edit_task(request, num):
     if request.method == 'POST':
