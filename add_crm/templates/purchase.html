@@ -139,7 +139,7 @@
       style="border-right: 1px solid; border-left: 1px solid"
     >
       <div class="card-body">
-        <p class="card-text"><img src="{% static "img/dashicons_post-status.png" %}"
+        <p class="card-text {% if a.status.id == 6 %} zq {% endif %}"><img src="{% static "img/dashicons_post-status.png" %}"
           width="20" height="20" alt="Статус:"> {{a.status}}</p>
       </div>
     </div>
