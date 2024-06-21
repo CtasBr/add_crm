@@ -82,10 +82,14 @@ def purchase(request):
         return render(request, "purchase.html", data)
 
     elif types == "equipment":
-        applications = EquipmentApplication.objects.all()
+        applications = EquipmentApplication.objects.all().order_by("-id")
+        equipment = Equipment.objects.all()
         data = {
             "nav": nav_state,
             "appl": applications,
+            "objects": equipment,
+            "status": statuses,
+            "topics": topics,
         }
         return render(request, "purchase_e.html", data)
     
@@ -126,7 +130,6 @@ def application(request, num):
                 obj.is_done = True
                 obj.save(update_fields=update_fields)
         appl.save(update_fields=["status", "deadline"])
-        print("a", deadline)
     
     return redirect('purchase')
 
@@ -193,4 +196,51 @@ def add_application_ts(request):
                                 )
         application.save()
         
+    return redirect('purchase')
+
+def add_equipment(request):
+    if request.method == 'POST':
+        topic = request.POST.get('topic')
+        name_provider = request.POST.get('name_provider')
+        contact = request.POST.get('contact')
+        provider = Provider(name=name_provider, link=contact)
+        provider.save()
+        payment_method = "Постоплата" if request.POST.get('payment_method')=="post-payment" else "30/70"
+        diadok = request.POST.get('diadok')
+        equipments = request.POST.getlist('name_position')
+        num_pos = len(equipments)
+        count_pos = request.POST.getlist('count')
+        link = request.POST.getlist('link')
+        
+        for i in range(num_pos):
+            try:
+                equipment = Equipment.objects.get(title=equipments[i])
+            except:
+                equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]))
+                equipment.save()
+            equipments[i] = equipment
+            
+        application = EquipmentApplication(purchase_topic=Purchase_topic.objects.get(id=topic), 
+                                  creator=request.user, 
+                                  status=Status.objects.get(id=1), 
+                                  payment_form=payment_method, 
+                                  provider=provider
+                                )
+
+        application.save()
+        
+        application.equipment.set(equipments)
+        
+        
+    return redirect('purchase')
+
+
+def equipment(request, num):
+    if request.method == 'POST':
+        deadline = request.POST.get('deadline', None)
+        status = request.POST.get('status')
+        appl = EquipmentApplication.objects.get(id=num)
+        appl.status = Status.objects.get(id=int(status))
+        appl.deadline = deadline
+        appl.save(update_fields=["status", "deadline"])
     return redirect('purchase')
