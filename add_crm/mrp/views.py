@@ -7,12 +7,17 @@ from .models import *
 
 
 def take(request):
+    '''
+    Функция которая вызывается при взаимодействии с позициями на складе 
+    Обрабатывается GET-запрос:
+    take - ID взятого (-1 если не взято)
+    return - ID того что вернули (-1 если ничего не вернули)
+    count - количество взятого (-1 если ничего)
+    '''
     take_obj = int(request.GET.get("take", "-1"))
     return_obj = int(request.GET.get("return", "-1"))
     count_obj = request.GET.get("count", "-1")
     count_obj = float(count_obj) if count_obj else -1
-
-    print(take_obj, return_obj, count_obj)
     id_obj = max(take_obj, return_obj)
     print(id_obj)
     if id_obj>=0 and count_obj>0:
@@ -29,8 +34,13 @@ def take(request):
         log.save()
     return redirect('warehouse')
 
-
 def warehouse(request):
+    '''
+    Функция отображения склада
+    Есть GET с параметром obj (передается поисковый запрос)
+    Если нет поискового запроса, то показываются все объекты, если есть, то отображаются те, 
+    которые подходят под поисковый запрос
+    '''
     find = request.GET.get("obj", "")
     if find:
         obj = Position.objects.filter(title__icontains=find.lower())
@@ -52,8 +62,11 @@ def warehouse(request):
     }
     return render(request, "warehouse.html", data)
 
-
 def purchase(request):
+    '''
+    Функция отображения заявок на закупки
+    По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
+    '''
     types = request.GET.get("type", "appl")
     topics = Purchase_topic.objects.all()
     statuses = Status.objects.all()
@@ -103,9 +116,12 @@ def purchase(request):
         }
         return render(request, "purchase_t.html", data)
     
-
-
 def application(request, num):
+    '''
+    Функция изменения статуса и срока поставки заявки по позициям 
+    Обрабатвается POST-запрос из формы
+    num - ID заявки по позициям
+    '''
     if request.method == 'POST':
         deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
@@ -133,8 +149,10 @@ def application(request, num):
     
     return redirect('purchase')
 
-
 def add_application(request):
+    '''
+    Функция обработки формы добавления заявки по позициям
+    '''
     if request.method == 'POST':
         topic = request.POST.get('topic')
         name_provider = request.POST.get('name_provider')
@@ -176,8 +194,10 @@ def add_application(request):
         
     return redirect('purchase')
 
-
 def add_application_ts(request):
+    '''
+    Функция обработки формы добавления заявки по ТЗ
+    '''
     if request.method == 'POST':
         topic = request.POST.get('topic')
         name_provider = request.POST.get('name_provider')
@@ -199,6 +219,9 @@ def add_application_ts(request):
     return redirect('purchase')
 
 def add_equipment(request):
+    '''
+    Функция обработки формы добавления заявки по оборудованию
+    '''
     if request.method == 'POST':
         topic = request.POST.get('topic')
         name_provider = request.POST.get('name_provider')
@@ -234,8 +257,12 @@ def add_equipment(request):
         
     return redirect('purchase')
 
-
 def equipment(request, num):
+    '''
+    Функция изменения статуса и срока поставки заявки по оборудованию 
+    Обрабатвается POST-запрос из формы
+    num - ID заявки по оборудованию
+    '''
     if request.method == 'POST':
         deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
