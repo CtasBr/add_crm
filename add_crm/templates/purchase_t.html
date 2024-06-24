@@ -73,7 +73,7 @@
       <div class="card-body" style="">
         <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
           width="20" height="20" alt="Оплата:"> 
-         <a href="{{a.technical_specification.url}}" download>Техническое задания для заявки #{{a.id}}</a> 
+         <a href="{% url "technical_specification" a.pk %}" download>Техническое задания для заявки #{{a.id}}</a> 
         </p>
         <div class="collapse" id="collapseInf{{a.id}}">
           <div class="card text-left" style="align-items: normal">

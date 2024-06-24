@@ -282,5 +282,6 @@ def equipment(request, num):
     return redirect('purchase')
 
 def download_file(request, pk):
+    print(pk)
     obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
     return FileResponse(obj.technical_specification, as_attachment=True)
