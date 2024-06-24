@@ -13,7 +13,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <form method="POST" class="" action="{% url "add_application_ts" %}">
+        <form method="POST" class="" action="{% url "add_application_ts" %}" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="modal-body">
             <div class="form-row" id="form_add_pur_row">
@@ -73,7 +73,7 @@
       <div class="card-body" style="">
         <p class="card-text"><img src="{% static "img/bx_purchase-tag-alt.png" %}"
           width="20" height="20" alt="Оплата:"> 
-         <a href="{{a.technical_specification.url}}" download>{{a.file_name}}</a> 
+         <a href="{{a.technical_specification.url}}" download>Техническое задания для заявки #{{a.id}}</a> 
         </p>
         <div class="collapse" id="collapseInf{{a.id}}">
           <div class="card text-left" style="align-items: normal">

@@ -1,6 +1,7 @@
 from os.path import basename
 
 from django.contrib.auth.models import Group, User
+from django.http import FileResponse
 from django.shortcuts import redirect, render
 
 from .models import *
@@ -206,7 +207,14 @@ def add_application_ts(request):
         provider.save()
         payment_method = "Постоплата" if request.POST.get('payment_method')=="post-payment" else "30/70"
         diadok = request.POST.get('diadok')
-        filefield = request.POST.get('file')
+        filefield = request.FILES.get('ts')
+        # with open(f'media/technical_specification/{filefield.name}', 'wb+') as destination:
+        #         for chunk in filefield.chunks():
+        #             destination.write(chunk)
+
+        
+        # print('POST: ', filefield)
+        print('FILES: ', filefield, filefield.size, filefield.name)
         application = ApplicationTechnicalSpecification(purchase_topic=Purchase_topic.objects.get(id=topic), 
                                   creator=request.user, 
                                   status=Status.objects.get(id=1), 
@@ -215,6 +223,7 @@ def add_application_ts(request):
                                   technical_specification=filefield
                                 )
         application.save()
+        print(application.technical_specification)
         
     return redirect('purchase')
 
@@ -271,3 +280,7 @@ def equipment(request, num):
         appl.deadline = deadline
         appl.save(update_fields=["status", "deadline"])
     return redirect('purchase')
+
+def download_file(request, pk):
+    obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
+    return FileResponse(obj.technical_specification, as_attachment=True)
