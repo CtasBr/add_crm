@@ -291,6 +291,9 @@ def download_file(request, pk):
     return FileResponse(obj.technical_specification, as_attachment=True)
 
 def update_warehouse_csv(request):
+    '''
+    Function which helps add info about products by csv table (use only whis debug = False)
+    '''
     csv_file_path = '/Users/stanislavbratkov/PycharmProjects/add_crm/add_crm/add_crm/static/sheets/warehouse_sheet.csv'
     # [name, quantity, units, min_quantity]
     with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
