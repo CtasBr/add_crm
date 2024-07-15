@@ -308,8 +308,5 @@ def update_warehouse_csv(request):
             print(i)
             obj = Position(title=str(i[0]), quantity=float(i[1]), units=Unit.objects.get(title=str(i[2]).lower()), min_quantity=float(i[3]), is_done=True)
             obj.save()
-            
-    # dir_path = os.path.dirname(os.path.realpath(__file__))
-    # files = os.listdir(dir_path)
-    # print(files)
+
     return redirect('purchase')
