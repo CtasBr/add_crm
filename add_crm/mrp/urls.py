@@ -12,5 +12,8 @@ urlpatterns = [
     path('add_application_ts/', add_application_ts, name='add_application_ts'),
     path('add_equipment/', add_equipment, name='add_equipment'),
     path('equipment/<int:num>', equipment, name='equipment'),
-    path('technical_specification/<int:pk>', download_file, name='technical_specification')
+    path('technical_specification/<int:pk>', download_file, name='technical_specification'),
+    path('application/<int:num>', application, name='application'),
+    path('csv/', update_warehouse_csv, name="csv"),
+    
 ]

@@ -1,8 +1,12 @@
+import csv
+import os
 from os.path import basename
 
+# from django.conf import STATIC_ROOT
 from django.contrib.auth.models import Group, User
 from django.http import FileResponse
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 
 from .models import *
 
@@ -285,3 +289,27 @@ def download_file(request, pk):
     print(pk)
     obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
     return FileResponse(obj.technical_specification, as_attachment=True)
+
+def update_warehouse_csv(request):
+    csv_file_path = '/Users/stanislavbratkov/PycharmProjects/add_crm/add_crm/add_crm/static/sheets/warehouse_sheet.csv'
+    # [name, quantity, units, min_quantity]
+    with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
+        csvreader = csv.reader(csvfile)
+        rows = []
+        for row in csvreader:
+            # print(row)
+            if len(row) > 1:
+                row[0] = row[0] + '.' + row[1]
+            row[0] = row[0].split(";")
+            rows.append(row[0])
+        rows.pop(0)
+        # title quantity units link min_quantity is_done
+        for i in rows:
+            print(i)
+            obj = Position(title=str(i[0]), quantity=float(i[1]), units=Unit.objects.get(title=str(i[2]).lower()), min_quantity=float(i[3]), is_done=True)
+            obj.save()
+            
+    # dir_path = os.path.dirname(os.path.realpath(__file__))
+    # files = os.listdir(dir_path)
+    # print(files)
+    return redirect('purchase')
