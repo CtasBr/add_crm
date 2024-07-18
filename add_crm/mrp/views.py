@@ -2,7 +2,6 @@ import csv
 import os
 from os.path import basename
 
-# from django.conf import STATIC_ROOT
 from django.contrib.auth.models import Group, User
 from django.http import FileResponse
 from django.shortcuts import redirect, render
@@ -48,7 +47,7 @@ def warehouse(request):
     '''
     find = request.GET.get("obj", "")
     if find:
-        obj = Position.objects.filter(title__icontains=find.lower())
+        obj = Position.objects.filter(title__icontains=find)
     else:
         obj = Position.objects.all()
     obj_for_find = Position.objects.all()
@@ -311,5 +310,9 @@ def update_warehouse_csv(request):
             print(i)
             obj = Position(title=str(i[0]), quantity=float(i[1]), units=Unit.objects.get(title=str(i[2]).lower()), min_quantity=float(i[3]), is_done=True)
             obj.save()
-
+    # positions = Position.objects.all()
+    # for pos in positions:
+    #     first_latter = pos.title[0]
+    #     pos.title = pos.title.replace(first_latter, first_latter.lower(), 1)
+    #     print(pos.title)
     return redirect('purchase')
