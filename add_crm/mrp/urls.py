@@ -13,6 +13,7 @@ urlpatterns = [
     path('add_equipment/', add_equipment, name='add_equipment'),
     path('equipment/<int:num>', equipment, name='equipment'),
     path('technical_specification/<int:pk>', download_file, name='technical_specification'),
+    path('technical_specification_upd/<int:num>', techical_specification, name='technical_specification_upd'),
     path('application/<int:num>', application, name='application'),
     path('csv/', update_warehouse_csv, name="csv"),
     

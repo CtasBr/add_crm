@@ -285,10 +285,27 @@ def equipment(request, num):
         appl.save(update_fields=["status", "deadline"])
     return redirect('purchase')
 
+def techical_specification(request, num):
+    '''
+    Функция изменения статуса и срока поставки заявки по ТЗ 
+    Обрабатвается POST-запрос из формы
+    num - ID заявки по оборудованию
+    '''
+    if request.method == 'POST':
+        deadline = request.POST.get('deadline', None)
+        status = request.POST.get('status')
+        appl = ApplicationTechnicalSpecification.objects.get(id=num)
+        appl.status = Status.objects.get(id=int(status))
+        appl.deadline = deadline
+        appl.save(update_fields=["status", "deadline"])
+    return redirect('purchase')
+
 def download_file(request, pk):
     print(pk)
     obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
     return FileResponse(obj.technical_specification, as_attachment=True)
+
+
 
 def update_warehouse_csv(request):
     '''

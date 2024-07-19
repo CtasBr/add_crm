@@ -81,7 +81,7 @@
               width="20" height="20" alt="Поставщик:"> {{a.provider}}</a>
             <a style="margin-top: 2px"><img src="{% static "img/tdesign_money.png" %}"
               width="20" height="20" alt="Оплата:"> {{a.payment_form}}</a>
-              <form method="POST" class="mt-1" action="/mrp/application/{{a.id}}">
+              <form method="POST" class="mt-1" action="/mrp/technical_specification_upd/{{a.id}}">
                 {% csrf_token %}
                 <div class="modal-body p-0">
                   <div class="form-row">
