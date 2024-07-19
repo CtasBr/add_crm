@@ -182,6 +182,10 @@ function addInputs() {
   unitsInput.className = 'form-group col-md-6';
   unitsInput.innerHTML = '<select id="units" name="units"> {% for u in units %} <option value="{{u.id}}">{{u.title}}</option> {% endfor %} </select>';
 
+  const minCountInput = document.createElement(`div`);
+  minCountInput.className = 'form-group col-md-6';
+  minCountInput.innerHTML = '<input type="number" step="0.01" class="form-control" id="min_count" name="min_count" placeholder="Минимальный остаток">';
+
   const linkInput = document.createElement(`div`);
   linkInput.className = 'form-group col-md-12';
   linkInput.innerHTML = '<input class="form-control" id="link" name="link" placeholder="Ссылка">';
@@ -189,6 +193,7 @@ function addInputs() {
   formArray.appendChild(posInput);
   formArray.appendChild(countInput);
   formArray.appendChild(unitsInput);
+  formArray.appendChild(minCountInput);
   formArray.appendChild(linkInput);
 }
 </script>

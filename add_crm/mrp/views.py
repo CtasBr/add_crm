@@ -139,6 +139,7 @@ def application(request, num):
                 if obj.units == pos.units:
                     obj.quantity += pos.quantity
                     update_fields.append("quantity")
+                    # print(111111111)
                 elif (obj.units.title == "кг" and pos.units.title == "г") or (obj.units.title == "л" and pos.units.title == "мл"):
                     obj.quantity += (pos.quantity / 1000)
                     update_fields.append("quantity")
@@ -170,7 +171,7 @@ def add_application(request):
         count_pos = request.POST.getlist('count')
         units = list(map(int, request.POST.getlist('units')))
         link = request.POST.getlist('link')
-        min_count = list(map(int, request.POST.getlist('min_count')))
+        min_count = list(map(float, request.POST.getlist('min_count')))
         
         for i in range(num_pos):
             try:
@@ -183,7 +184,7 @@ def add_application(request):
             except:
                 position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
                 position.save()
-            positions[i] = PositionInApplication(position=position, quantity=int(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
+            positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
             positions[i].save()
         # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         
