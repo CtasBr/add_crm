@@ -39,6 +39,11 @@ def take(request):
     return redirect('warehouse')
 
 def warehouse(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
     '''
     Функция отображения склада
     Есть GET с параметром obj (передается поисковый запрос)
@@ -63,10 +68,16 @@ def warehouse(request):
         "positions": obj,
         "find": find,
         "find_objs": obj_for_find,
+        "user_info": user_info
     }
     return render(request, "warehouse.html", data)
 
 def purchase(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
     '''
     Функция отображения заявок на закупки
     По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
@@ -95,6 +106,7 @@ def purchase(request):
             "status": statuses,
             "objects": obj_for_add,
             "topics": topics,
+            "user_info": user_info
         }
         return render(request, "purchase.html", data)
 
@@ -107,6 +119,7 @@ def purchase(request):
             "objects": equipment,
             "status": statuses,
             "topics": topics,
+            "user_info": user_info
         }
         return render(request, "purchase_e.html", data)
     
@@ -117,6 +130,7 @@ def purchase(request):
             "appl": applications,
             "status": statuses,
             "topics": topics,
+            "user_info": user_info
         }
         return render(request, "purchase_t.html", data)
     

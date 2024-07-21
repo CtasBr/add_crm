@@ -1,10 +1,12 @@
 <div class="container mt-0 mr-0 ml-0" style="padding: 0">
+  {% if user_info.AddLab %}
   <div class="btn-group" role="group" aria-label="Basic example">
     <a href="{% url "projects" %}" type="button" class="btn btn-custom {{nav.projects}}">Проекты</a>
     <a href="{% url "calendar" %}" type="button" class="btn btn-custom {{nav.calendar}}">Календарь</a>
     <a href="{% url "gantt" %}" type="button" class="btn btn-custom {{nav.hant}}">Гант</a>
     <a href="{% url "staff" %}" type="button" class="btn btn-custom {{nav.employees}}">Сотрудники</a>
   </div>
+  {% endif %}
   <div class="btn-group" role="group" aria-label="Basic example">
     <a href="{% url "warehouse" %}" type="button" class="btn btn-custom {{nav.warehouse}}">Склад</a>
     <a href="{% url "purchase" %}" type="button" class="btn btn-custom {{nav.purchase}}">Закупки</a>

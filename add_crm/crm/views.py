@@ -20,6 +20,12 @@ def generate_random_hex():
     return res_hex
 
 def projects(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
+    
     if request.method == 'POST':
         title = request.POST.get('title')
         deadline = request.POST.get('deadline')
@@ -61,6 +67,7 @@ def projects(request):
             "users": u,
             "comments": c,
             "nav": nav_state,
+            "user_info": user_info,
             }
     return render(request, 'index.html', data)
 
@@ -117,6 +124,12 @@ def variations(request, id):
         return redirect('experiments', variation.main_experiment_id.main_project_id.id)
 
 def schedule(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
+    
     lvl = int(request.GET.get("lvl", 1))
     gant_data = []
     if lvl == 1:
@@ -261,6 +274,7 @@ def schedule(request):
             "gant_height": gant_height,
             "lvl": lvl_name,
             "users": users_info,
+            "user_info": user_info,
             }
     
     return render(request, 'schedule.html', data)
@@ -274,6 +288,12 @@ def comment(request, num):
         return redirect('projects')
     
 def calendar(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
+    
     subtasks = Subtask.objects.filter(is_done=False)
     tasks = Task.objects.filter(is_done=False)
     locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
@@ -339,6 +359,7 @@ def calendar(request):
         "calendar": c_done,
         "nav": nav_state,
         "date_active": date_active,
+        "user_info": user_info
     }
     return render(request, 'calendar.html', data)
 
@@ -346,6 +367,12 @@ range_lvl = "week"
 lvl = "projects"
 
 def gantt(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
+    
     global range_lvl
     global lvl
     range_lvl = request.GET.get("range", range_lvl)
@@ -421,10 +448,17 @@ def gantt(request):
         "c_n": column_names,
         "infos": line_inf,
         "date_active": date_active,
+        "user_info": user_info,
     }
     return render(request, 'gantt.html', data)
 
 def staff(request):
+    user_info = {
+        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+    }
+    
     users = Empl.objects.all()
     users_infos = {
         "part1": [],
@@ -461,7 +495,8 @@ def staff(request):
                  }
     data = {
         "nav": nav_state,
-        "user_info": users_infos,
+        "users_info": users_infos,
+        "user_info": user_info
     }
     return render(request, "staff.html", data)
 

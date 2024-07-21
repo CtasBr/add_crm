@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <section class="slider">
   <div class="slider--content">
-    {% for usr in user_info.part1 %}
+    {% for usr in users_info.part1 %}
     <div class="card mb-3">
       <div class="card_title project">
         <div class="text_title">{{usr.usr}}</div>
@@ -93,7 +93,7 @@
   </div>
 
   <div class="slider--content">
-    {% for usr in user_info.part2 %}
+    {% for usr in users_info.part2 %}
     <div class="card mb-3">
       <div class="card_title project">
         <div class="text_title">{{usr.usr}}</div>
@@ -185,7 +185,7 @@
   </div>
 
   <div class="slider--content">
-    {% for usr in user_info.part3 %}
+    {% for usr in users_info.part3 %}
     <div class="card mb-3">
       <div class="card_title project">
         <div class="text_title">{{usr.usr}}</div>

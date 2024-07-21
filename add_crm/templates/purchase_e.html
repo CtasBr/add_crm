@@ -74,7 +74,7 @@
   <div class="row no-gutters d-flex align-items-center" style="width: 100%">
     <div class="col-md-1" style="color: #925537">
       <div class="card-body">
-        <a class="card-text" data-toggle="collapse"  href="#collapseInf{{a.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="color: #925537">#{{a.id}}</a>
+        <a class="card-text" data-toggle="collapse" {% if user_info.PurS %} href="#collapseInf{{a.id}}" role="button" aria-expanded="false" aria-controls="collapseExample"{% endif %} style="color: #925537">#{{a.id}}</a>
       </div>
     </div>
     <div
