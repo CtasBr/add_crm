@@ -127,11 +127,16 @@ def application(request, num):
     num - ID заявки по позициям
     '''
     if request.method == 'POST':
+        fields = ["status"]
         deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
         appl = Application.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        appl.deadline = deadline
+        print("deadline:", deadline)
+        if deadline:
+            print("deadline chacked")
+            fields.append('deadline')
+            appl.deadline = deadline
         if appl.status.id == 5:
             for pos in appl.positions.all():
                 obj = pos.position
@@ -150,7 +155,7 @@ def application(request, num):
                     pass
                 obj.is_done = True
                 obj.save(update_fields=update_fields)
-        appl.save(update_fields=["status", "deadline"])
+        appl.save(update_fields=fields)
     
     return redirect('purchase')
 
@@ -277,12 +282,15 @@ def equipment(request, num):
     num - ID заявки по оборудованию
     '''
     if request.method == 'POST':
+        fields = ["status"]
         deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
         appl = EquipmentApplication.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        appl.deadline = deadline
-        appl.save(update_fields=["status", "deadline"])
+        if deadline != None: 
+            appl.deadline = deadline
+            fields.append("deadline")
+        appl.save(update_fields=fields)
     return redirect('purchase')
 
 def techical_specification(request, num):

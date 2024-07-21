@@ -11,7 +11,7 @@
   </div>
   {% if user.is_authenticated %}
   <div class="btn-group" role="group" aria-label="Basic example">
-  <a class="btn btn-custom">{{ user.first_name }} {{ user.last_name }}</a>
+  <a class="btn btn-custom">{{ user.first_name }} {{ user.last_name }} </a>
   </div>
   {% endif %}
   <div class="btn-group" role="group" aria-label="Basic example">
@@ -26,6 +26,13 @@
     <button type="submit" class="btn btn-custom active">Войти</button>
   </form>
   {% endif %}
+  {% comment %} {% if user.groups.filter(name='Super').exists %}
+        OK
+    {% else %}
+        NO
+    {% endif %} {% endcomment %}
+
+
 </div>
 
 
