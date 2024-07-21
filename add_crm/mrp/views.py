@@ -132,9 +132,9 @@ def application(request, num):
         status = request.POST.get('status')
         appl = Application.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        print("deadline:", deadline)
+        # print("deadline:", deadline)
         if deadline:
-            print("deadline chacked")
+            # print("deadline chacked")
             fields.append('deadline')
             appl.deadline = deadline
         if appl.status.id == 5:
@@ -287,7 +287,7 @@ def equipment(request, num):
         status = request.POST.get('status')
         appl = EquipmentApplication.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        if deadline != None: 
+        if deadline: 
             appl.deadline = deadline
             fields.append("deadline")
         appl.save(update_fields=fields)
@@ -300,12 +300,15 @@ def techical_specification(request, num):
     num - ID заявки по оборудованию
     '''
     if request.method == 'POST':
+        fields = ["status"]
         deadline = request.POST.get('deadline', None)
         status = request.POST.get('status')
         appl = ApplicationTechnicalSpecification.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        appl.deadline = deadline
-        appl.save(update_fields=["status", "deadline"])
+        if deadline:
+            fields.append("deadline")
+            appl.deadline = deadline
+        appl.save(update_fields=fields)
     return redirect('purchase')
 
 def download_file(request, pk):
