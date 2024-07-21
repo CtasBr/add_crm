@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
+{% if user_info.AddLab %}
 <section class="slider">
   {% for p in projects %} {% if not p.is_done %}
   <div class="slider--content">
@@ -272,6 +272,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 {% endblock content %}
 
