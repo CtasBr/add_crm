@@ -90,6 +90,9 @@ def purchase(request):
         units = Unit.objects.all()
         
         obj_for_add = Position.objects.all()
+        units_by_obj = {}
+        for i in obj_for_add:
+            units_by_obj[i.title] = i.units
         
     nav_state = {"projects": "", 
                  "hant": "",
@@ -106,7 +109,8 @@ def purchase(request):
             "status": statuses,
             "objects": obj_for_add,
             "topics": topics,
-            "user_info": user_info
+            "user_info": user_info,
+            "units_by_obj": units_by_obj
         }
         return render(request, "purchase.html", data)
 
@@ -158,7 +162,6 @@ def application(request, num):
                 if obj.units == pos.units:
                     obj.quantity += pos.quantity
                     update_fields.append("quantity")
-                    # print(111111111)
                 elif (obj.units.title == "кг" and pos.units.title == "г") or (obj.units.title == "л" and pos.units.title == "мл"):
                     obj.quantity += (pos.quantity / 1000)
                     update_fields.append("quantity")
