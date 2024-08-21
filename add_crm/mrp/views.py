@@ -379,4 +379,6 @@ def gen_path(request):
     random_string = generate_random_string(length, characters)
     print(random_string)
     gen_paths[f'/{random_string}/'] = False
+    false_keys = list(filter(lambda key: not gen_paths[key], gen_paths))
+    print(false_keys)
 
