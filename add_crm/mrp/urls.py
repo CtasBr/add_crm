@@ -16,5 +16,6 @@ urlpatterns = [
     path('technical_specification_upd/<int:num>', techical_specification, name='technical_specification_upd'),
     path('application/<int:num>', application, name='application'),
     path('csv/', update_warehouse_csv, name="csv"),
-    
 ]
+
+urlpatterns.extend(urlpatterns_views)

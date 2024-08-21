@@ -1,14 +1,21 @@
 import csv
 import os
+import random
 from os.path import basename
 
 from django.contrib.auth.models import Group, User
 from django.http import FileResponse
 from django.shortcuts import redirect, render
 from django.templatetags.static import static
+from django.urls import include, path
 
 from .models import *
 
+urlpatterns_views = [
+]
+
+# "path": "is_used (boolean)"
+gen_paths = {}
 
 def take(request):
     '''
@@ -170,6 +177,8 @@ def application(request, num):
                     update_fields.append("quantity")
                 else:
                     pass
+                link = Link(link=pos.link, appl=appl)
+                link.save()
                 obj.is_done = True
                 obj.save(update_fields=update_fields)
         appl.save(update_fields=fields)
@@ -333,8 +342,6 @@ def download_file(request, pk):
     obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
     return FileResponse(obj.technical_specification, as_attachment=True)
 
-
-
 def update_warehouse_csv(request):
     '''
     Function which helps add info about products by csv table (use only whis debug = False)
@@ -362,3 +369,14 @@ def update_warehouse_csv(request):
     #     pos.title = pos.title.replace(first_latter, first_latter.lower(), 1)
     #     print(pos.title)
     return redirect('purchase')
+
+def generate_random_string(length, characters):
+    return ''.join(random.choices(characters, k=length))
+
+def gen_path(request):
+    length = 16
+    characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    random_string = generate_random_string(length, characters)
+    print(random_string)
+    gen_paths[f'/{random_string}/'] = False
+
