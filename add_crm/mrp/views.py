@@ -11,9 +11,6 @@ from django.urls import include, path
 
 from .models import *
 
-urlpatterns_views = [
-]
-
 # "path": "is_used (boolean)"
 gen_paths = {}
 
@@ -80,71 +77,142 @@ def warehouse(request):
     return render(request, "warehouse.html", data)
 
 def purchase(request):
-    user_info = {
-        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
-        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
-        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
-    }
-    '''
-    Функция отображения заявок на закупки
-    По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
-    '''
-    types = request.GET.get("type", "appl")
-    topics = Purchase_topic.objects.all()
-    statuses = Status.objects.all()
-    if types == "appl":
-        applications = Application.objects.all().order_by("-id")
-        units = Unit.objects.all()
-        
-        obj_for_add = Position.objects.all()
-        units_by_obj = {}
-        for i in obj_for_add:
-            units_by_obj[i.title] = i.units
-        
-    nav_state = {"projects": "", 
-                 "hant": "",
-                 "calendar": "",
-                 "employees": "",   
-                 "warehouse": "", 
-                 "purchase":  "active"
-                 }
-    if types == "appl":
-        data = {
-            "nav": nav_state,
-            "appl": applications,
-            "units": units,
-            "status": statuses,
-            "objects": obj_for_add,
-            "topics": topics,
-            "user_info": user_info,
-            "units_by_obj": units_by_obj
+    print(request.path)
+    if request.path == '/mrp/purchase/':
+        user_info = {
+            "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+            "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+            "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
         }
-        return render(request, "purchase.html", data)
+        '''
+        Функция отображения заявок на закупки
+        По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
+        '''
+        types = request.GET.get("type", "appl")
+        topics = Purchase_topic.objects.all()
+        statuses = Status.objects.all()
+        if types == "appl":
+            applications = Application.objects.all().order_by("-id")
+            units = Unit.objects.all()
+            
+            obj_for_add = Position.objects.all()
+            units_by_obj = {}
+            for i in obj_for_add:
+                units_by_obj[i.title] = i.units
+            
+        nav_state = {"projects": "", 
+                    "hant": "",
+                    "calendar": "",
+                    "employees": "",   
+                    "warehouse": "", 
+                    "purchase":  "active"
+                    }
+        if types == "appl":
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "units": units,
+                "status": statuses,
+                "objects": obj_for_add,
+                "topics": topics,
+                "user_info": user_info,
+                "units_by_obj": units_by_obj
+            }
+            return render(request, "purchase.html", data)
 
-    elif types == "equipment":
-        applications = EquipmentApplication.objects.all().order_by("-id")
-        equipment = Equipment.objects.all()
-        data = {
-            "nav": nav_state,
-            "appl": applications,
-            "objects": equipment,
-            "status": statuses,
-            "topics": topics,
-            "user_info": user_info
-        }
-        return render(request, "purchase_e.html", data)
-    
+        elif types == "equipment":
+            applications = EquipmentApplication.objects.all().order_by("-id")
+            equipment = Equipment.objects.all()
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "objects": equipment,
+                "status": statuses,
+                "topics": topics,
+                "user_info": user_info
+            }
+            return render(request, "purchase_e.html", data)
+        
+        else:
+            applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "status": statuses,
+                "topics": topics,
+                "user_info": user_info
+            }
+            return render(request, "purchase_t.html", data)
     else:
-        applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
-        data = {
-            "nav": nav_state,
-            "appl": applications,
-            "status": statuses,
-            "topics": topics,
-            "user_info": user_info
+        user_info = {
+            "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+            "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+            "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
         }
-        return render(request, "purchase_t.html", data)
-    
+        '''
+        Функция отображения заявок на закупки
+        По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
+        '''
+        types = request.GET.get("type", "appl")
+        topics = Purchase_topic.objects.all()
+        statuses = Status.objects.all()
+        if types == "appl":
+            applications = Application.objects.all().order_by("-id")
+            units = Unit.objects.all()
+            
+            obj_for_add = Position.objects.all()
+            units_by_obj = {}
+            for i in obj_for_add:
+                units_by_obj[i.title] = i.units
+            
+        nav_state = {"projects": "", 
+                    "hant": "",
+                    "calendar": "",
+                    "employees": "",   
+                    "warehouse": "", 
+                    "purchase":  "active"
+                    }
+        if types == "appl":
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "units": units,
+                "status": statuses,
+                "objects": obj_for_add,
+                "topics": topics,
+                "user_info": user_info,
+                "units_by_obj": units_by_obj
+            }
+            return render(request, "purchase.html", data)
+
+        elif types == "equipment":
+            applications = EquipmentApplication.objects.all().order_by("-id")
+            equipment = Equipment.objects.all()
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "objects": equipment,
+                "status": statuses,
+                "topics": topics,
+                "user_info": user_info
+            }
+            return render(request, "purchase_e.html", data)
+        
+        else:
+            applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
+            data = {
+                "nav": nav_state,
+                "appl": applications,
+                "status": statuses,
+                "topics": topics,
+                "user_info": user_info
+            }
+            return render(request, "purchase_t.html", data)
+
+urlpatterns_views = [
+    path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh')
+]
+
 def application(request, num):
     '''
     Функция изменения статуса и срока поставки заявки по позициям 
@@ -370,15 +438,23 @@ def update_warehouse_csv(request):
     #     print(pos.title)
     return redirect('purchase')
 
+# генерация рандомной строки определенной длинны из набора символов
 def generate_random_string(length, characters):
     return ''.join(random.choices(characters, k=length))
 
+# функция генерации одноразового пути
 def gen_path(request):
     length = 16
     characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    
     random_string = generate_random_string(length, characters)
-    print(random_string)
     gen_paths[f'/{random_string}/'] = False
+    urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
+    
     false_keys = list(filter(lambda key: not gen_paths[key], gen_paths))
-    print(false_keys)
-
+    
+    print(false_keys, request.path)
+    
+    if str(request.path) in false_keys:
+        print(True)
+        
