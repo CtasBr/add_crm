@@ -159,7 +159,86 @@
 
 {% endblock content %}
 
-{% block auth_content %}{% endblock auth_content %}
+{% block auth_content %}
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a href="{% url "purchase" %}" class="btn btn-custom active">Позиции</a>
+  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom">ТЗ</a>
+  <a href="{% url "purchase" %}?type=equipment" class="btn btn-custom">Оборудование</a>
+</div>
+<br>
+<div class="btn-group mt-4" role="group" aria-label="Basic example">
+  <a class="btn btn-custom active" alt="Добавить проект" id="myBtn">Создать заявку</a>
+</div>
+<div id="myModal" class="modal" style="z-index: 1000;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form method="POST" class="" action="{% url "gen_path" %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-row" id="form_add_pur_row">
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" id="name_provider" name="name_provider" placeholder="Название поставщика">
+            </div>
+            <div class="form-group col-md-12">
+              <input type="text" class="form-control" id="contact" name="contact" placeholder="Ссылка на станицу с контактами поставщика">
+            </div>
+            <div class="form-group col-md-12">
+              <label for="topic">Тема закупки</label>
+              <select id="topic" name="topic" >
+                {% for t in topics %}
+                <option value="{{t.id}}">{{t.title}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="payment_method">Оплата</label>
+              <select id="payment_method" name="payment_method" >
+                <option value="post-payment">Постоплата</option>
+                <option value="3070">30/70</option>
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <input id="diadok" name="diadok" type="checkbox">
+              <label for="diadok">Поставщик работает в ДИАДОК</label>
+            </div>
+            <div class="form-group col-md-12 mt-2">
+              <label for="description">Позиция</label>
+              <input class="form-control" id="name_position" name="name_position" placeholder="Название" list="options" autocomplete="off">
+              <datalist id="options">
+              {% for p in objects %}
+                <option value="{{p.title}}">
+              {% endfor %}
+              </datalist>
+            </div>
+            <div class="form-group col-md-6">
+              <input type="number" step="0.01" class="form-control" id="count" name="count" placeholder="Количество">
+            </div>
+            <div class="form-group col-md-6">
+              <select id="units" name="units">
+                {% for u in units %}
+                <option value="{{u.id}}">{{u.title}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <input type="number" step="0.01" class="form-control" id="min_count" name="min_count" placeholder="Минимальный остаток">
+            </div>
+            <div class="form-group col-md-12">
+              <input class="form-control" id="link" name="link" placeholder="Ссылка">
+            </div>
+            
+          </div>
+          <a href="#" onclick="addInputs()">Добавить позицию</a>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock auth_content %}
 {% block scripts %}
 <script>
 var i = 0;

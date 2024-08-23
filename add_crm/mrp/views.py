@@ -11,7 +11,7 @@ from django.urls import include, path
 
 from .models import *
 
-# "path": "is_used (boolean)"
+# {"path": {"is_used": (boolean), "purchase_type": (int), "purchase_id": (int)}}
 gen_paths = {}
 
 def take(request):
@@ -448,7 +448,7 @@ def gen_path(request):
     characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     
     random_string = generate_random_string(length, characters)
-    gen_paths[f'/{random_string}/'] = False
+    gen_paths[f'/{random_string}/'] = {"is_used": False, "purchase_type": None, "purchase_id": None}
     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
     
     false_keys = list(filter(lambda key: not gen_paths[key], gen_paths))
