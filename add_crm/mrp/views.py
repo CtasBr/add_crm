@@ -12,7 +12,8 @@ from django.urls import include, path
 from .models import *
 
 # {"path": {"is_used": (boolean), "purchase_type": (int), "purchase_id": (int)}}
-gen_paths = {}
+# 1 - appl; 2 - eq; 3 - ts
+gen_paths = {"qwertyuiopasdfgh": {"is_used": False, "purchase_type": None, "purchase_id": None}}
 
 def take(request):
     '''
@@ -154,58 +155,54 @@ def purchase(request):
         По GET-запросу передается какой тип заявок отображать (по позициям (appl), по ТЗ (technical_specification), по оборудованию (equipment))
         '''
         types = request.GET.get("type", "appl")
-        topics = Purchase_topic.objects.all()
         statuses = Status.objects.all()
+        link_name = str(request.path).replace('/mrp/', "").replace('/', '').strip()
         if types == "appl":
-            applications = Application.objects.all().order_by("-id")
+            applications = []
+            can_add = False
+            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 1:
+                applications = Application.objects.get(id=gen_paths[link_name]['purchase_id'])
+            elif not gen_paths[link_name]['is_used']:
+                can_add = True
+
             units = Unit.objects.all()
             
-            obj_for_add = Position.objects.all()
-            units_by_obj = {}
-            for i in obj_for_add:
-                units_by_obj[i.title] = i.units
-            
-        nav_state = {"projects": "", 
-                    "hant": "",
-                    "calendar": "",
-                    "employees": "",   
-                    "warehouse": "", 
-                    "purchase":  "active"
-                    }
-        if types == "appl":
             data = {
-                "nav": nav_state,
                 "appl": applications,
                 "units": units,
                 "status": statuses,
-                "objects": obj_for_add,
-                "topics": topics,
                 "user_info": user_info,
-                "units_by_obj": units_by_obj
+                "can_add": can_add,
             }
             return render(request, "purchase.html", data)
 
         elif types == "equipment":
-            applications = EquipmentApplication.objects.all().order_by("-id")
-            equipment = Equipment.objects.all()
+            applications = []
+            can_add = False
+            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 2:
+                applications = EquipmentApplication.objects.get(id=gen_paths[link_name]['purchase_id'])
+            elif not gen_paths[link_name]['is_used']:
+                can_add = True
             data = {
-                "nav": nav_state,
                 "appl": applications,
-                "objects": equipment,
                 "status": statuses,
-                "topics": topics,
-                "user_info": user_info
+                "user_info": user_info,
+                "can_add": can_add,
             }
             return render(request, "purchase_e.html", data)
         
         else:
-            applications = ApplicationTechnicalSpecification.objects.all().order_by("-id")
+            applications = []
+            can_add = False
+            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 3:
+                applications = ApplicationTechnicalSpecification.objects.get(id=gen_paths[link_name]['purchase_id'])
+            elif not gen_paths[link_name]['is_used']:
+                can_add = True
             data = {
-                "nav": nav_state,
                 "appl": applications,
                 "status": statuses,
-                "topics": topics,
-                "user_info": user_info
+                "user_info": user_info,
+                "can_add": can_add,
             }
             return render(request, "purchase_t.html", data)
 
@@ -451,7 +448,7 @@ def gen_path(request):
     gen_paths[f'/{random_string}/'] = {"is_used": False, "purchase_type": None, "purchase_id": None}
     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
     
-    false_keys = list(filter(lambda key: not gen_paths[key], gen_paths))
+    false_keys = [key for key, value in gen_path.items() if not value["is_used"]]
     
     print(false_keys, request.path)
     
