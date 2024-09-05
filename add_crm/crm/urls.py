@@ -17,5 +17,6 @@ urlpatterns = [
     path('staff/', staff, name='staff'),
     path('add_res_document/<int:num>', add_result, name='add_result'),
     path('download_file/<int:pk>', download_file, name="download_file"),
-    path('result/<int:num>', result, name="result")
+    path('result/<int:num>', result, name="result"),
+    path('edit_subtask/<int:num>', edit_subtask, name="edit_subtask"),
 ]

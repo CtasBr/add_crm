@@ -111,14 +111,72 @@
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if not s.is_done %}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}} <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}} ||<a data-toggle="collapse" href="#collapseEditS{{s.id}}">{{s.title}}</a> <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="collapse" id="collapseEditS{{s.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="{% url "edit_subtask" s.id %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{s.title}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{s.date_add}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{s.deadline}}">
+                </div>
+                {% comment %} <div class="form-group col-md-12">
+                <select class="custom-select" multiple name="users" id="users">
+                  {% for u in users%}
+                    <option value="{{u.id}}">{{u.name}}</option>
+                  {% endfor %}
+                </select>
+                </div> {% endcomment %}
+                
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
         {% endif %}
         {% endif %}
         {% endfor %}
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if s.is_done and s.is_shown%}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}} <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}} ||<a data-toggle="collapse" href="#collapseEditS{{s.id}}">{{s.title}}</a> <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="collapse" id="collapseEditS{{s.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="{% url "edit_subtask" s.id %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{s.title}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{s.date_add}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{s.deadline}}">
+                </div>
+                {% comment %} <div class="form-group col-md-12">
+                <select class="custom-select" multiple name="users" id="users">
+                  {% for u in users%}
+                    <option value="{{u.id}}">{{u.name}}</option>
+                  {% endfor %}
+                </select>
+                </div> {% endcomment %}
+                
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
         {% endif %}
         {% endif %}
         {% endfor %}
@@ -315,14 +373,72 @@
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if not s.is_done %}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}} ||<a data-toggle="collapse" href="#collapseEditS{{s.id}}">{{s.title}}</a> <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="collapse" id="collapseEditS{{s.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="{% url "edit_subtask" s.id %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{s.title}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{s.date_add}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{s.deadline}}">
+                </div>
+                {% comment %} <div class="form-group col-md-12">
+                <select class="custom-select" multiple name="users" id="users">
+                  {% for u in users%}
+                    <option value="{{u.id}}">{{u.name}}</option>
+                  {% endfor %}
+                </select>
+                </div> {% endcomment %}
+                
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
         {% endif %}
         {% endif %}
         {% endfor %}
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if s.is_done and s.is_shown%}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}} ||<a data-toggle="collapse" href="#collapseEditS{{s.id}}">{{s.title}}</a> <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
+        <div class="collapse" id="collapseEditS{{s.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="{% url "edit_subtask" s.id %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название" value="{{s.title}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала" value="{{s.date_add}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн" value="{{s.deadline}}">
+                </div>
+                {% comment %} <div class="form-group col-md-12">
+                <select class="custom-select" multiple name="users" id="users">
+                  {% for u in users%}
+                    <option value="{{u.id}}">{{u.name}}</option>
+                  {% endfor %}
+                </select>
+                </div> {% endcomment %}
+                
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
         {% endif %}
         {% endif %}
         {% endfor %}

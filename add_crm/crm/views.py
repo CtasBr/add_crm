@@ -586,3 +586,25 @@ def result(request, num):
             res.file = file
         res.save()
     return redirect(projects)
+
+def edit_subtask(request, num):
+    if request.method == 'POST':
+        subtask_obj = Subtask.objects.get(id=int(num))
+        
+        title = request.POST.get('title')
+        
+        
+        date_start = request.POST.get('date_start')
+        
+        subtask_obj.date_add = date_start if date_start!='' else subtask_obj.date_add
+        
+        deadline = request.POST.get('deadline') 
+        
+        subtask_obj.deadline = deadline if deadline!='' else subtask_obj.deadline
+        
+        subtask_obj.title = title
+        
+        
+        subtask_obj.save(update_fields=["title", "deadline",  "date_add"])
+        return redirect('projects')
+    
