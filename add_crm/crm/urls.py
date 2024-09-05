@@ -16,4 +16,6 @@ urlpatterns = [
     path('gantt/', gantt, name='gantt'),
     path('staff/', staff, name='staff'),
     path('add_res_document/<int:num>', add_result, name='add_result'),
+    path('download_file/<int:pk>', download_file, name="download_file"),
+    path('result/<int:num>', result, name="result")
 ]

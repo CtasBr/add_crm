@@ -225,7 +225,7 @@
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
         {% if r.file %}
-        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle-done"></div></a>{{r.title}}</div>
+        <div class="subtask"><a href="{% url "download_file" r.id %}" class="card-link"><div class="circle-done"></div></a>{{r.title}}</div>
         {% endif %}
         {% endif %}
         {% endfor %}
@@ -233,9 +233,9 @@
         <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-align: left; margin-top: 5px;">
           Добавить
         </a>
-        <div class="collapse" id="collapseAdd{{r.id}}">
+        <div class="collapse" id="collapseAdd{{t.id}}">
           <div class="card card-body task">
-            <form method="POST" class="" action="/subtasks/{{t.id}}">
+            <form method="POST" class="" action="{% url "result" t.id %}" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-12">

@@ -4,7 +4,7 @@ import locale
 import math
 import random
 
-from django.http import HttpResponseRedirect
+from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
 from .models import *
@@ -566,3 +566,19 @@ def add_result(request, num):
     res.file = filefield
     res.save(update_fields=["file"])
     return redirect('projects')
+
+def download_file(request, pk):
+    print(pk)
+    obj = Result.objects.get(pk=pk)
+    return FileResponse(obj.file, as_attachment=True)
+
+def result(request, num):
+    if request.method == 'POST':
+        name = request.POST.get("title", "no_name")
+        file = request.FILES.get("result_file", None)
+        res = Result(title=name, main_task_id=Task.objects.get(id=num))
+        if file != None:
+            print(file)
+            res.file = file
+        res.save()
+    return redirect(projects)
