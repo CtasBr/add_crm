@@ -97,6 +97,7 @@
         <a href="{% url "projects" %}?done_task={{t.id}}" class="card_button done">Готово</a>
         <a class="card_button" data-toggle="collapse" href="#collapseComments{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Комментарии</a>
         <a class="card_button" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Подзадачи</a>
+        <a class="card_button" data-toggle="collapse" href="#collapseResult{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Рузультаты</a>
       </div>
       <div id="my-popover{{t.id}}" popover class="my-popover">
         {% for e in t.executors_id.all %}
@@ -111,6 +112,13 @@
         {% if s.main_task_id.id == t.id %}
         {% if not s.is_done %}
         <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% for s in subtasks %}
+        {% if s.main_task_id.id == t.id %}
+        {% if s.is_done and s.is_shown%}
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
         {% endif %}
         {% endif %}
         {% endfor %}
@@ -163,6 +171,41 @@
          </form>
         </div>
       </div
+        <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-align: left; margin-top: 5px;">
+          Добавить
+        </a>
+        <div class="collapse" id="collapseAdd{{t.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="/subtasks/{{t.id}}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Название">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="date_start" placeholder="Дата начала">
+                </div>
+                <div class="form-group col-md-6">
+                  <input type="date" class="form-control" id="date" name="deadline" placeholder="Дедлайн">
+                </div>
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="collapse" id="collapseResult{{t.id}}">
+      <div class="card subtasks">
+        {% for s in subtasks %}
+        {% if s.main_task_id.id == t.id %}
+        {% if not s.is_done %}
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
         <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-align: left; margin-top: 5px;">
           Добавить
         </a>

@@ -44,9 +44,14 @@ def projects(request):
         t_d.update(is_done=True)
     
     done_subtask_index = int(request.GET.get("done_subtask", -1))
+    print(done_subtask_index)
     if done_subtask_index > -1:
-        st_d = Subtask.objects.filter(id=done_subtask_index)
-        st_d.update(is_done=True)
+        st_d = Subtask.objects.get(id=done_subtask_index)
+        if st_d.is_done == False:
+            st_d.is_done=True
+        else:
+            st_d.is_shown=False
+        st_d.save(update_fields=["is_done", "is_shown"])
     nav_state = {"projects": "active", 
                  "hant": "",
                  "calendar": "",
@@ -92,7 +97,7 @@ def subtasks(request, num):
         title = request.POST.get('title')
         deadline = request.POST.get('deadline', '')
         date_start = request.POST.get('date_start')
-        subtask = Subtask(title=title, deadline=deadline, is_done=False, main_task_id=Task.objects.get(id=num), date_add=date_start)
+        subtask = Subtask(title=title, deadline=deadline, is_done=False, main_task_id=Task.objects.get(id=num), date_add=date_start, is_shown=True)
         subtask.save()
         return redirect('projects')
 
