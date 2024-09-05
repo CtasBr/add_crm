@@ -15,4 +15,5 @@ urlpatterns = [
     path('calendar/', calendar, name='calendar'),
     path('gantt/', gantt, name='gantt'),
     path('staff/', staff, name='staff'),
+    path('add_res_document/<int:num>', add_result, name='add_result'),
 ]

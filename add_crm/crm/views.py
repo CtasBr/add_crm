@@ -71,6 +71,7 @@ def projects(request):
     s = Subtask.objects.all()
     u = Empl.objects.all()
     c = Comment.objects.all()
+    r = Result.objects.all()
     data = {"projects": p, 
             "tasks": t, 
             "subtasks": s,
@@ -78,6 +79,7 @@ def projects(request):
             "comments": c,
             "nav": nav_state,
             "user_info": user_info,
+            "results": r,
             }
     return render(request, 'index.html', data)
 
@@ -555,3 +557,12 @@ def edit_project(request, num):
         
         pr_obj.save(update_fields=["title", "deadline", "description", "date_add"])
         return redirect('projects')
+    
+def add_result(request, num):
+    if request.method == 'POST':
+        filefield = request.FILES.get('file_result')
+    
+    res = Result.objects.get(id=num)
+    res.file = filefield
+    res.save(update_fields=["file"])
+    return redirect('projects')

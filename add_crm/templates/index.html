@@ -201,12 +201,36 @@
       <div class="card subtasks">
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
-        {% if not r.is_done %}
-        <div class="subtask"><a href="{% url "projects" %}?done_result={{r.id}}" class="card-link"><div class="circle"></div></a>{{r.title}}</div>
+        {% if not r.file %}
+        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle"></div></a>{{r.title}}</div>
+        {% endif %}
+        {% endif %}
+        <div class="collapse" id="collapseAddDocument{{r.id}}">
+          <div class="card card-body task">
+            <form method="POST" class="" action="{% url "add_result" r.id%}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input type="file" class="form-control" id="file_result" name="file_result" placeholder="Файл результат">
+                </div>
+                <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">Сохранить</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+        </div>
+        {% endfor %}
+
+        {% for r in results %}
+        {% if r.main_task_id.id == t.id %}
+        {% if r.file %}
+        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle-done"></div></a>{{r.title}}</div>
         {% endif %}
         {% endif %}
         {% endfor %}
-        <a class="card-link" data-toggle="collapse" href="#collapseAdd{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-align: left; margin-top: 5px;">
+
+        <a class="card-link" data-toggle="collapse" href="#collapseAdd{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-align: left; margin-top: 5px;">
           Добавить
         </a>
         <div class="collapse" id="collapseAdd{{r.id}}">
