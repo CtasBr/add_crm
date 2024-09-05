@@ -111,14 +111,14 @@
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if not s.is_done %}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}} <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
         {% endif %}
         {% endif %}
         {% endfor %}
         {% for s in subtasks %}
         {% if s.main_task_id.id == t.id %}
         {% if s.is_done and s.is_shown%}
-        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}}</div>
+        <div class="subtask"><a href="{% url "projects" %}?done_subtask={{s.id}}" class="card-link"><div class="circle-done"></div></a>{{s.date_add | date:"d.m.Y"}}-{{s.deadline | date:"d.m.Y"}}<br>{{s.title}} <a href="{% url "projects" %}?close_subtask={{s.id}}" class="card-link"><div class="close"></div></a> </div>
         {% endif %}
         {% endif %}
         {% endfor %}
@@ -361,14 +361,13 @@
         {% endfor %}
       <div class="card_content" style="margin-left: 0;">
         <div id="mc_embed_signup">
-          <form method="POST" class="" action="/comment/{{t.id}}" style="display: flex;">
+          <form method="POST" class="" action="/comment/{{t.id}}" style="display: flex;" enctype="multipart/form-data">
             {% csrf_token %}
             <div id="mc_embed_signup_scroll" style="display: flex;">
-               <div class="mc-field-group" style="margin-right: 10px;"><input type="text" placeholder="Сообщение" name="text" class="required email" id="mce-EMAIL"></div>
+               <div class="mc-field-group" style="margin-right: 10px;"><input type="text" placeholder="Сообщение" name="text" class="required email" id="mce-EMAIL"></div><input type="file" class="form-control" id="file_result" name="file_result" placeholder="Файл результат">
                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">></button>
                <input type="submit" hidden>
                <div id="mce-responses" class="clear">
-                  <!-- здесь размещены ответы -->
                </div>
                <div style="position: absolute; left: -5000px;"><input type="text" name="b_0b5586be71b0fee16a03f5684_e41ec18eab" tabindex="-1" value=""></div>
             </div>

@@ -36,7 +36,11 @@ def projects(request):
 
         return redirect('projects')
 
-
+    close_subtask_index = int(request.GET.get("close_subtask", -1))
+    if close_subtask_index > -1:
+        sub_obj = Subtask.objects.get(id=close_subtask_index)
+        sub_obj.is_shown = False
+        sub_obj.save(update_fields=["is_shown"])
     
     done_task_index = int(request.GET.get("done_task", -1))
     if done_task_index > -1:
