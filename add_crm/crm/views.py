@@ -40,8 +40,12 @@ def projects(request):
     
     done_task_index = int(request.GET.get("done_task", -1))
     if done_task_index > -1:
-        t_d = Task.objects.filter(id=done_task_index)
-        t_d.update(is_done=True)
+        t_d = Task.objects.get(id=done_task_index)
+        if t_d.is_done == False:
+            t_d.is_done=True
+        else:
+            t_d.is_done=False
+        t_d.save(update_fields=["is_done"])
     
     done_subtask_index = int(request.GET.get("done_subtask", -1))
     print(done_subtask_index)
@@ -50,8 +54,9 @@ def projects(request):
         if st_d.is_done == False:
             st_d.is_done=True
         else:
-            st_d.is_shown=False
+            st_d.is_done=False
         st_d.save(update_fields=["is_done", "is_shown"])
+
     nav_state = {"projects": "active", 
                  "hant": "",
                  "calendar": "",
