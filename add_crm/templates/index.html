@@ -456,7 +456,7 @@
           <form method="POST" class="" action="/comment/{{t.id}}" style="display: flex;" enctype="multipart/form-data">
             {% csrf_token %}
             <div id="mc_embed_signup_scroll" style="display: flex;">
-               <div class="mc-field-group" style="margin-right: 10px;"><input type="text" placeholder="Сообщение" name="text" class="required email" id="mce-EMAIL"></div><input type="file" class="form-control" id="file_result" name="file_result" placeholder="Файл результат">
+               <div class="mc-field-group" style="margin-right: 10px;"><input type="text" placeholder="Сообщение" name="text" class="required email" id="mce-EMAIL"><input type="file" class="required email" id="file_result" name="file_result" placeholder="Файл результат"></div>
                <button type="submit" class="btn btn-primary" style="background-color: #925537; border: 0px">></button>
                <input type="submit" hidden>
                <div id="mce-responses" class="clear">

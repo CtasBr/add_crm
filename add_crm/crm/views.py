@@ -298,8 +298,9 @@ def schedule(request):
 def comment(request, num):
     if request.method == 'POST':
         text = request.POST.get('text')
-        # file = request.POST.get('file')
-        comment = Comment(text=text, main_task_id=Task.objects.get(id=num), user=request.user)
+        file = request.FILES.get('comment_file')
+        
+        comment = Comment(text=text, file=file, main_task_id=Task.objects.get(id=num), user=request.user)
         comment.save()
         return redirect('projects')
     
