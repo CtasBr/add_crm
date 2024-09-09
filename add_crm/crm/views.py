@@ -295,6 +295,7 @@ def schedule(request):
     
     return render(request, 'schedule.html', data)
 
+
 def comment(request, num):
     if request.method == 'POST':
         text = request.POST.get('text')
@@ -575,6 +576,11 @@ def add_result(request, num):
 def download_file(request, pk):
     print(pk)
     obj = Result.objects.get(pk=pk)
+    return FileResponse(obj.file, as_attachment=True)
+
+def download_file_comment(request, pk):
+    print(pk)
+    obj = Comment.objects.get(pk=pk)
     return FileResponse(obj.file, as_attachment=True)
 
 def result(request, num):
