@@ -80,6 +80,7 @@ def purchase(request):
     print(request.path)
     link_name = 'purchase'
     if request.path == '/mrp/purchase/':
+        add_link_name = "add_application"
         print(link_name)
         user_info = {
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
@@ -120,6 +121,7 @@ def purchase(request):
                 "user_info": user_info,
                 "units_by_obj": units_by_obj,
                 "link_name": link_name,
+                "add_link_name": add_link_name
             }
             return render(request, "purchase.html", data)
 
@@ -134,6 +136,7 @@ def purchase(request):
                 "topics": topics,
                 "user_info": user_info,
                 "link_name": link_name,
+                "add_link_name": add_link_name,
             }
             return render(request, "purchase_e.html", data)
         
@@ -146,6 +149,7 @@ def purchase(request):
                 "topics": topics,
                 "user_info": user_info,
                 "link_name": link_name,
+                "add_link_name": add_link_name
             }
             return render(request, "purchase_t.html", data)
     else:
@@ -334,9 +338,11 @@ def add_application_ts(request):
 
         
         # print('POST: ', filefield)
+        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
         print('FILES: ', filefield, filefield.size, filefield.name)
-        application = ApplicationTechnicalSpecification(purchase_topic=Purchase_topic.objects.get(id=topic), 
-                                  creator=request.user, 
+        application = ApplicationTechnicalSpecification(purchase_topic=topic, 
+                                  creator=user, 
                                   status=Status.objects.get(id=1), 
                                   payment_form=payment_method, 
                                   provider=provider,
@@ -371,9 +377,10 @@ def add_equipment(request):
                 equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]))
                 equipment.save()
             equipments[i] = equipment
-            
-        application = EquipmentApplication(purchase_topic=Purchase_topic.objects.get(id=topic), 
-                                  creator=request.user, 
+        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
+        application = EquipmentApplication(purchase_topic=topic, 
+                                  creator=user, 
                                   status=Status.objects.get(id=1), 
                                   payment_form=payment_method, 
                                   provider=provider
@@ -475,6 +482,7 @@ def gen_path(request):
     urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
     urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
     urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
+    return redirect("purchase")
     
     
 urlpatterns_views = [
