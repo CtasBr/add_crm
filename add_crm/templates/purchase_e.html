@@ -212,8 +212,7 @@
     </div>
   </div>
 </div>
-{% for a in appl %}
-{% if a.status.id != 5 %}
+{% if a %}
 <div class="card mt-3 mr-4 ml-4" style="max-width: 100%; width: auto">
   <div class="row no-gutters d-flex align-items-center" style="width: 100%">
     <div class="col-md-1" style="color: #925537">
@@ -289,7 +288,6 @@
   </div>
 </div>
 {% endif %}
-{% endfor %}
 
 {% endblock auth_content %}
 

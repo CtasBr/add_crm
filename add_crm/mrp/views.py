@@ -197,7 +197,7 @@ def purchase(request):
             elif not gen_paths.is_used:
                 can_add = True
             data = {
-                "appl": applications,
+                "a": applications,
                 "status": statuses,
                 "user_info": user_info,
                 "can_add": can_add,
@@ -214,7 +214,7 @@ def purchase(request):
             elif not gen_paths.is_used:
                 can_add = True
             data = {
-                "appl": applications,
+                "a": applications,
                 "status": statuses,
                 "user_info": user_info,
                 "can_add": can_add,
@@ -351,7 +351,15 @@ def add_application_ts(request):
         application.save()
         print(application.technical_specification)
         
-    return redirect('purchase')
+        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
+            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+            gen_paths = Path.objects.get(path=path_adding)
+            gen_paths.is_used = True
+            gen_paths.purchase_id = application.id
+            gen_paths.purchase_type = 3
+            gen_paths.save()
+        
+    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
 
 def add_equipment(request):
     '''
@@ -389,9 +397,16 @@ def add_equipment(request):
         application.save()
         
         application.equipment.set(equipments)
+        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
+            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+            gen_paths = Path.objects.get(path=path_adding)
+            gen_paths.is_used = True
+            gen_paths.purchase_id = application.id
+            gen_paths.purchase_type = 2
+            gen_paths.save()
         
         
-    return redirect('purchase')
+    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
 
 def equipment(request, num):
     '''
