@@ -81,6 +81,7 @@ def purchase(request):
     print(request.path)
     link_name = 'purchase'
     if request.path == '/mrp/purchase/':
+        print(link_name)
         user_info = {
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
             "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
@@ -214,9 +215,6 @@ def purchase(request):
             }
             return render(request, "purchase_t.html", data)
 
-urlpatterns_views = [
-    path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh')
-]
 
 def application(request, num):
     '''
@@ -300,6 +298,13 @@ def add_application(request):
                                 )
         application.save()
         application.positions.set(positions)
+        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
+            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+            gen_paths[path_adding]["is_used"] = True
+            gen_paths[path_adding]["purchase_id"] = application.id()
+            gen_paths[path_adding]["purchase_type"] = 1
+            
+            
         
     return redirect('purchase')
 
@@ -447,6 +452,10 @@ def update_warehouse_csv(request):
 def generate_random_string(length, characters):
     return ''.join(random.choices(characters, k=length))
 
+# path('add_application/', add_application, name='add_application'),
+# path('add_application_ts/', add_application_ts, name='add_application_ts'),
+# path('add_equipment/', add_equipment, name='add_equipment'),
+
 # функция генерации одноразового пути
 def gen_path(request):
     length = 16
@@ -455,6 +464,9 @@ def gen_path(request):
     random_string = generate_random_string(length, characters)
     gen_paths[f'/{random_string}/'] = {"is_used": False, "purchase_type": None, "purchase_id": None}
     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
+    urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
+    urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
+    urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
     
     false_keys = [key for key, value in gen_path.items() if not value["is_used"]]
     
@@ -463,3 +475,9 @@ def gen_path(request):
     if str(request.path) in false_keys:
         print(True)
         
+urlpatterns_views = [
+    path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh'),
+    path(f'add_application__qwertyuiopasdfgh/', add_application, name=f'add_application__qwertyuiopasdfgh'),
+    path(f'add_application_ts__qwertyuiopasdfgh/', add_application_ts, name=f'add_application_ts__qwertyuiopasdfgh'),
+    path(f'add_equipment__qwertyuiopasdfgh/', add_equipment, name=f'add_equipment__qwertyuiopasdfgh')
+]
