@@ -177,7 +177,6 @@ def purchase(request, link):
                 can_add = True
 
             units = Unit.objects.all()
-            
             data = {
                 "a": applications,
                 "units": units,
@@ -280,7 +279,7 @@ def add_application(request, link):
         num_pos = len(positions)
         count_pos = request.POST.getlist('count')
         units = list(map(int, request.POST.getlist('units')))
-        link = request.POST.getlist('link')
+        link_obj = request.POST.getlist('link')
         min_count = list(map(float, request.POST.getlist('min_count')))
         
         for i in range(num_pos):
@@ -294,7 +293,7 @@ def add_application(request, link):
             except:
                 position = Position(title=positions[i], quantity=0, units=Unit.objects.get(id=int(units[i])), is_done = False )
                 position.save()
-            positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
+            positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link_obj[i], units=Unit.objects.get(id=int(units[i])))
             positions[i].save()
         # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
@@ -307,17 +306,18 @@ def add_application(request, link):
                                 )
         application.save()
         application.positions.set(positions)
+        print("Путь ", link)
         if link != "add_application":
             path_adding = link
+            print(path_adding)
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
             gen_paths.purchase_type = 1
             gen_paths.save()
             
-            
         
-    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
+    return redirect("purchase", link)
 
 def add_application_ts(request, link):
     '''
@@ -359,7 +359,7 @@ def add_application_ts(request, link):
             gen_paths.purchase_type = 3
             gen_paths.save()
         
-    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
+    return redirect("purchase", link)
 
 def add_equipment(request, link):
     '''
@@ -376,13 +376,13 @@ def add_equipment(request, link):
         equipments = request.POST.getlist('name_position')
         num_pos = len(equipments)
         count_pos = request.POST.getlist('count')
-        link = request.POST.getlist('link')
+        link_obj = request.POST.getlist('link')
         
         for i in range(num_pos):
             try:
                 equipment = Equipment.objects.get(title=equipments[i])
             except:
-                equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]))
+                equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]), link=link_obj[i])
                 equipment.save()
             equipments[i] = equipment
         topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
@@ -398,7 +398,7 @@ def add_equipment(request, link):
         
         application.equipment.set(equipments)
         if link != "add_application":
-            path_adding =link
+            path_adding = link
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
@@ -406,7 +406,7 @@ def add_equipment(request, link):
             gen_paths.save()
         
         
-    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
+    return redirect("purchase", link)
 
 def equipment(request, num):
     '''
@@ -493,7 +493,7 @@ def gen_path(request):
     random_string = generate_random_string(length, characters)
     gen_paths = Path(path=random_string, is_used=False, purchase_type=None, purchase_id=None)
     gen_paths.save()
-    return redirect("purchase")
+    return redirect("purchase", "purchase")
     
     
 urlpatterns_views = [
