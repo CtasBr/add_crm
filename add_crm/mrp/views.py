@@ -79,6 +79,7 @@ def warehouse(request):
 
 def purchase(request):
     print(request.path)
+    link_name = 'purchase'
     if request.path == '/mrp/purchase/':
         user_info = {
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
@@ -117,7 +118,8 @@ def purchase(request):
                 "objects": obj_for_add,
                 "topics": topics,
                 "user_info": user_info,
-                "units_by_obj": units_by_obj
+                "units_by_obj": units_by_obj,
+                "link_name": link_name,
             }
             return render(request, "purchase.html", data)
 
@@ -130,7 +132,8 @@ def purchase(request):
                 "objects": equipment,
                 "status": statuses,
                 "topics": topics,
-                "user_info": user_info
+                "user_info": user_info,
+                "link_name": link_name,
             }
             return render(request, "purchase_e.html", data)
         
@@ -141,7 +144,8 @@ def purchase(request):
                 "appl": applications,
                 "status": statuses,
                 "topics": topics,
-                "user_info": user_info
+                "user_info": user_info,
+                "link_name": link_name,
             }
             return render(request, "purchase_t.html", data)
     else:
