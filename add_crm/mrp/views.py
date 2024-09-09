@@ -180,6 +180,7 @@ def purchase(request):
                 "user_info": user_info,
                 "can_add": can_add,
                 "link_name": link_name,
+                "add_link_name": f"add_application__{link_name}"
             }
             return render(request, "purchase.html", data)
 
@@ -196,6 +197,7 @@ def purchase(request):
                 "user_info": user_info,
                 "can_add": can_add,
                 "link_name": link_name,
+                "add_link_name": f"add_equipment__{link_name}"
             }
             return render(request, "purchase_e.html", data)
         
@@ -212,6 +214,7 @@ def purchase(request):
                 "user_info": user_info,
                 "can_add": can_add,
                 "link_name": link_name,
+                "add_link_name": f"add_application_ts__{link_name}"
             }
             return render(request, "purchase_t.html", data)
 
