@@ -159,16 +159,5 @@ class Comment(models.Model):
     
 # {"path": {"is_used": (boolean), "purchase_type": (int), "purchase_id": (int)}}
 # 1 - appl; 2 - eq; 3 - ts
-class Path(models.Model):
-    class Meta:
-        db_table = "paths"
-        verbose_name = "путь"
-        verbose_name_plural = "пути"
-    path = models.CharField(max_length=200, verbose_name="Путь")
-    is_used = models.BooleanField(verbose_name="использован")
-    purchase_type = models.IntegerField(verbose_name="тип заявки", blank=True, null=True)
-    purchase_id = models.IntegerField(verbose_name="номер заявки", blank=True, null=True)
-    
-    def __str__(self):
-        return str(self.path)
+
     

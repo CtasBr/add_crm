@@ -14,5 +14,6 @@ admin.site.register(PositionInApplication)
 admin.site.register(ApplicationTechnicalSpecification)
 admin.site.register(Equipment)
 admin.site.register(EquipmentApplication)
+admin.site.register(Path)
 
 

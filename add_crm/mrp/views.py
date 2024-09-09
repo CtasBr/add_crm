@@ -13,7 +13,6 @@ from .models import *
 
 # {"path": {"is_used": (boolean), "purchase_type": (int), "purchase_id": (int)}}
 # 1 - appl; 2 - eq; 3 - ts
-gen_paths = {"qwertyuiopasdfgh": {"is_used": False, "purchase_type": None, "purchase_id": None}}
 
 def take(request):
     '''
@@ -163,18 +162,20 @@ def purchase(request):
         statuses = Status.objects.all()
         link_name = str(request.path).replace('/mrp/', "").replace('/', '').strip()
         print(link_name)
+        gen_paths = Path.objects.get(path=link_name)
         if types == "appl":
             applications = []
             can_add = False
-            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 1:
-                applications = Application.objects.get(id=gen_paths[link_name]['purchase_id'])
-            elif not gen_paths[link_name]['is_used']:
+            if gen_paths.is_used and gen_paths.purchase_type == 1:
+                applications = Application.objects.get(id=gen_paths.purchase_id)
+                print(applications)
+            elif not gen_paths.is_used:
                 can_add = True
 
             units = Unit.objects.all()
             
             data = {
-                "appl": applications,
+                "a": applications,
                 "units": units,
                 "status": statuses,
                 "user_info": user_info,
@@ -187,9 +188,9 @@ def purchase(request):
         elif types == "equipment":
             applications = []
             can_add = False
-            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 2:
-                applications = EquipmentApplication.objects.get(id=gen_paths[link_name]['purchase_id'])
-            elif not gen_paths[link_name]['is_used']:
+            if gen_paths.is_used and gen_paths.purchase_type == 2:
+                applications = EquipmentApplication.objects.get(id=gen_paths.purchase_id)
+            elif not gen_paths.is_used:
                 can_add = True
             data = {
                 "appl": applications,
@@ -204,9 +205,9 @@ def purchase(request):
         else:
             applications = []
             can_add = False
-            if gen_paths[link_name]['is_used'] and gen_paths[link_name]["purchase_type"] == 3:
-                applications = ApplicationTechnicalSpecification.objects.get(id=gen_paths[link_name]['purchase_id'])
-            elif not gen_paths[link_name]['is_used']:
+            if gen_paths.is_used and gen_paths.purchase_type == 3:
+                applications = ApplicationTechnicalSpecification.objects.get(id=gen_paths.purchase_id)
+            elif not gen_paths.is_used:
                 can_add = True
             data = {
                 "appl": applications,
@@ -292,9 +293,10 @@ def add_application(request):
             positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
             positions[i].save()
         # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
-        
-        application = Application(purchase_topic=Purchase_topic.objects.get(id=topic), 
-                                  creator=request.user, 
+        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
+        application = Application(purchase_topic=topic, 
+                                  creator=user, 
                                   status=Status.objects.get(id=1), 
                                   payment_form=payment_method, 
                                   provider=provider
@@ -303,13 +305,15 @@ def add_application(request):
         application.positions.set(positions)
         if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
             path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
-            gen_paths[path_adding]["is_used"] = True
-            gen_paths[path_adding]["purchase_id"] = application.id()
-            gen_paths[path_adding]["purchase_type"] = 1
+            gen_paths = Path.objects.get(path=path_adding)
+            gen_paths.is_used = True
+            gen_paths.purchase_id = application.id
+            gen_paths.purchase_type = 1
+            gen_paths.save()
             
             
         
-    return redirect('purchase')
+    return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
 
 def add_application_ts(request):
     '''
@@ -465,22 +469,25 @@ def gen_path(request):
     characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     
     random_string = generate_random_string(length, characters)
-    gen_paths[f'/{random_string}/'] = {"is_used": False, "purchase_type": None, "purchase_id": None}
+    gen_paths = Path(path=random_string, is_used=False, purchase_type=None, purchase_id=None)
+    gen_paths.save()
     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
     urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
     urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
     urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
     
-    false_keys = [key for key, value in gen_path.items() if not value["is_used"]]
     
-    print(false_keys, request.path)
-    
-    if str(request.path) in false_keys:
-        print(True)
-        
 urlpatterns_views = [
-    path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh'),
-    path(f'add_application__qwertyuiopasdfgh/', add_application, name=f'add_application__qwertyuiopasdfgh'),
-    path(f'add_application_ts__qwertyuiopasdfgh/', add_application_ts, name=f'add_application_ts__qwertyuiopasdfgh'),
-    path(f'add_equipment__qwertyuiopasdfgh/', add_equipment, name=f'add_equipment__qwertyuiopasdfgh')
+    # path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh'),
+    # path(f'add_application__qwertyuiopasdfgh/', add_application, name=f'add_application__qwertyuiopasdfgh'),
+    # path(f'add_application_ts__qwertyuiopasdfgh/', add_application_ts, name=f'add_application_ts__qwertyuiopasdfgh'),
+    # path(f'add_equipment__qwertyuiopasdfgh/', add_equipment, name=f'add_equipment__qwertyuiopasdfgh')
 ]
+
+genereted_paths = Path.objects.all()
+for i in genereted_paths:
+    random_string = i.path
+    urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
+    urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
+    urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
+    urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))

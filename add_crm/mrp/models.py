@@ -66,7 +66,7 @@ class Application(models.Model):
         verbose_name_plural = "Заявки"
     
     purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
-    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT, null=True)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
     payment_form = models.CharField(verbose_name="Оплата", choices=payment_forms, max_length=100)
     positions = models.ManyToManyField("PositionInApplication", blank=True, verbose_name="Позиции")
@@ -143,7 +143,7 @@ class ApplicationTechnicalSpecification(models.Model):
         verbose_name_plural = "Заявки с ТЗ"
     
     purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
-    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT, null=True)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
     payment_form = models.CharField(verbose_name="Оплата", choices=payment_forms, max_length=100)
     technical_specification = models.FileField(verbose_name="Файл", upload_to='technical_specification/', blank=True, null=True)
@@ -180,7 +180,7 @@ class EquipmentApplication(models.Model):
         verbose_name_plural = "Заявки на оборудование"
     
     purchase_topic = models.ForeignKey(verbose_name="Тема закупки", to="Purchase_topic", on_delete=models.PROTECT)
-    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT)
+    creator = models.ForeignKey(verbose_name="Создатель", to=User, on_delete=models.PROTECT, null=True)
     status = models.ForeignKey(verbose_name="Статус", to="Status", on_delete=models.PROTECT)
     payment_form = models.CharField(verbose_name="Оплата", choices=payment_forms, max_length=100)
     provider = models.ForeignKey(to="Provider", verbose_name="Поставщик", on_delete=models.PROTECT)
@@ -189,3 +189,17 @@ class EquipmentApplication(models.Model):
     
     def __str__(self) -> str:
         return f'{self.purchase_topic.title} {self.provider.name}'
+    
+
+class Path(models.Model):
+    class Meta:
+        db_table = "paths"
+        verbose_name = "путь"
+        verbose_name_plural = "пути"
+    path = models.CharField(max_length=200, verbose_name="Путь")
+    is_used = models.BooleanField(verbose_name="использован")
+    purchase_type = models.IntegerField(verbose_name="тип заявки", blank=True, null=True)
+    purchase_id = models.IntegerField(verbose_name="номер заявки", blank=True, null=True)
+    
+    def __str__(self):
+        return str(self.path)
