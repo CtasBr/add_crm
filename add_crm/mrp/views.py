@@ -76,10 +76,10 @@ def warehouse(request):
     }
     return render(request, "warehouse.html", data)
 
-def purchase(request):
+def purchase(request, link):
     print(request.path)
     link_name = 'purchase'
-    if request.path == '/mrp/purchase/':
+    if link == "purchase":
         add_link_name = "add_application"
         print(link_name)
         user_info = {
@@ -164,7 +164,7 @@ def purchase(request):
         '''
         types = request.GET.get("type", "appl")
         statuses = Status.objects.all()
-        link_name = str(request.path).replace('/mrp/', "").replace('/', '').strip()
+        link_name = link
         print(link_name)
         gen_paths = Path.objects.get(path=link_name)
         if types == "appl":
@@ -264,7 +264,7 @@ def application(request, num):
     
     return redirect('purchase')
 
-def add_application(request):
+def add_application(request, link):
     '''
     Функция обработки формы добавления заявки по позициям
     '''
@@ -297,8 +297,8 @@ def add_application(request):
             positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link[i], units=Unit.objects.get(id=int(units[i])))
             positions[i].save()
         # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
-        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
-        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
+        topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if link == "add_application" else None
         application = Application(purchase_topic=topic, 
                                   creator=user, 
                                   status=Status.objects.get(id=1), 
@@ -307,8 +307,8 @@ def add_application(request):
                                 )
         application.save()
         application.positions.set(positions)
-        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
-            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+        if link != "add_application":
+            path_adding = link
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
@@ -319,7 +319,7 @@ def add_application(request):
         
     return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
 
-def add_application_ts(request):
+def add_application_ts(request, link):
     '''
     Функция обработки формы добавления заявки по ТЗ
     '''
@@ -338,8 +338,8 @@ def add_application_ts(request):
 
         
         # print('POST: ', filefield)
-        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
-        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
+        topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if link == "add_application" else None
         print('FILES: ', filefield, filefield.size, filefield.name)
         application = ApplicationTechnicalSpecification(purchase_topic=topic, 
                                   creator=user, 
@@ -351,8 +351,8 @@ def add_application_ts(request):
         application.save()
         print(application.technical_specification)
         
-        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
-            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+        if link != "add_application":
+            path_adding = link
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
@@ -361,7 +361,7 @@ def add_application_ts(request):
         
     return redirect(str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1])
 
-def add_equipment(request):
+def add_equipment(request, link):
     '''
     Функция обработки формы добавления заявки по оборудованию
     '''
@@ -385,8 +385,8 @@ def add_equipment(request):
                 equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]))
                 equipment.save()
             equipments[i] = equipment
-        topic = Purchase_topic.objects.get(id=topic) if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
-        user = request.user if str(request.path).replace('/mrp/', "").replace('/', '').strip() == "add_application" else None
+        topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        user = request.user if link == "add_application" else None
         application = EquipmentApplication(purchase_topic=topic, 
                                   creator=user, 
                                   status=Status.objects.get(id=1), 
@@ -397,8 +397,8 @@ def add_equipment(request):
         application.save()
         
         application.equipment.set(equipments)
-        if str(request.path).replace('/mrp/', "").replace('/', '').strip() != "add_application":
-            path_adding = str(request.path).replace('/mrp/', "").replace('/', '').strip().split("__")[1]
+        if link != "add_application":
+            path_adding =link
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
@@ -493,10 +493,6 @@ def gen_path(request):
     random_string = generate_random_string(length, characters)
     gen_paths = Path(path=random_string, is_used=False, purchase_type=None, purchase_id=None)
     gen_paths.save()
-    urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
-    urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
-    urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
-    urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
     return redirect("purchase")
     
     
@@ -507,10 +503,10 @@ urlpatterns_views = [
     # path(f'add_equipment__qwertyuiopasdfgh/', add_equipment, name=f'add_equipment__qwertyuiopasdfgh')
 ]
 
-genereted_paths = Path.objects.all()
-for i in genereted_paths:
-    random_string = i.path
-    urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
-    urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
-    urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
-    urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
+# genereted_paths = Path.objects.all()
+# for i in genereted_paths:
+#     random_string = i.path
+#     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
+#     urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
+#     urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
+#     urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))

@@ -1,9 +1,9 @@
 {% extends "base.html" %}{% load static %}{% block content %}
 <br>
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
-  <a href="{% url "purchase" %}" class="btn btn-custom">Позиции</a>
-  <a href="{% url "purchase" %}?type=technical_specification" class="btn btn-custom">ТЗ</a>
-  <a href="{% url "purchase" %}?type=equipment" class="btn btn-custom active">Оборудование</a>
+  <a href="{% url "purchase" link_name %}" class="btn btn-custom">Позиции</a>
+  <a href="{% url "purchase" link_name %}?type=technical_specification" class="btn btn-custom">ТЗ</a>
+  <a href="{% url "purchase" link_name %}?type=equipment" class="btn btn-custom active">Оборудование</a>
 </div>
 <br>
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
@@ -13,7 +13,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <form method="POST" class="" action="{% url "add_equipment" %}">
+      <form method="POST" class="" action="{% url "add_equipment" link_name%}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="form-row" id="form_add_pur_row">
@@ -151,9 +151,9 @@
 
 {% block auth_content %}
 <div class="btn-group mt-4" role="group" aria-label="Basic example">
-  <a href="{% url link_name %}" class="btn btn-custom">Позиции</a>
-  <a href="{% url link_name %}?type=technical_specification" class="btn btn-custom">ТЗ</a>
-  <a href="{% url link_name %}?type=equipment" class="btn btn-custom active">Оборудование</a>
+  <a href="{% url "purchase" link_name %}" class="btn btn-custom">Позиции</a>
+  <a href="{% url "purchase" link_name %}?type=technical_specification" class="btn btn-custom">ТЗ</a>
+  <a href="{% url "purchase" link_name %}?type=equipment" class="btn btn-custom active">Оборудование</a>
 </div>
 <br>
 {% if can_add %}
@@ -165,7 +165,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <form method="POST" class="" action="{% url add_link_name %}">
+      <form method="POST" class="" action="{% url "add_equipment" link_name%}">
         {% csrf_token %}
         <div class="modal-body">
           <div class="form-row" id="form_add_pur_row">
