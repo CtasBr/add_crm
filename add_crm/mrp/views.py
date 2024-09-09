@@ -157,6 +157,7 @@ def purchase(request):
         types = request.GET.get("type", "appl")
         statuses = Status.objects.all()
         link_name = str(request.path).replace('/mrp/', "").replace('/', '').strip()
+        print(link_name)
         if types == "appl":
             applications = []
             can_add = False
@@ -173,6 +174,7 @@ def purchase(request):
                 "status": statuses,
                 "user_info": user_info,
                 "can_add": can_add,
+                "link_name": link_name,
             }
             return render(request, "purchase.html", data)
 
@@ -188,6 +190,7 @@ def purchase(request):
                 "status": statuses,
                 "user_info": user_info,
                 "can_add": can_add,
+                "link_name": link_name,
             }
             return render(request, "purchase_e.html", data)
         
@@ -203,6 +206,7 @@ def purchase(request):
                 "status": statuses,
                 "user_info": user_info,
                 "can_add": can_add,
+                "link_name": link_name,
             }
             return render(request, "purchase_t.html", data)
 
