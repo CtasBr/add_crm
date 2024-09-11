@@ -44,10 +44,11 @@ def take(request):
 
 def warehouse(request):
     user_info = {
-        "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
-        "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
-        "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
-    }
+            "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
+            "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
+            "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+            "CanAddPath": request.user.groups.filter(name='adder_path').exists() if request.user.is_authenticated else False,
+        }
     '''
     Функция отображения склада
     Есть GET с параметром obj (передается поисковый запрос)
@@ -86,6 +87,7 @@ def purchase(request, link):
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
             "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
             "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+            "CanAddPath": request.user.groups.filter(name='adder_path').exists() if request.user.is_authenticated else False,
         }
         '''
         Функция отображения заявок на закупки
@@ -157,6 +159,7 @@ def purchase(request, link):
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
             "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
             "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
+            "CanAddPath": request.user.groups.filter(name='adder_path').exists() if request.user.is_authenticated else False,
         }
         '''
         Функция отображения заявок на закупки
