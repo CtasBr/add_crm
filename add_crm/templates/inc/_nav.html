@@ -10,8 +10,11 @@
   <div class="btn-group" role="group" aria-label="Basic example">
     <a href="{% url "warehouse" %}" type="button" class="btn btn-custom {{nav.warehouse}}">Склад</a>
     <a href="{% url "purchase" "purchase"%}" type="button" class="btn btn-custom {{nav.purchase}}">Закупки</a>
+  </div>
+  <div class="btn-group" role="group" aria-label="Basic example">
     {% if user_info.CanAddPath %}
     <a href="{% url "gen_path" %}" type="button" class="btn btn-custom">Сгенерировать путь</a>
+    <a href="{{last_path}}" type="button" class="btn btn-custom">Посмотреть</a>
     {% endif %}
   </div>
   {% else %} 

@@ -200,6 +200,7 @@ class Path(models.Model):
     is_used = models.BooleanField(verbose_name="использован")
     purchase_type = models.IntegerField(verbose_name="тип заявки", blank=True, null=True)
     purchase_id = models.IntegerField(verbose_name="номер заявки", blank=True, null=True)
+    is_shown = models.BooleanField(verbose_name="показан", default=False)
     
     def __str__(self):
         return str(self.path)

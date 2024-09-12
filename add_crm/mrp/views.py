@@ -47,7 +47,6 @@ def warehouse(request):
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
             "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
             "PurS": request.user.groups.filter(name='purchasing_specialist').exists() if request.user.is_authenticated else False,
-            "CanAddPath": request.user.groups.filter(name='adder_path').exists() if request.user.is_authenticated else False,
         }
     '''
     Функция отображения склада
@@ -78,11 +77,13 @@ def warehouse(request):
     return render(request, "warehouse.html", data)
 
 def purchase(request, link):
-    print(request.path)
+    last_obj = Path.objects.order_by('-id').first()
+    req_path = request.path.replace('/purchase', '', 1)
+    last_path = f'{req_path}/{last_obj}'
+    print(last_path)
     link_name = 'purchase'
     if link == "purchase":
         add_link_name = "add_application"
-        print(link_name)
         user_info = {
             "AddLab": request.user.groups.filter(name='AddLab').exists() if request.user.is_authenticated else False,
             "CaramLab": request.user.groups.filter(name='Ceramist').exists() if request.user.is_authenticated else False,
@@ -123,7 +124,8 @@ def purchase(request, link):
                 "user_info": user_info,
                 "units_by_obj": units_by_obj,
                 "link_name": link_name,
-                "add_link_name": add_link_name
+                "add_link_name": add_link_name,
+                "last_path": last_path,
             }
             return render(request, "purchase.html", data)
 
@@ -500,16 +502,7 @@ def gen_path(request):
     
     
 urlpatterns_views = [
-    # path(f'qwertyuiopasdfgh/', purchase, name=f'qwertyuiopasdfgh'),
-    # path(f'add_application__qwertyuiopasdfgh/', add_application, name=f'add_application__qwertyuiopasdfgh'),
-    # path(f'add_application_ts__qwertyuiopasdfgh/', add_application_ts, name=f'add_application_ts__qwertyuiopasdfgh'),
-    # path(f'add_equipment__qwertyuiopasdfgh/', add_equipment, name=f'add_equipment__qwertyuiopasdfgh')
 ]
 
-# genereted_paths = Path.objects.all()
-# for i in genereted_paths:
-#     random_string = i.path
-#     urlpatterns_views.append(path(f'{random_string}/', purchase, name=f'{random_string}'))
-#     urlpatterns_views.append(path(f'add_application__{random_string}/', add_application, name=f'add_application__{random_string}'))
-#     urlpatterns_views.append(path(f'add_application_ts__{random_string}/', add_application_ts, name=f'add_application_ts__{random_string}'))
-#     urlpatterns_views.append(path(f'add_equipment__{random_string}/', add_equipment, name=f'add_equipment__{random_string}'))
+def show_paths(request):
+    return render(request, "show_paths.html")
