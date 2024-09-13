@@ -242,8 +242,8 @@
       <div class="card subtasks">
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
-        {% if not r.file %}
-        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle"></div></a>{{r.title}}</div>
+        {% if not r.file and r.is_shown %}
+        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle"></div></a>{{r.title}} <a href="{% url "projects" %}?close_result={{r.id}}" class="card-link"><div class="close"></div></a></div>
         {% endif %}
         {% endif %}
         <div class="collapse" id="collapseAddDocument{{r.id}}">
@@ -265,8 +265,8 @@
 
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
-        {% if r.file %}
-        <div class="subtask"><a href="{% url "download_file" r.id %}" class="card-link"><div class="circle-done"></div></a>{{r.title}}</div>
+        {% if r.file and r.is_shown %}
+        <div class="subtask"><a href="{% url "download_file" r.id %}" class="card-link"><div class="circle-done"></div></a>{{r.title}}<a href="{% url "projects" %}?close_result={{r.id}}" class="card-link"><div class="close"></div></a></div>
         {% endif %}
         {% endif %}
         {% endfor %}
@@ -487,8 +487,8 @@
       <div class="card subtasks">
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
-        {% if not r.file %}
-        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle"></div></a>{{r.title}}</div>
+        {% if not r.file and r.is_shown %}
+        <div class="subtask"><a data-toggle="collapse" href="#collapseAddDocument{{r.id}}" role="button" aria-expanded="false" aria-controls="collapseExample" class="card-link"><div class="circle"></div></a>{{r.title}} <a href="{% url "projects" %}?close_result={{r.id}}" class="card-link"><div class="close"></div></a></div>
         {% endif %}
         {% endif %}
         <div class="collapse" id="collapseAddDocument{{r.id}}">
@@ -510,8 +510,8 @@
 
         {% for r in results %}
         {% if r.main_task_id.id == t.id %}
-        {% if r.file %}
-        <div class="subtask"><a href="{% url "download_file" r.id %}" class="card-link"><div class="circle-done"></div></a>{{r.title}}</div>
+        {% if r.file and r.is_shown %}
+        <div class="subtask"><a href="{% url "download_file" r.id %}" class="card-link"><div class="circle-done"></div></a>{{r.title}}<a href="{% url "projects" %}?close_result={{r.id}}" class="card-link"><div class="close"></div></a></div>
         {% endif %}
         {% endif %}
         {% endfor %}
