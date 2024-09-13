@@ -266,7 +266,7 @@ def application(request, num):
                 obj.save(update_fields=update_fields)
         appl.save(update_fields=fields)
     
-    return redirect('purchase')
+    return redirect('purchase', 'purchase')
 
 def add_application(request, link):
     '''
@@ -382,7 +382,7 @@ def add_equipment(request, link):
         num_pos = len(equipments)
         count_pos = request.POST.getlist('count')
         link_obj = request.POST.getlist('link')
-        
+        print("Link: ", link)
         for i in range(num_pos):
             try:
                 equipment = Equipment.objects.get(title=equipments[i])
@@ -390,7 +390,7 @@ def add_equipment(request, link):
                 equipment = Equipment(name=equipments[i], quantity=int(count_pos[i]), link=link_obj[i])
                 equipment.save()
             equipments[i] = equipment
-        topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
+        topic = Purchase_topic.objects.get(id=topic) if link == "purchase" else Purchase_topic.objects.get(title="Одноразовая")
         user = request.user if link == "add_application" else None
         application = EquipmentApplication(purchase_topic=topic, 
                                   creator=user, 
@@ -402,7 +402,7 @@ def add_equipment(request, link):
         application.save()
         
         application.equipment.set(equipments)
-        if link != "add_application":
+        if link != "purchase":
             path_adding = link
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
@@ -429,7 +429,7 @@ def equipment(request, num):
             appl.deadline = deadline
             fields.append("deadline")
         appl.save(update_fields=fields)
-    return redirect('purchase')
+    return redirect('purchase', 'purchase')
 
 def techical_specification(request, num):
     '''
@@ -447,7 +447,7 @@ def techical_specification(request, num):
             fields.append("deadline")
             appl.deadline = deadline
         appl.save(update_fields=fields)
-    return redirect('purchase')
+    return redirect('purchase', 'purchase')
 
 def download_file(request, pk):
     print(pk)

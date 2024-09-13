@@ -11,10 +11,10 @@ class Purchase_topic(models.Model):
         verbose_name_plural = "Темы закупок"
         
     title = models.CharField(verbose_name="Название", max_length=300)
-    stage = models.IntegerField(verbose_name="Этап", blank=True)
+    stage = models.IntegerField(verbose_name="Этап", blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return self.title + str(self.stage)
 
 
 class Status(models.Model):
