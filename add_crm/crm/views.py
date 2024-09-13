@@ -41,6 +41,12 @@ def projects(request):
         sub_obj = Subtask.objects.get(id=close_subtask_index)
         sub_obj.is_shown = False
         sub_obj.save(update_fields=["is_shown"])
+        
+    close_result_index = int(request.GET.get("close_result", -1))
+    if close_result_index > -1:
+        res_obj = Result.objects.get(id=close_result_index)
+        res_obj.is_shown = False
+        res_obj.save(update_fields=["is_shown"])
     
     done_task_index = int(request.GET.get("done_task", -1))
     if done_task_index > -1:
@@ -295,7 +301,6 @@ def schedule(request):
     
     return render(request, 'schedule.html', data)
 
-
 def comment(request, num):
     if request.method == 'POST':
         text = request.POST.get('text')
@@ -314,7 +319,7 @@ def calendar(request):
     
     subtasks = Subtask.objects.filter(is_done=False)
     tasks = Task.objects.filter(is_done=False)
-    locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+    # locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
     today = datetime.date.today()
     day_word = today.strftime('%A')
     day_number = today.strftime('%d')  # число

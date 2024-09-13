@@ -77,8 +77,8 @@ class Subtask(models.Model):
     date_add = models.DateField(verbose_name="Дата начала", auto_now=True)
     deadline = models.DateField(verbose_name="Дата сдачи", blank=True)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
-    is_done = models.BooleanField(verbose_name="Выполнено")
-    is_shown = models.BooleanField(verbose_name="Показывается")
+    is_done = models.BooleanField(verbose_name="Выполнено", default=False)
+    is_shown = models.BooleanField(verbose_name="Показывается", default=True)
     
     
     def __str__(self):
@@ -92,6 +92,7 @@ class Result(models.Model):
     title = models.CharField(verbose_name="Название", max_length=500)
     main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
     file = models.FileField(verbose_name="Файл", upload_to='result_files/', blank=True, null=True)
+    is_shown = models.BooleanField(verbose_name="Показывается", default=True)
 
 class Empl(models.Model):
     """Пользователи
