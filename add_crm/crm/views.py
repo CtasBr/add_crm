@@ -3,7 +3,7 @@ import datetime
 import locale
 import math
 import random
-
+from django.db.models import Count, Q
 from django.http import FileResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 
@@ -77,7 +77,7 @@ def projects(request):
 
     
     p = Project.objects.all()
-    t = Task.objects.all()
+    t = Task.objects.annotate(results_count=Count('results', filter=Q(results__is_shown=True)))
     s = Subtask.objects.all()
     u = Empl.objects.all()
     c = Comment.objects.all()

@@ -97,7 +97,7 @@
         <a href="{% url "projects" %}?done_task={{t.id}}" class="card_button done">Готово</a>
         <a class="card_button" data-toggle="collapse" href="#collapseComments{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Комментарии</a>
         <a class="card_button" data-toggle="collapse" href="#collapseExample{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Подзадачи</a>
-        <a class="card_button" data-toggle="collapse" href="#collapseResult{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Результаты</a>
+        <a class="card_button" data-toggle="collapse" href="#collapseResult{{t.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">Результаты ({{t.results_count}})</a>
       </div>
       <div id="my-popover{{t.id}}" popover class="my-popover">
         {% for e in t.executors_id.all %}

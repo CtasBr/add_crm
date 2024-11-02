@@ -90,7 +90,7 @@ class Result(models.Model):
         verbose_name = "результат"
         verbose_name_plural = "результаты"
     title = models.CharField(verbose_name="Название", max_length=500)
-    main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT)
+    main_task_id = models.ForeignKey(to="Task", on_delete=models.PROTECT, related_name="results")
     file = models.FileField(verbose_name="Файл", upload_to='result_files/', blank=True, null=True)
     is_shown = models.BooleanField(verbose_name="Показывается", default=True)
 

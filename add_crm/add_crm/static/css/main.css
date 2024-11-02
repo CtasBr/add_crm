@@ -13,6 +13,9 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: scroll;
+  /*opacity: 0;  /*Начальная прозрачность */
+  /*transition: opacity 0.5s ease; /* Плавный переход */
+  visibility: hidden;
 }
 
 a {
