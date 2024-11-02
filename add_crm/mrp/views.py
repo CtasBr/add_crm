@@ -27,7 +27,6 @@ def take(request):
     count_obj = request.GET.get("count", "-1")
     count_obj = float(count_obj) if count_obj else -1
     id_obj = max(take_obj, return_obj)
-    print(id_obj)
     if id_obj>=0 and count_obj>0:
         object = Position.objects.get(id=id_obj)
         if take_obj > -1:
@@ -80,7 +79,6 @@ def purchase(request, link):
     last_obj = Path.objects.order_by('-id').first()
     req_path = request.path.replace('/purchase', '', 1)
     last_path = f'{req_path}/{last_obj}'
-    print(last_path)
     link_name = 'purchase'
     if link == "purchase":
         add_link_name = "add_application"
@@ -170,14 +168,12 @@ def purchase(request, link):
         types = request.GET.get("type", "appl")
         statuses = Status.objects.all()
         link_name = link
-        print(link_name)
         gen_paths = Path.objects.get(path=link_name)
         if types == "appl":
             applications = []
             can_add = False
             if gen_paths.is_used and gen_paths.purchase_type == 1:
                 applications = Application.objects.get(id=gen_paths.purchase_id)
-                print(applications)
             elif not gen_paths.is_used:
                 can_add = True
 
@@ -240,9 +236,7 @@ def application(request, num):
         status = request.POST.get('status')
         appl = Application.objects.get(id=num)
         appl.status = Status.objects.get(id=int(status))
-        # print("deadline:", deadline)
         if deadline:
-            # print("deadline chacked")
             fields.append('deadline')
             appl.deadline = deadline
         if appl.status.id == 5:
@@ -290,9 +284,7 @@ def add_application(request, link):
         for i in range(num_pos):
             try:
                 position = Position.objects.get(title=positions[i])
-                print(min_count[i] != position.min_quantity, int(units[i]) == position.units.id)
                 if min_count[i] != position.min_quantity and units[i] == position.units.id:
-                    print("done_ifff")
                     position.min_quantity = min_count[i]
                     position.save(update_fields=["min_quantity"])
             except:
@@ -300,7 +292,6 @@ def add_application(request, link):
                 position.save()
             positions[i] = PositionInApplication(position=position, quantity=float(count_pos[i]), link=link_obj[i], units=Unit.objects.get(id=int(units[i])))
             positions[i].save()
-        # print(f'contact {contact}, payment_method {payment_method}, diadok {diadok}, name_position {positions}, count_pos {count_pos}, units {units}')
         topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
         user = request.user if link == "add_application" else None
         application = Application(purchase_topic=topic, 
@@ -311,10 +302,8 @@ def add_application(request, link):
                                 )
         application.save()
         application.positions.set(positions)
-        print("Путь ", link)
         if link != "add_application":
             path_adding = link
-            print(path_adding)
             gen_paths = Path.objects.get(path=path_adding)
             gen_paths.is_used = True
             gen_paths.purchase_id = application.id
@@ -337,15 +326,9 @@ def add_application_ts(request, link):
         payment_method = "Постоплата" if request.POST.get('payment_method')=="post-payment" else "30/70"
         diadok = request.POST.get('diadok')
         filefield = request.FILES.get('ts')
-        # with open(f'media/technical_specification/{filefield.name}', 'wb+') as destination:
-        #         for chunk in filefield.chunks():
-        #             destination.write(chunk)
-
         
-        # print('POST: ', filefield)
         topic = Purchase_topic.objects.get(id=topic) if link == "add_application" else Purchase_topic.objects.get(title="Одноразовая")
         user = request.user if link == "add_application" else None
-        print('FILES: ', filefield, filefield.size, filefield.name)
         application = ApplicationTechnicalSpecification(purchase_topic=topic, 
                                   creator=user, 
                                   status=Status.objects.get(id=1), 
@@ -354,7 +337,6 @@ def add_application_ts(request, link):
                                   technical_specification=filefield
                                 )
         application.save()
-        print(application.technical_specification)
         
         if link != "add_application":
             path_adding = link
@@ -382,7 +364,6 @@ def add_equipment(request, link):
         num_pos = len(equipments)
         count_pos = request.POST.getlist('count')
         link_obj = request.POST.getlist('link')
-        print("Link: ", link)
         for i in range(num_pos):
             try:
                 equipment = Equipment.objects.get(title=equipments[i])
@@ -450,7 +431,6 @@ def techical_specification(request, num):
     return redirect('purchase', 'purchase')
 
 def download_file(request, pk):
-    print(pk)
     obj = ApplicationTechnicalSpecification.objects.get(pk=pk)
     return FileResponse(obj.technical_specification, as_attachment=True)
 
@@ -459,38 +439,24 @@ def update_warehouse_csv(request):
     Function which helps add info about products by csv table (use only whis debug = False)
     '''
     csv_file_path = '/Users/stanislavbratkov/PycharmProjects/add_crm/add_crm/add_crm/static/sheets/warehouse_sheet.csv'
-    # [name, quantity, units, min_quantity]
     with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         rows = []
         for row in csvreader:
-            # print(row)
             if len(row) > 1:
                 row[0] = row[0] + '.' + row[1]
             row[0] = row[0].split(";")
             rows.append(row[0])
         rows.pop(0)
-        # title quantity units link min_quantity is_done
         for i in rows:
-            print(i)
             obj = Position(title=str(i[0]), quantity=float(i[1]), units=Unit.objects.get(title=str(i[2]).lower()), min_quantity=float(i[3]), is_done=True)
             obj.save()
-    # positions = Position.objects.all()
-    # for pos in positions:
-    #     first_latter = pos.title[0]
-    #     pos.title = pos.title.replace(first_latter, first_latter.lower(), 1)
-    #     print(pos.title)
     return redirect('purchase')
 
-# генерация рандомной строки определенной длинны из набора символов
 def generate_random_string(length, characters):
     return ''.join(random.choices(characters, k=length))
 
-# path('add_application/', add_application, name='add_application'),
-# path('add_application_ts/', add_application_ts, name='add_application_ts'),
-# path('add_equipment/', add_equipment, name='add_equipment'),
 
-# функция генерации одноразового пути
 def gen_path(request):
     length = 16
     characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'

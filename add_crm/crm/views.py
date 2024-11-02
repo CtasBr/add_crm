@@ -58,7 +58,6 @@ def projects(request):
         t_d.save(update_fields=["is_done"])
     
     done_subtask_index = int(request.GET.get("done_subtask", -1))
-    print(done_subtask_index)
     if done_subtask_index > -1:
         st_d = Subtask.objects.get(id=done_subtask_index)
         if st_d.is_done == False:
@@ -104,7 +103,6 @@ def tasks(request, num):
         task = Task(title=title, deadline=deadline, description=description, is_done=False, main_project_id=Project.objects.get(id=num), date_add=date_start)
         users = Empl.objects.filter(id__in=users)
         task.save()
-        print(users)
         task.executors_id.set(users)
 
         return redirect('projects')
@@ -579,12 +577,10 @@ def add_result(request, num):
     return redirect('projects')
 
 def download_file(request, pk):
-    print(pk)
     obj = Result.objects.get(pk=pk)
     return FileResponse(obj.file, as_attachment=True)
 
 def download_file_comment(request, pk):
-    print(pk)
     obj = Comment.objects.get(pk=pk)
     return FileResponse(obj.file, as_attachment=True)
 
@@ -594,7 +590,6 @@ def result(request, num):
         file = request.FILES.get("result_file", None)
         res = Result(title=name, main_task_id=Task.objects.get(id=num))
         if file != None:
-            print(file)
             res.file = file
         res.save()
     return redirect(projects)
